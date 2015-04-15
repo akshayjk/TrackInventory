@@ -1,0 +1,27 @@
+.OrderForm{
+    max-width: 70%;
+    margin-top: 10%;
+}
+
+.form-control{
+    width: auto;
+}
+.mini{
+    width :10%;
+}
+
+.small{
+    width: 20%;
+}
+
+.medium{
+    width: 40%;
+}
+
+.large{
+    width: 60%;
+}
+
+.xlarge{
+    width: 80%
+}
