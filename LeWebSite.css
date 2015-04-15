@@ -23,7 +23,7 @@
     width: auto;
 }
 .mini{
-    width :10%;
+    width :15%;
 }
 
 .small{
@@ -40,4 +40,8 @@
 
 .xlarge{
     width: 80%
+}
+
+.NextButton{
+    width:20%;
 }
