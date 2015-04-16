@@ -7,40 +7,63 @@
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="LeWebSite.css" rel="stylesheet">
     <script src="bootstrap/js/bootstrap.min.js"></script>
+
+<script>
+
+    $(document).ready(function(){
+        $('#PaymentTab').attr('class', 'disabled disabledTab');
+        $('#OrderTab').attr('class', 'disabled disabledTab');
+
+        $('#Next').click(function(event){
+            $('#OrderTab').attr('class', 'active');
+            $('#StudentTab').attr('class', 'disabled disabledTab');
+            $('#orange').show();
+            $('#red').hide();
+
+        });
+        $('#Confirm').click(function(event){
+            $('#OrderTab').attr('class', 'disabled disabledTab');
+            $('#PaymentTab').attr('class', 'active');
+            $('#yellow').show();
+            $('#orange').hide();
+        });
+
+
+    });
+
+</script>
+
+
 </head>
 <body>
 
 <div class="col-md-2 navColumn">
     <ul class="nav nav-pills nav-stacked navigationBar">
         <li role="presentation" class="active"><a href="#">Place Order</a></li>
-        <li role="presentation"><a href="#">Previous Orders</a></li>
-        <li role="presentation"><a href="#">Messages</a></li>
+        <li role="presentation"><a href="PreviousOrders.html">Previous Orders</a></li>
+        <li role="presentation"><a href="Query.html">Queries</a></li>
     </ul>
 </div>
 <div class="container">
 
 <ul id="tabs" class="nav nav-tabs col-md-10" data-tabs="tabs">
-    <li class="active"><a href="#red" data-toggle="tab"><b>Students' Details</b></a></li>
-    <li><a href="#orange" data-toggle="tab"><b>Order Summary</b></a></li>
-    <li><a href="#yellow" data-toggle="tab"><b>Payment Details</b></a></li>
+    <li class="active" id="StudentTab"><a href="#red" data-toggle="tab"><b>Students' Details</b></a></li>
+    <li class="" id="OrderTab"><a href="#orange" data-toggle="tab" ><b>Order Summary</b></a></li>
+    <li class="" id="PaymentTab"><a href="#yellow" data-toggle="tab"><b>Payment Details</b></a></li>
 </ul>
 <div class="tab-content">
     <div class="tab-pane active col-md-10" id="red">
-        <form class="OrderForm form-group">
+        <form class="OrderForm form-group" name="myForm" >
             <fieldset>
                 <div class="control-group col-sm-12 ">
                     <label class="control-label col-sm-4" for="childname">Name of Child</label>
 
                     <div class="controls">
-                        <input id="childname" name="childname" type="text" placeholder="Enter full name of child"
+                        <input id="childname" name="childname" type="text" required placeholder="Enter full name of child"
                                class="col-sm-4 form-control medium" autofocus>
 
                     </div>
-                    <label class="control-label col-sm-2" for="addMore">Add More</label>
 
-                    <div class="controls">
-                        <button id="addMore" name="addMore" class="btn btn-primary">+</button>
-                    </div>
                 </div>
                 <br/>
 
@@ -62,7 +85,7 @@
                     <label class="control-label col-sm-4" for="classAge">Age</label>
 
                     <div class="controls">
-                        <input id="classAge" name="classAge" type="number" placeholder="age"
+                        <input id="classAge" name="classAge" type="number" required placeholder="age"
                                class="col-sm-8 form-control mini">
 
                     </div>
@@ -73,7 +96,7 @@
                     <label class="control-label col-sm-4" for="parentName">Parent Name</label>
 
                     <div class="controls">
-                        <input id="parentName" name="parentName" type="text" placeholder="Mother's/Father's name"
+                        <input id="parentName" name="parentName" type="text" required placeholder="Mother's/Father's name"
                                class="col-sm-8 form-control medium ">
 
                     </div>
@@ -83,7 +106,7 @@
                     <label class="control-label col-sm-4" for="parentsContact">Parent's Contact No.</label>
 
                     <div class="controls">
-                        <input id="parentsContact" name="parentsContact" type="tel" placeholder="Contact Number"
+                        <input id="parentsContact" name="parentsContact" type="tel" placeholder="Contact Number" required
                                class="col-sm-8 form-control medium ">
 
                     </div>
@@ -119,7 +142,7 @@
 
                     <div class="controls">
                         <input id="uniformQuant" name="uniformQuant" type="number" placeholder="Qty"
-                               class="col-sm-8 form-control mini">
+                               class="col-sm-8 form-control mini" required>
 
                     </div>
                 </div>
@@ -130,7 +153,7 @@
 
                     <div class="controls">
                         <input id="Date" name="Date" type="DATE" placeholder="placeholder"
-                               class="col-sm-8 form-control medium">
+                               class="col-sm-8 form-control medium" required>
 
                     </div>
                 </div>
@@ -141,7 +164,7 @@
 
                     <div class="controls">
                         <input id="regNum" name="regNum" type="text" placeholder="Enter Child's Registration Number"
-                               class="col-sm-8 form-control medium">
+                               class="col-sm-8 form-control medium" required>
 
                     </div>
                 </div>
@@ -152,7 +175,7 @@
 
                     <div class="controls">
                         <input id="receiptNo" name="receiptNo" type="text" placeholder="Enter Receipt Number"
-                               class="col-sm-8 form-control medium">
+                               class="col-sm-8 form-control medium" required>
                     </div>
                 </div>
                 <br/>
@@ -165,13 +188,29 @@
                         <span class="input-group-addon">Rs</span>
                         <input id="kitCost" name="kitCost" type="number" placeholder="000.00"
                                class="col-sm-8 form-control mini">
+
                     </div>
+
                 </div>
                 <br/>
                 <!-- Button -->
+                <div class="addmoretext">
+                    <label class="control-label col-sm-2" for="addMore" style="
+    margin-top: 20px;
+    margin-left: 7px;
+">Add More</label>
+                </div>
+                <div class="controls">
+                    <button type="submit" id="addMore" name="addMore" class="btn btn-primary" style="
+    margin-top: 10px;
+">+</button>
+                </div>
+
+
+
                 <div class="control-group col-sm-12">
                     <div class="controls">
-                        <button id="Next" name="Next" class="btn btn-primary NextButton">Next</button>
+                        <button id="Next" name="Next" class="btn btn-primary NextButton" type="submit">Next</button>
                     </div>
                 </div>
                 <br/>
@@ -182,7 +221,21 @@
     <div class="tab-pane col-md-10" id="yellow">
         <form class="OrderForm form-group">
             <fieldset>
+                <!-- Text input-->
 
+
+
+                <div class="control-group col-sm-12">
+                    <label class="control-label col-sm-4" for="modePayment">Total Amount Paid</label>
+
+                    <div class="controls input-group small">
+                        <span class="input-group-addon">Rs</span>
+                        <input id="AmountTotal" name="AmountTotal" type="number" placeholder="000.00"
+                               class="col-sm-8 form-control mini">
+
+                    </div>
+                </div>
+                <br/>
                <!-- Text input-->
                 <div class="control-group col-sm-12">
                     <label class="control-label col-sm-4" for="modePayment">Mode of Payment</label>
@@ -228,7 +281,12 @@
         </form>
     </div>
     <div class="tab-pane col-md-10" id="orange">
-        <p>Order Summery will be here </p>
+        <p>Order Summary will be here </p>
+        <div class="control-group col-sm-12">
+            <div class="controls">
+                <button id="Confirm" name="Next" class="btn btn-primary NextButton" type="submit">Confirm</button>
+            </div>
+        </div>
     </div>
 </div>
 

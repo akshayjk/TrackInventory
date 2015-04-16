@@ -42,6 +42,17 @@
     width: 80%
 }
 
-.NextButton{
-    width:20%;
+
+.NextButton {
+    margin-top: 25px;
+    margin-left: 250px;
+    width: 20%;
+
+}
+.disabledTab{
+    pointer-events: none;
+}
+.addmoretext{
+
+    margin-top:5px;
 }
