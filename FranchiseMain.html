@@ -3,7 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="public/Images/LEFav.png">
-    <title>Orders</title>
+    <title>LE Orders</title>
     <script src="public/bootstrap/js/Jquery"></script>
     <link href="public/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="public/Stylesheets/LeWebSite.css" rel="stylesheet">
@@ -34,8 +34,18 @@
 
     </script>
 </head>
-<body ng-app="franchiseMain">
-<div class="col-md-2 navColumn">
+<body>
+<header>
+    <img src="public/Images/LEFav.png" class="col-sm-2 headerImage"><div class="headerClass"><div class="col-sm-8 headerName">Little Einstein Preschool</div>
+    <div class="col-sm-2"><a href="#some" class="signIn">WebSite</a> | <a href="#some" class="signIn">Contact Us</a></div></div>
+</header>
+<div class="control-group col-sm-12">
+    <div class="FranchiseName">AkshayFranchisee</div>
+    <div class="controls">
+        <button id="logout" name="logout" class="btn btn-primary logoutbutton" type="submit">LogOut</button>
+    </div>
+</div>
+<div class="col-md-2 navColumn menu">
     <ul class="nav nav-pills nav-stacked navigationBar">
         <li role="presentation" class="active"><a href="#">Place Order</a></li>
         <li role="presentation"><a href="views/PreviousOrders.html">Previous Orders</a></li>
