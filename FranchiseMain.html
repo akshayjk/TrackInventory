@@ -2,295 +2,294 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Franchise First Page</title>
-    <script src="bootstrap/js/Jquery"></script>
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="LeWebSite.css" rel="stylesheet">
-    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <link rel="icon" type="image/png" href="public/Images/LEFav.png">
+    <title>Orders</title>
+    <script src="public/bootstrap/js/Jquery"></script>
+    <link href="public/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="public/Stylesheets/LeWebSite.css" rel="stylesheet">
+    <script src="public/bootstrap/js/bootstrap.min.js"></script>
+    <script src="public/angularfiles/angular.min.js"></script>
+    <script>
 
-<script>
-
-    $(document).ready(function(){
-        $('#PaymentTab').attr('class', 'disabled disabledTab');
-        $('#OrderTab').attr('class', 'disabled disabledTab');
-
-        $('#Next').click(function(event){
-            $('#OrderTab').attr('class', 'active');
-            $('#StudentTab').attr('class', 'disabled disabledTab');
-            $('#orange').show();
-            $('#red').hide();
-
-        });
-        $('#Confirm').click(function(event){
+        $(document).ready(function () {
+            $('#PaymentTab').attr('class', 'disabled disabledTab');
             $('#OrderTab').attr('class', 'disabled disabledTab');
-            $('#PaymentTab').attr('class', 'active');
-            $('#yellow').show();
-            $('#orange').hide();
+
+            $('#Next').click(function (event) {
+                $('#OrderTab').attr('class', 'active');
+                $('#StudentTab').attr('class', 'disabled disabledTab');
+                $('#orange').show();
+                $('#red').hide();
+
+            });
+            $('#Confirm').click(function (event) {
+                $('#OrderTab').attr('class', 'disabled disabledTab');
+                $('#PaymentTab').attr('class', 'active');
+                $('#yellow').show();
+                $('#orange').hide();
+            });
+
+
         });
 
-
-    });
-
-</script>
-
-
+    </script>
 </head>
-<body>
-
+<body ng-app="franchiseMain">
 <div class="col-md-2 navColumn">
     <ul class="nav nav-pills nav-stacked navigationBar">
         <li role="presentation" class="active"><a href="#">Place Order</a></li>
-        <li role="presentation"><a href="PreviousOrders.html">Previous Orders</a></li>
-        <li role="presentation"><a href="Query.html">Queries</a></li>
+        <li role="presentation"><a href="views/PreviousOrders.html">Previous Orders</a></li>
+        <li role="presentation"><a href="views/Query.html">Queries</a></li>
     </ul>
 </div>
 <div class="container">
 
 <ul id="tabs" class="nav nav-tabs col-md-10" data-tabs="tabs">
     <li class="active" id="StudentTab"><a href="#red" data-toggle="tab"><b>Students' Details</b></a></li>
-    <li class="" id="OrderTab"><a href="#orange" data-toggle="tab" ><b>Order Summary</b></a></li>
+    <li class="" id="OrderTab"><a href="#orange" data-toggle="tab"><b>Order Summary</b></a></li>
     <li class="" id="PaymentTab"><a href="#yellow" data-toggle="tab"><b>Payment Details</b></a></li>
 </ul>
 <div class="tab-content">
-    <div class="tab-pane active col-md-10" id="red">
-        <form class="OrderForm form-group" name="myForm" >
-            <fieldset>
-                <div class="control-group col-sm-12 ">
-                    <label class="control-label col-sm-4" for="childname">Name of Child</label>
+<div class="tab-pane active col-md-10" id="red">
+    <form class="OrderForm form-group" name="myForm">
+        <fieldset>
+            <div class="control-group col-sm-12 ">
+                <label class="control-label col-sm-4" for="childname">Name of Child</label>
 
-                    <div class="controls">
-                        <input id="childname" name="childname" type="text" required placeholder="Enter full name of child"
-                               class="col-sm-4 form-control medium" autofocus>
-
-                    </div>
+                <div class="controls">
+                    <input id="childname" name="childname" type="text" required placeholder="Enter full name of child"
+                           class="col-sm-4 form-control medium" autofocus>
 
                 </div>
-                <br/>
 
-                <div class="control-group col-sm-12">
-                    <label class="control-label col-sm-4" for="selectClass">Class</label>
+            </div>
+            <br/>
 
-                    <div class="controls">
-                        <select id="selectClass" name="selectClass" class="col-sm-8 form-control small">
-                            <option>PlayGroup</option>
-                            <option>Nursery</option>
-                            <option>LKG</option>
-                            <option>UKG</option>
-                        </select>
-                    </div>
+            <div class="control-group col-sm-12">
+                <label class="control-label col-sm-4" for="selectClass">Class</label>
+
+                <div class="controls">
+                    <select id="selectClass" name="selectClass" class="col-sm-8 form-control small">
+                        <option>PlayGroup</option>
+                        <option>Nursery</option>
+                        <option>LKG</option>
+                        <option>UKG</option>
+                    </select>
                 </div>
+            </div>
 
-                <!-- Text input-->
-                <div class="control-group col-sm-12">
-                    <label class="control-label col-sm-4" for="classAge">Age</label>
+            <!-- Text input-->
+            <div class="control-group col-sm-12">
+                <label class="control-label col-sm-4" for="classAge">Age</label>
 
-                    <div class="controls">
-                        <input id="classAge" name="classAge" type="number" required placeholder="age"
-                               class="col-sm-8 form-control mini">
-
-                    </div>
-                </div>
-                <br/>
-                <!-- Text input-->
-                <div class="control-group col-sm-12">
-                    <label class="control-label col-sm-4" for="parentName">Parent Name</label>
-
-                    <div class="controls">
-                        <input id="parentName" name="parentName" type="text" required placeholder="Mother's/Father's name"
-                               class="col-sm-8 form-control medium ">
-
-                    </div>
-                </div>
-                <!-- Text input-->
-                <div class="control-group col-sm-12">
-                    <label class="control-label col-sm-4" for="parentsContact">Parent's Contact No.</label>
-
-                    <div class="controls">
-                        <input id="parentsContact" name="parentsContact" type="tel" placeholder="Contact Number" required
-                               class="col-sm-8 form-control medium ">
-
-                    </div>
-                </div>
-                <br/>
-                <!-- Text input-->
-                <div class="control-group col-sm-12">
-                    <label class="control-label col-sm-4" for="parentEmail">Parent's Email</label>
-
-                    <div class="controls">
-                        <input id="parentEmail" name="parentEmail" type="email" placeholder="someone@example.com"
-                               class="col-sm-8 form-control medium" required>
-
-                    </div>
-                </div>
-                <br/>
-                <!-- Select Basic -->
-                <div class="control-group col-sm-12">
-                    <label class="control-label col-sm-4" for="uniformSize">Uniform Size</label>
-
-                    <div class="controls">
-                        <select id="uniformSize" name="uniformSize" class="col-sm-8 form-control mini">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                        </select>
-                    </div>
-                </div>
-                <br/>
-                <!-- Text input-->
-                <div class="control-group col-sm-12">
-                    <label class="control-label col-sm-4" for="uniformQuant">Uniform Quantity</label>
-
-                    <div class="controls">
-                        <input id="uniformQuant" name="uniformQuant" type="number" placeholder="Qty"
-                               class="col-sm-8 form-control mini" required>
-
-                    </div>
-                </div>
-                <br/>
-                <!-- Text input-->
-                <div class="control-group col-sm-12">
-                    <label class="control-label col-sm-4" for="Date">Date of Admission</label>
-
-                    <div class="controls">
-                        <input id="Date" name="Date" type="DATE" placeholder="placeholder"
-                               class="col-sm-8 form-control medium" required>
-
-                    </div>
-                </div>
-                <br/>
-                <!-- Text input-->
-                <div class="control-group col-sm-12">
-                    <label class="control-label col-sm-4" for="regNum">Registration number</label>
-
-                    <div class="controls">
-                        <input id="regNum" name="regNum" type="text" placeholder="Enter Child's Registration Number"
-                               class="col-sm-8 form-control medium" required>
-
-                    </div>
-                </div>
-                <br/>
-                <!-- Text input-->
-                <div class="control-group col-sm-12">
-                    <label class="control-label col-sm-4" for="receiptNo">Receipt Number</label>
-
-                    <div class="controls">
-                        <input id="receiptNo" name="receiptNo" type="text" placeholder="Enter Receipt Number"
-                               class="col-sm-8 form-control medium" required>
-                    </div>
-                </div>
-                <br/>
-                <!-- Text input-->
-                <div class="control-group col-sm-12">
-
-                    <label class="control-label col-sm-4" for="kitCost">Welcome Kit Cost</label>
-
-                    <div class="controls input-group small">
-                        <span class="input-group-addon">Rs</span>
-                        <input id="kitCost" name="kitCost" type="number" placeholder="000.00"
-                               class="col-sm-8 form-control mini">
-
-                    </div>
+                <div class="controls">
+                    <input id="classAge" name="classAge" type="number" required placeholder="age"
+                           class="col-sm-8 form-control mini">
 
                 </div>
-                <br/>
-                <!-- Button -->
-                <div class="addmoretext">
-                    <label class="control-label col-sm-2" for="addMore" style="
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-sm-12">
+                <label class="control-label col-sm-4" for="parentName">Parent Name</label>
+
+                <div class="controls">
+                    <input id="parentName" name="parentName" type="text" required placeholder="Mother's/Father's name"
+                           class="col-sm-8 form-control medium ">
+
+                </div>
+            </div>
+            <!-- Text input-->
+            <div class="control-group col-sm-12">
+                <label class="control-label col-sm-4" for="parentsContact">Parent's Contact No.</label>
+
+                <div class="controls">
+                    <input id="parentsContact" name="parentsContact" type="tel" placeholder="Contact Number" required
+                           class="col-sm-8 form-control medium ">
+
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-sm-12">
+                <label class="control-label col-sm-4" for="parentEmail">Parent's Email</label>
+
+                <div class="controls">
+                    <input id="parentEmail" name="parentEmail" type="email" placeholder="someone@example.com"
+                           class="col-sm-8 form-control medium" required>
+
+                </div>
+            </div>
+            <br/>
+            <!-- Select Basic -->
+            <div class="control-group col-sm-12">
+                <label class="control-label col-sm-4" for="uniformSize">Uniform Size</label>
+
+                <div class="controls">
+                    <select id="uniformSize" name="uniformSize" class="col-sm-8 form-control mini">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                    </select>
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-sm-12">
+                <label class="control-label col-sm-4" for="uniformQuant">Uniform Quantity</label>
+
+                <div class="controls">
+                    <input id="uniformQuant" name="uniformQuant" type="number" placeholder="Qty"
+                           class="col-sm-8 form-control mini" required>
+
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-sm-12">
+                <label class="control-label col-sm-4" for="Date">Date of Admission</label>
+
+                <div class="controls">
+                    <input id="Date" name="Date" type="DATE" placeholder="placeholder"
+                           class="col-sm-8 form-control medium" required>
+
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-sm-12">
+                <label class="control-label col-sm-4" for="regNum">Registration number</label>
+
+                <div class="controls">
+                    <input id="regNum" name="regNum" type="text" placeholder="Enter Child's Registration Number"
+                           class="col-sm-8 form-control medium" required>
+
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-sm-12">
+                <label class="control-label col-sm-4" for="receiptNo">Receipt Number</label>
+
+                <div class="controls">
+                    <input id="receiptNo" name="receiptNo" type="text" placeholder="Enter Receipt Number"
+                           class="col-sm-8 form-control medium" required>
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-sm-12">
+
+                <label class="control-label col-sm-4" for="kitCost">Welcome Kit Cost</label>
+
+                <div class="controls input-group small">
+                    <span class="input-group-addon">Rs</span>
+                    <input id="kitCost" name="kitCost" type="number" placeholder="000.00"
+                           class="col-sm-8 form-control mini">
+
+                </div>
+
+            </div>
+            <br/>
+            <!-- Button -->
+            <div class="addmoretext">
+                <label class="control-label col-sm-2" for="addMore" style="
     margin-top: 20px;
     margin-left: 7px;
 ">Add More</label>
-                </div>
-                <div class="controls">
-                    <button type="submit" id="addMore" name="addMore" class="btn btn-primary" style="
-    margin-top: 10px;
-">+</button>
-                </div>
-
-
-
-                <div class="control-group col-sm-12">
-                    <div class="controls">
-                        <button id="Next" name="Next" class="btn btn-primary NextButton" type="submit">Next</button>
-                    </div>
-                </div>
-                <br/>
-                <br/>
-            </fieldset>
-        </form>
-    </div>
-    <div class="tab-pane col-md-10" id="yellow">
-        <form class="OrderForm form-group">
-            <fieldset>
-                <!-- Text input-->
-
-
-
-                <div class="control-group col-sm-12">
-                    <label class="control-label col-sm-4" for="modePayment">Total Amount Paid</label>
-
-                    <div class="controls input-group small">
-                        <span class="input-group-addon">Rs</span>
-                        <input id="AmountTotal" name="AmountTotal" type="number" placeholder="000.00"
-                               class="col-sm-8 form-control mini">
-
-                    </div>
-                </div>
-                <br/>
-               <!-- Text input-->
-                <div class="control-group col-sm-12">
-                    <label class="control-label col-sm-4" for="modePayment">Mode of Payment</label>
-
-                    <div class="controls">
-                        <input id="modePayment" name="modePayment" type="text" placeholder="Cash/Account Transfer"
-                               class="col-sm-8 form-control medium">
-
-                    </div>
-                </div>
-                <br/>
-                <!-- Text input-->
-                <div class="control-group col-sm-12">
-                    <label class="control-label col-sm-4" for="bankTranID">Bank Transaction id </label>
-
-                    <div class="controls">
-                        <input id="bankTranID" name="bankTranID" type="text" placeholder=""
-                               class="col-sm-8 form-control medium ">
-
-                    </div>
-                </div>
-                <br/>
-                <!-- Text input-->
-                <div class="control-group col-sm-12">
-                    <label class="control-label col-sm-4" for="address">Address</label>
-
-                    <div class="controls">
-                        <textarea id="address" name="address" placeholder="Enter Address for delivery" rows="3"
-                                  class="col-sm-8 form-control medium ">
-                        </textarea>
-
-                    </div>
-                </div>
-
-                <div class="control-group col-sm-12">
-                    <div class="controls col-sm-12">
-                        <button id="placeOrder" name="placeOrder" class="btn btn-primary col-sm-2"
-                                style="margin-top:2%; padding-right:10%;">Place Order
-                        </button>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
-    </div>
-    <div class="tab-pane col-md-10" id="orange">
-        <p>Order Summary will be here </p>
-        <div class="control-group col-sm-12">
-            <div class="controls">
-                <button id="Confirm" name="Next" class="btn btn-primary NextButton" type="submit">Confirm</button>
             </div>
+            <div class="controls">
+                <button type="submit" id="addMore" name="addMore" class="btn btn-primary" style="
+    margin-top: 10px;
+">+
+                </button>
+            </div>
+
+
+            <div class="control-group col-sm-12">
+                <div class="controls">
+                    <button id="Next" name="Next" class="btn btn-primary NextButton" type="submit">Next</button>
+                </div>
+            </div>
+            <br/>
+            <br/>
+        </fieldset>
+    </form>
+</div>
+<div class="tab-pane col-md-10" id="yellow">
+    <form class="OrderForm form-group">
+        <fieldset>
+            <!-- Text input-->
+
+
+            <div class="control-group col-sm-12">
+                <label class="control-label col-sm-4" for="modePayment">Total Amount Paid</label>
+
+                <div class="controls input-group small">
+                    <span class="input-group-addon">Rs</span>
+                    <input id="AmountTotal" name="AmountTotal" type="number" placeholder="000.00"
+                           class="col-sm-8 form-control mini">
+
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-sm-12">
+                <label class="control-label col-sm-4" for="modePayment">Mode of Payment</label>
+
+                <div class="controls">
+                    <input id="modePayment" name="modePayment" type="text" placeholder="Cash/Account Transfer"
+                           class="col-sm-8 form-control medium">
+
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-sm-12">
+                <label class="control-label col-sm-4" for="bankTranID">Bank Transaction id </label>
+
+                <div class="controls">
+                    <input id="bankTranID" name="bankTranID" type="text" placeholder=""
+                           class="col-sm-8 form-control medium ">
+
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-sm-12">
+                <label class="control-label col-sm-4" for="address">Address</label>
+
+                <div class="controls">
+                    <textarea id="address" name="address" placeholder="Enter Address for delivery" rows="3"
+                              class="col-sm-8 form-control medium ">
+                    </textarea>
+
+                </div>
+            </div>
+
+            <div class="control-group col-sm-12">
+                <div class="controls col-sm-12">
+                    <button id="placeOrder" name="placeOrder" class="btn btn-primary col-sm-2"
+                            style="margin-top:2%; padding-right:10%;">Place Order
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div class="tab-pane col-md-10" id="orange">
+    <p>Order Summary will be here </p>
+
+    <div class="control-group col-sm-12">
+        <div class="controls">
+            <button id="Confirm" name="Next" class="btn btn-primary NextButton" type="submit">Confirm</button>
         </div>
     </div>
+</div>
 </div>
 
 
 </div>
 </body>
+<script src="public/JavaScripts/franchiseMain.js"></script>
 </html>

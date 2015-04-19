@@ -65,10 +65,14 @@ h4{
 }
 
 .container{
-    margin : 5%;
+    margin-top : 5%;
     margin-left: 17%;
     padding-left: 2%;
 
+}
+
+.menu{
+    margin-top:5%;
 }
 .navigationBar{
     margin-right: 2%;
@@ -120,6 +124,16 @@ h4{
 .LoginImage{
    max-width: 50%;
    margin-top: 15%;
+}
+.headerImage{
+    max-width: 5%;
+    margin-top:1.5%;
+    margin-left:1%;
+
+}
+
+.headerName{
+    padding-left:0%;
 }
 .LoginHeaderContainer{
     margin-top:5%;
