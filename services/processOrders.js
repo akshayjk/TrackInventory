@@ -19,6 +19,7 @@ ProcessOrder.prototype.placeOrder = function (orderObject, req, res) {
     Students.forEach(function (kid) {
         kid.OrderId = orderId;
         kid.FranchiseId = orderObject.FranchiseId;
+        kid.FranchiseName = orderObject.FranchiseName;
     })
     var studentOptions = {
         collection: define.studentsCollection,

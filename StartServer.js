@@ -8,8 +8,8 @@ var express = require('express'),
     fs = require('fs');
 
 //App Modules
-var dataBase = require('./DbOperations.js');
-var processOrder = require('./processOrders.js');
+var dataBase = require('./services/DbOperations.js');
+var processOrder = require('./services/processOrders.js');
 
 app.get('/Order', function (req, res) {
     console.log("received get order")
