@@ -1,3 +1,64 @@
+@font-face {
+    font-family: 'fontscorecomttwcenmt';
+    src: url('./fonts/fontscorecomttwcenmt.eot');
+    src: local('fontscorecomttwcenmt'), url('./fonts/fontscorecomttwcenmt.woff') format('woff'), url('./fonts/fontscorecomttwcenmt.ttf') format('truetype');
+}
+h1{
+    font-family: 'fontscorecomttwcenmt';
+    font-size: 400%;
+    font-weight: 500;
+    color :#081e30;
+}
+.rightSide{
+
+}
+header{
+    height: 5%;
+    background-color: #396992;
+    border-bottom: 2px solid #5f5f5f;
+    box-shadow: 0 0 2px black;
+}
+
+.headerClass{
+    color:white;
+    margin-bottom: 3%;
+    padding-top: 2%;
+    padding-left: 3%;
+    font-size: 150%;
+    font-family: 'fontscorecomttwcenmt';
+
+}
+
+.footerClass{
+    color:white;
+    padding-left:3%;
+    padding-bottom: 2%;
+    padding-top: 1%;
+    font-size: 100%;
+    font-family: 'fontscorecomttwcenmt';
+}
+
+footer{
+    height: auto;
+    width: 100%;
+    position: fixed;
+    bottom: 0%;
+    background-color: #396992;
+    border-top: 2px solid #5f5f5f;
+    box-shadow: 0 0 2px black;
+}
+.signIn{
+    color:white;
+    text-decoration:none !important;
+}
+a:hover{
+    color:white;
+}
+h4{
+    font-family: 'fontscorecomttwcenmt';
+    font-size:150%;
+}
+
 .OrderForm{
     max-width: 70%;
     margin-top: 5%;
@@ -56,3 +117,22 @@
 
     margin-top:5px;
 }
+.LoginImage{
+   max-width: 50%;
+   margin-top: 15%;
+}
+.LoginHeaderContainer{
+    margin-top:5%;
+
+}
+.MiddleContainer{
+    margin-top: 10%;
+    margin-bottom: 20%;
+}
+
+.LoginContainer{
+    width: 80%;
+    margin-bottom: 2%;
+}
+
+
