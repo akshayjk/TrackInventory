@@ -11,26 +11,7 @@
     <script src="public/angularfiles/angular.min.js"></script>
     <script>
 
-        $(document).ready(function () {
-            $('#PaymentTab').attr('class', 'disabled disabledTab');
-            $('#OrderTab').attr('class', 'disabled disabledTab');
 
-            $('#Next').click(function (event) {
-                $('#OrderTab').attr('class', 'active');
-                $('#StudentTab').attr('class', 'disabled disabledTab');
-                $('#orange').show();
-                $('#red').hide();
-
-            });
-            $('#Confirm').click(function (event) {
-                $('#OrderTab').attr('class', 'disabled disabledTab');
-                $('#PaymentTab').attr('class', 'active');
-                $('#yellow').show();
-                $('#orange').hide();
-            });
-
-
-        });
 
     </script>
 </head>
@@ -61,13 +42,13 @@
 </ul>
 <div class="tab-content">
 <div class="tab-pane active col-md-10" id="red">
-    <form class="OrderForm form-group" name="myForm">
+
         <fieldset>
             <div class="control-group col-sm-12 ">
                 <label class="control-label col-sm-4" for="childname">Name of Child</label>
 
                 <div class="controls">
-                    <input id="childname" name="childname" type="text" required placeholder="Enter full name of child"
+                    <input id="childname" name="childname" type="text"  placeholder="Enter full name of child"
                            class="col-sm-4 form-control medium" autofocus>
 
                 </div>
@@ -93,7 +74,7 @@
                 <label class="control-label col-sm-4" for="classAge">Age</label>
 
                 <div class="controls">
-                    <input id="classAge" name="classAge" type="number" required placeholder="age"
+                    <input id="classAge" name="classAge" type="number"  placeholder="age"
                            class="col-sm-8 form-control mini">
 
                 </div>
@@ -104,7 +85,7 @@
                 <label class="control-label col-sm-4" for="parentName">Parent Name</label>
 
                 <div class="controls">
-                    <input id="parentName" name="parentName" type="text" required placeholder="Mother's/Father's name"
+                    <input id="parentName" name="parentName" type="text"  placeholder="Mother's/Father's name"
                            class="col-sm-8 form-control medium ">
 
                 </div>
@@ -114,7 +95,7 @@
                 <label class="control-label col-sm-4" for="parentsContact">Parent's Contact No.</label>
 
                 <div class="controls">
-                    <input id="parentsContact" name="parentsContact" type="tel" placeholder="Contact Number" required
+                    <input id="parentsContact" name="parentsContact" type="tel" placeholder="Contact Number"
                            class="col-sm-8 form-control medium ">
 
                 </div>
@@ -126,7 +107,7 @@
 
                 <div class="controls">
                     <input id="parentEmail" name="parentEmail" type="email" placeholder="someone@example.com"
-                           class="col-sm-8 form-control medium" required>
+                           class="col-sm-8 form-control medium" >
 
                 </div>
             </div>
@@ -150,7 +131,7 @@
 
                 <div class="controls">
                     <input id="uniformQuant" name="uniformQuant" type="number" placeholder="Qty"
-                           class="col-sm-8 form-control mini" required>
+                           class="col-sm-8 form-control mini" >
 
                 </div>
             </div>
@@ -161,7 +142,7 @@
 
                 <div class="controls">
                     <input id="Date" name="Date" type="DATE" placeholder="placeholder"
-                           class="col-sm-8 form-control medium" required>
+                           class="col-sm-8 form-control medium" >
 
                 </div>
             </div>
@@ -172,7 +153,7 @@
 
                 <div class="controls">
                     <input id="regNum" name="regNum" type="text" placeholder="Enter Child's Registration Number"
-                           class="col-sm-8 form-control medium" required>
+                           class="col-sm-8 form-control medium" >
 
                 </div>
             </div>
@@ -202,32 +183,33 @@
             </div>
             <br/>
             <!-- Button -->
-            <div class="addmoretext">
-                <label class="control-label col-sm-2" for="addMore" style="
-    margin-top: 20px;
-    margin-left: 7px;
-">Add More</label>
-            </div>
-            <div class="controls">
-                <button type="submit" id="addMore" name="addMore" class="btn btn-primary" style="
-    margin-top: 10px;
-">+
-                </button>
-            </div>
 
-
-            <div class="control-group col-sm-12">
-                <div class="controls">
-                    <button id="Next" name="Next" class="btn btn-primary NextButton" type="submit">Next</button>
-                </div>
-            </div>
             <br/>
             <br/>
         </fieldset>
-    </form>
+
+    <div class="addmoretext">
+        <label class="control-label col-sm-2" for="addMore" style="
+    margin-top: 20px;
+    margin-left: 7px;
+">Add More</label>
+    </div>
+    <div class="controls">
+        <button type="" id="addMore" name="addMore" class="btn btn-primary" style="
+    margin-top: 10px;
+">+
+        </button>
+    </div>
+
+
+    <div class="control-group col-sm-12">
+        <div class="controls">
+            <button id="Next" name="Next" class="btn btn-primary NextButton" type="">Next</button>
+        </div>
+    </div>
 </div>
 <div class="tab-pane col-md-10" id="yellow">
-    <form class="OrderForm form-group">
+
         <fieldset>
             <!-- Text input-->
 
@@ -270,9 +252,9 @@
                 <label class="control-label col-sm-4" for="address">Address</label>
 
                 <div class="controls">
-                    <textarea id="address" name="address" placeholder="Enter Address for delivery" rows="3"
+                    <input id="address" name="address" placeholder="Enter Address for delivery" rows="3"
                               class="col-sm-8 form-control medium ">
-                    </textarea>
+                    </input>
 
                 </div>
             </div>
@@ -285,14 +267,14 @@
                 </div>
             </div>
         </fieldset>
-    </form>
+
 </div>
 <div class="tab-pane col-md-10" id="orange">
     <p>Order Summary will be here </p>
 
     <div class="control-group col-sm-12">
         <div class="controls">
-            <button id="Confirm" name="Next" class="btn btn-primary NextButton" type="submit">Confirm</button>
+            <button id="Confirm" name="Next" class="btn btn-primary NextButton" type="">Confirm</button>
         </div>
     </div>
 </div>
