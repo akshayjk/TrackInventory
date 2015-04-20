@@ -70,8 +70,25 @@ $(document).ready(function () {
     $('#placeOrder').click(function (event) {
         var bankval= validatebankForm();
         if (bankval)
-        {alert("Your order has been placed. We will verify payment and get back soon");
-            parent.location='FranchiseMain.html';}
+        {
+            var bankdata = {
+
+                "FranchiseId": "Akshay123",
+                "FranchiseName": "Kulkarni",
+                "TotalAmount": 1000,
+                "ModeOfPayment": document.getElementById("modePayment").value,
+                "TransactionID": document.getElementById("bankTranID").value,
+                "Address": document.getElementById("address").value
+
+
+
+            }
+
+            console.log("TransactionID" + bankdata.TransactionID);
+            StudentOrderAdded(bankdata);
+
+
+            }
     });
 
 
@@ -120,6 +137,15 @@ function studentAdded(data){
      document.getElementById("receiptNo").value="";
 
 }
+function StudentOrderAdded(data){
+    var callservicedata = [Studentorder.Students,data]
+    console.log("Student Data" + callservicedata);
+
+    alert("Your order has been placed. We will verify payment and get back soon");
+    parent.location='FranchiseMain.html';
+
+}
+
 
 function getFormData($form){
     var unindexed_array = $form.serializeArray();
