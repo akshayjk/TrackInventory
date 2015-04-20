@@ -18,9 +18,9 @@ angular.module('franchiseMain', [])
 
 var val;
 var bankval;
-var Studentorder = {
 
-    "Students": [
+
+  var  Students =  [
         {
             "NameOfStudent": "Akshay5",
             "Class": "2nd",
@@ -33,18 +33,25 @@ var Studentorder = {
             "DateOfAdmission": "ISO Date Format",
             "RegistrationNumber": "AG887425",
             "ReceiptNumber": "RR2478754"
-        }
-    ],
-    "FranchiseId": "35465464",
-    "FranchiseName":"SomeName",
-    "TotalAmount": 654354.55,
-    "ModeOfPayment": "Cash",
-    "TransactionID": "RR88283553",
-    "Address": "Some detailed address here "
-};
+        },
+      {
+          "NameOfStudent": "saksham",
+          "Class": "2nd",
+          "Age": 12,
+          "ParentName": "Parent1",
+          "ParentContact": 543524,
+          "ParentEmail": "Another@something.com",
+          "UniformSize": 10,
+          "UniformQty": 2,
+          "DateOfAdmission": "ISO Date Format",
+          "RegistrationNumber": "AG887425",
+          "ReceiptNumber": "RR2478754"
+      }
+    ];
+
 
 $(document).ready(function () {
-    // console.log("Student Data" + Studentorder);
+
 
     $('#PaymentTab').attr('class', 'disabled disabledTab');
     $('#OrderTab').attr('class', 'disabled disabledTab');
@@ -122,8 +129,8 @@ $(document).ready(function () {
 });
 
 function studentAdded(data){
-    Studentorder.Students.push(data);
-    console.log("Student Data" + Studentorder.Students);
+    Students.push(data);
+    console.log("Student Data" + Students);
     document.getElementById("childname").value="";
 
       document.getElementById("classAge").value="";
@@ -138,7 +145,7 @@ function studentAdded(data){
 
 }
 function StudentOrderAdded(data){
-    var callservicedata = [Studentorder.Students,data]
+    var callservicedata = [Students,data]
     console.log("Student Data" + callservicedata);
 
     alert("Your order has been placed. We will verify payment and get back soon");
@@ -147,17 +154,7 @@ function StudentOrderAdded(data){
 }
 
 
-function getFormData($form){
-    var unindexed_array = $form.serializeArray();
-    var indexed_array = {};
 
-    $.map(unindexed_array, function(n, i){
-        indexed_array[n['name']] = n['value'];
-    });
-
-    return indexed_array;
-
-}
 
 function validatebankForm() {
     var x = document.getElementById("modePayment");
@@ -240,4 +237,74 @@ function validateForm()
     }
     return true;
 
+}
+
+var $table = $('#table'),
+    $remove = $('#remove');
+$(function () {
+    $table.bootstrapTable({
+        data: Students
+    });
+    $table.bootstrapTable({
+        height: getHeight()
+    });
+    $table.on('check.bs.table uncheck.bs.table ' +
+    'check-all.bs.table uncheck-all.bs.table', function () {
+        $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+    });
+    $table.on('all.bs.table', function (e, name, args) {
+        console.log(name, args);
+    });
+    $remove.click(function () {
+        var ids = $.map($table.bootstrapTable('getSelections'), function (row) {
+            return row.id
+        });
+        $table.bootstrapTable('remove', {
+            field: 'id',
+            values: ids
+        });
+        $remove.prop('disabled', true);
+    });
+    $(window).resize(function () {
+        $table.bootstrapTable('resetView', {
+            height: getHeight()
+        });
+    });
+});
+function operateFormatter(value, row, index) {
+    return [
+        '<a class="like" href="javascript:void(0)" title="Like">',
+        '<i class="glyphicon glyphicon-heart"></i>',
+        '</a>  ',
+        '<a class="remove" href="javascript:void(0)" title="Remove">',
+        '<i class="glyphicon glyphicon-remove"></i>',
+        '</a>'
+    ].join('');
+}
+window.operateEvents = {
+    'click .like': function (e, value, row, index) {
+        alert('You click like action, row: ' + JSON.stringify(row));
+    },
+    'click .remove': function (e, value, row, index) {
+        $table.bootstrapTable('remove', {
+            field: 'id',
+            values: [row.id]
+        });
+    }
+};
+function totalTextFormatter(data) {
+    return 'Total';
+}
+function totalNameFormatter(data) {
+    return data.length;
+}
+function totalPriceFormatter(data) {
+    var total = 0;
+    $.each(data, function (i, row) {
+        total += +(row.price.substring(1));
+    });
+    return '$' + total;
+}
+function getHeight() {
+    return $(window).height() - $('h1').outerHeight(true);
 }

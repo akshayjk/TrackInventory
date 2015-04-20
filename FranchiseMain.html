@@ -9,11 +9,44 @@
     <link href="public/Stylesheets/LeWebSite.css" rel="stylesheet">
     <script src="public/bootstrap/js/bootstrap.min.js"></script>
     <script src="public/angularfiles/angular.min.js"></script>
+
+    <script src="../public/bootstrap/js/Jquery"></script>
+
     <script>
-
-
-
+        $(function () {
+            $('.toggle').click(function () {
+                $('.nav-list').toggleClass('active');
+            });
+            $('#navbar li a, .nav-list li a').click(function (e) {
+                var href = $(this).attr('href');
+                if (href === '#' || /^http.*/.test(href)) {
+                    return;
+                }
+                e.preventDefault();
+                $('iframe').attr('src', href);
+                $('.nav-list').removeClass('active');
+                location.hash = href;
+            });
+            $('iframe').attr('src', location.hash.substring(1) || 'welcome.html');
+        });
     </script>
+
+
+    <link rel="stylesheet" href="public/bootstrap-table/src/bootstrap-table.css">
+    <link rel="stylesheet" href="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css">
+    <script src="public/jquery.min.js"></script>
+
+    <script src="public/bootstrap-table/src/bootstrap-table.js"></script>
+    <script src="public/bootstrap-table/src/extensions/export/bootstrap-table-export.js"></script>
+    <script src="//rawgit.com/kayalshri/tableExport.jquery.plugin/master/tableExport.js"></script>
+    <script src="//rawgit.com/kayalshri/tableExport.jquery.plugin/master/jquery.base64.js"></script>
+    <script src="public/bootstrap-table/src/extensions/editable/bootstrap-table-editable.js"></script>
+    <script src="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/js/bootstrap-editable.js"></script>
+    <script src="public/ga.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20140204/json2.min.js"></script>
 </head>
 <body>
 <header>
@@ -272,6 +305,38 @@
 <div class="tab-pane col-md-10" id="orange">
     <p>Order Summary will be here </p>
 
+    <table id="table"
+           data-toolbar="#toolbar"
+           data-search="true"
+           data-show-refresh="true"
+           data-show-toggle="true"
+           data-show-columns="true"
+           data-show-export="true"
+           data-show-pagination-switch="true"
+           data-pagination="true"
+           data-show-footer="true"
+           data-side-pagination="server"
+           >
+        <thead>
+        <tr>
+            <th data-field="state" data-checkbox="true"></th>
+            <th data-field="id" data-sortable="true"
+                data-footer-formatter="totalTextFormatter">ID</th>
+            <th data-field="NameOfStudent" data-sortable="true" data-editable="true"
+                data-footer-formatter="totalNameFormatter">NameOfStudent</th>
+            <th data-field="UniformSize" data-sortable="true" data-editable="true"
+                data-footer-formatter="totalNameFormatter">UniformSize</th>
+            <th data-field="UniformQty" data-sortable="true" data-editable="true"
+                data-footer-formatter="totalNameFormatter">UniformQty</th>
+            <th data-field="price" data-sortable="true" data-editable="true"
+                data-footer-formatter="totalPriceFormatter">Item Price</th>
+            <th data-field="operate"
+                data-formatter="operateFormatter"
+                data-events="operateEvents">Item Operate</th>
+        </tr>
+        </thead>
+    </table>
+
     <div class="control-group col-sm-12">
         <div class="controls">
             <button id="Confirm" name="Next" class="btn btn-primary NextButton" type="">Confirm</button>
@@ -282,6 +347,9 @@
 
 
 </div>
+<!--<footer>
+    <div class="footerClass">&copy; Little Einstein 2015</div>
+</footer>-->
 </body>
 <script src="public/JavaScripts/franchiseMain.js"></script>
 </html>
