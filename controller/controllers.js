@@ -10,7 +10,7 @@
       $scope.loginForm ={};
       $scope.login = function(credentials){
           console.log(credentials);
-          $location.path('/franchise');
+          $location.path('#franchise');
       }
   }]);
 
