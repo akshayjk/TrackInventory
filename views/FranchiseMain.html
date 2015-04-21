@@ -2,13 +2,13 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="public/Images/LEFav.png">
+    <link rel="icon" type="image/png" href="../public/Images/LEFav.png">
     <title>LE Orders</title>
-    <script src="public/bootstrap/js/Jquery"></script>
-    <link href="public/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="public/Stylesheets/LeWebSite.css" rel="stylesheet">
-    <script src="public/bootstrap/js/bootstrap.min.js"></script>
-    <script src="public/angularfiles/angular.min.js"></script>
+    <script src="../public/bootstrap/js/Jquery"></script>
+    <link href="../public/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../public/Stylesheets/LeWebSite.css" rel="stylesheet">
+    <script src="../public/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../public/angularfiles/angular.min.js"></script>
 
     <script src="../public/bootstrap/js/Jquery"></script>
 
@@ -32,17 +32,17 @@
     </script>
 
 
-    <link rel="stylesheet" href="public/bootstrap-table/src/bootstrap-table.css">
+    <link rel="stylesheet" href="../public/bootstrap-table/src/bootstrap-table.css">
     <link rel="stylesheet" href="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css">
-    <script src="public/jquery.min.js"></script>
+    <script src="../public/jquery.min.js"></script>
 
-    <script src="public/bootstrap-table/src/bootstrap-table.js"></script>
-    <script src="public/bootstrap-table/src/extensions/export/bootstrap-table-export.js"></script>
+    <script src="../public/bootstrap-table/src/bootstrap-table.js"></script>
+    <script src="../public/bootstrap-table/src/extensions/export/bootstrap-table-export.js"></script>
     <script src="//rawgit.com/kayalshri/tableExport.jquery.plugin/master/tableExport.js"></script>
     <script src="//rawgit.com/kayalshri/tableExport.jquery.plugin/master/jquery.base64.js"></script>
-    <script src="public/bootstrap-table/src/extensions/editable/bootstrap-table-editable.js"></script>
+    <script src="../public/bootstrap-table/src/extensions/editable/bootstrap-table-editable.js"></script>
     <script src="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/js/bootstrap-editable.js"></script>
-    <script src="public/ga.js"></script>
+    <script src="../public/ga.js"></script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -50,7 +50,7 @@
 </head>
 <body>
 <header>
-    <img src="public/Images/LEFav.png" class="col-sm-2 headerImage"><div class="headerClass"><div class="col-sm-8 headerName">Little Einstein Preschool</div>
+    <img src="../public/Images/LEFav.png" class="col-sm-2 headerImage"><div class="headerClass"><div class="col-sm-8 headerName">Little Einstein Preschool</div>
     <div class="col-sm-2"><a href="#some" class="signIn">WebSite</a> | <a href="#some" class="signIn">Contact Us</a></div></div>
 </header>
 <div class="control-group col-sm-12">
@@ -62,8 +62,8 @@
 <div class="col-md-2 navColumn menu">
     <ul class="nav nav-pills nav-stacked navigationBar">
         <li role="presentation" class="active"><a href="#">Place Order</a></li>
-        <li role="presentation"><a href="views/PreviousOrders.html">Previous Orders</a></li>
-        <li role="presentation"><a href="views/Query.html">Queries</a></li>
+        <li role="presentation"><a href="PreviousOrders.html">Previous Orders</a></li>
+        <li role="presentation"><a href="Query.html">Queries</a></li>
     </ul>
 </div>
 <div class="container">
@@ -75,7 +75,6 @@
 </ul>
 <div class="tab-content">
 <div class="tab-pane active col-md-10" id="red">
-
         <fieldset>
             <div class="control-group col-sm-12 ">
                 <label class="control-label col-sm-4" for="childname">Name of Child</label>
@@ -83,15 +82,11 @@
                 <div class="controls">
                     <input id="childname" name="childname" type="text"  placeholder="Enter full name of child"
                            class="col-sm-4 form-control medium" autofocus>
-
                 </div>
-
             </div>
             <br/>
-
             <div class="control-group col-sm-12">
                 <label class="control-label col-sm-4" for="selectClass">Class</label>
-
                 <div class="controls">
                     <select id="selectClass" name="selectClass" class="col-sm-8 form-control small">
                         <option>PlayGroup</option>
@@ -101,54 +96,44 @@
                     </select>
                 </div>
             </div>
-
             <!-- Text input-->
             <div class="control-group col-sm-12">
                 <label class="control-label col-sm-4" for="classAge">Age</label>
-
                 <div class="controls">
                     <input id="classAge" name="classAge" type="number"  placeholder="age"
                            class="col-sm-8 form-control mini">
-
                 </div>
             </div>
             <br/>
             <!-- Text input-->
             <div class="control-group col-sm-12">
                 <label class="control-label col-sm-4" for="parentName">Parent Name</label>
-
                 <div class="controls">
                     <input id="parentName" name="parentName" type="text"  placeholder="Mother's/Father's name"
                            class="col-sm-8 form-control medium ">
-
                 </div>
             </div>
             <!-- Text input-->
             <div class="control-group col-sm-12">
                 <label class="control-label col-sm-4" for="parentsContact">Parent's Contact No.</label>
-
                 <div class="controls">
                     <input id="parentsContact" name="parentsContact" type="tel" placeholder="Contact Number"
                            class="col-sm-8 form-control medium ">
-
                 </div>
             </div>
             <br/>
             <!-- Text input-->
             <div class="control-group col-sm-12">
                 <label class="control-label col-sm-4" for="parentEmail">Parent's Email</label>
-
                 <div class="controls">
                     <input id="parentEmail" name="parentEmail" type="email" placeholder="someone@example.com"
                            class="col-sm-8 form-control medium" >
-
                 </div>
             </div>
             <br/>
             <!-- Select Basic -->
             <div class="control-group col-sm-12">
                 <label class="control-label col-sm-4" for="uniformSize">Uniform Size</label>
-
                 <div class="controls">
                     <select id="uniformSize" name="uniformSize" class="col-sm-8 form-control mini">
                         <option>1</option>
@@ -161,40 +146,33 @@
             <!-- Text input-->
             <div class="control-group col-sm-12">
                 <label class="control-label col-sm-4" for="uniformQuant">Uniform Quantity</label>
-
                 <div class="controls">
                     <input id="uniformQuant" name="uniformQuant" type="number" placeholder="Qty"
                            class="col-sm-8 form-control mini" >
-
                 </div>
             </div>
             <br/>
             <!-- Text input-->
             <div class="control-group col-sm-12">
                 <label class="control-label col-sm-4" for="Date">Date of Admission</label>
-
                 <div class="controls">
                     <input id="Date" name="Date" type="DATE" placeholder="placeholder"
                            class="col-sm-8 form-control medium" >
-
                 </div>
             </div>
             <br/>
             <!-- Text input-->
             <div class="control-group col-sm-12">
                 <label class="control-label col-sm-4" for="regNum">Registration number</label>
-
                 <div class="controls">
                     <input id="regNum" name="regNum" type="text" placeholder="Enter Child's Registration Number"
                            class="col-sm-8 form-control medium" >
-
                 </div>
             </div>
             <br/>
             <!-- Text input-->
             <div class="control-group col-sm-12">
                 <label class="control-label col-sm-4" for="receiptNo">Receipt Number</label>
-
                 <div class="controls">
                     <input id="receiptNo" name="receiptNo" type="text" placeholder="Enter Receipt Number"
                            class="col-sm-8 form-control medium" required>
@@ -203,24 +181,18 @@
             <br/>
             <!-- Text input-->
             <div class="control-group col-sm-12">
-
                 <label class="control-label col-sm-4" for="kitCost">Welcome Kit Cost</label>
-
                 <div class="controls input-group small">
                     <span class="input-group-addon">Rs</span>
                     <input id="kitCost" name="kitCost" type="number" placeholder="000.00"
                            class="col-sm-8 form-control mini">
-
                 </div>
-
             </div>
             <br/>
             <!-- Button -->
-
             <br/>
             <br/>
         </fieldset>
-
     <div class="addmoretext">
         <label class="control-label col-sm-2" for="addMore" style="
     margin-top: 20px;
@@ -233,8 +205,6 @@
 ">+
         </button>
     </div>
-
-
     <div class="control-group col-sm-12">
         <div class="controls">
             <button id="Next" name="Next" class="btn btn-primary NextButton" type="">Next</button>
@@ -242,56 +212,44 @@
     </div>
 </div>
 <div class="tab-pane col-md-10" id="yellow">
-
         <fieldset>
             <!-- Text input-->
-
-
             <div class="control-group col-sm-12">
                 <label class="control-label col-sm-4" for="modePayment">Total Amount Paid</label>
-
                 <div class="controls input-group small">
                     <span class="input-group-addon">Rs</span>
                     <input id="AmountTotal" name="AmountTotal" type="number" placeholder="000.00"
                            class="col-sm-8 form-control mini">
-
                 </div>
             </div>
             <br/>
             <!-- Text input-->
             <div class="control-group col-sm-12">
                 <label class="control-label col-sm-4" for="modePayment">Mode of Payment</label>
-
                 <div class="controls">
                     <input id="modePayment" name="modePayment" type="text" placeholder="Cash/Account Transfer"
                            class="col-sm-8 form-control medium">
-
                 </div>
             </div>
             <br/>
             <!-- Text input-->
             <div class="control-group col-sm-12">
                 <label class="control-label col-sm-4" for="bankTranID">Bank Transaction id </label>
-
                 <div class="controls">
                     <input id="bankTranID" name="bankTranID" type="text" placeholder=""
                            class="col-sm-8 form-control medium ">
-
                 </div>
             </div>
             <br/>
             <!-- Text input-->
             <div class="control-group col-sm-12">
                 <label class="control-label col-sm-4" for="address">Address</label>
-
                 <div class="controls">
                     <input id="address" name="address" placeholder="Enter Address for delivery" rows="3"
                               class="col-sm-8 form-control medium ">
                     </input>
-
                 </div>
             </div>
-
             <div class="control-group col-sm-12">
                 <div class="controls col-sm-12">
                     <button id="placeOrder" name="placeOrder" class="btn btn-primary col-sm-2"
@@ -304,7 +262,6 @@
 </div>
 <div class="tab-pane col-md-10" id="orange">
     <p>Order Summary will be here </p>
-
     <table id="table"
            data-toolbar="#toolbar"
            data-search="true"
@@ -351,5 +308,5 @@
     <div class="footerClass">&copy; Little Einstein 2015</div>
 </footer>-->
 </body>
-<script src="public/JavaScripts/franchiseMain.js"></script>
+<script src="../public/JavaScripts/franchiseMain.js"></script>
 </html>

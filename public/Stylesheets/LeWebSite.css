@@ -11,18 +11,31 @@ h1{
 }
 
 .FranchiseName {
-    margin-left: 20px;
-    margin-top: -10px;
+    margin-left: 2%;
+    margin-top: 2%;
 }
 
 .rightSide{
 
 }
 
+.footerContainer{
+    margin-top: 2%;
+    margin-left: 10%;
+    padding-left: 2%;
+}
+
+.minHtClass{
+    min-height: 400px;
+}
+
 .logoutbutton {
-    margin-top: -10px;
-    margin-left: 856px;
-    width: 10%;
+    /*margin-top: 4%;
+    margin-left: 2%;
+    width: 20%;
+    position: absolute;
+    right:0%;*/
+    float: right;
 }
 
 header{
@@ -48,6 +61,8 @@ header{
     padding-bottom: 2%;
     padding-top: 1%;
     font-size: 100%;
+    position: relative;
+    bottom: 0%;
     font-family: 'fontscorecomttwcenmt';
 }
 
@@ -67,10 +82,12 @@ footer{
 a:hover{
     color:white;
 }
+/*
 h4{
     font-family: 'fontscorecomttwcenmt';
     font-size:150%;
 }
+*/
 
 .OrderForm{
     max-width: 70%;
@@ -79,13 +96,14 @@ h4{
 
 .container{
     margin-top : 5%;
-    margin-left: 17%;
+    margin-left: 10%;
     padding-left: 2%;
 
 }
 
 .menu{
-    margin-top:5%;
+ margin-bottom: 2%;
+ margin-top: 2%;
 }
 .navigationBar{
     margin-right: 2%;
@@ -142,7 +160,7 @@ h4{
     max-width: 5%;
     margin-top:1.5%;
     margin-left:1%;
-
+    min-width: 5%;
 }
 
 .headerName{
