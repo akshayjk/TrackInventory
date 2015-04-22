@@ -102,8 +102,8 @@ h4{
 }
 
 .menu{
- margin-bottom: 2%;
- margin-top: 2%;
+    margin-bottom: 2%;
+    margin-top: 2%;
 }
 .navigationBar{
     margin-right: 2%;
@@ -153,8 +153,8 @@ h4{
     margin-top:5px;
 }
 .LoginImage{
-   max-width: 50%;
-   margin-top: 15%;
+    max-width: 50%;
+    margin-top: 15%;
 }
 .headerImage{
     max-width: 5%;
@@ -180,4 +180,6 @@ h4{
     margin-bottom: 2%;
 }
 
-
+.OrderTable{
+    margin:2%;
+}
