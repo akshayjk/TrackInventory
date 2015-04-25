@@ -236,7 +236,7 @@ h4{
 
 .MessageDisplay{
     min-height: 400px;
-    max-height: 500px;
+
 }
 
 .FranchiseMessageDisplay{
@@ -247,11 +247,29 @@ h4{
 }
 
 .FranchiseMessageDisplay:hover{
-    background-color: #eeeeee;
+    background-color: #f6f6f6;
 }
 
 .FranchiseMessageBlock{
     min-height: 400px;
-    max-height: 500px;
+    height: 400px;
     overflow-y: scroll;
+}
+
+.clickedMessageFr{
+    background-color: #e5e5e5;
+    border-bottom: 1px solid #ddd;
+    padding : 5%;
+
+}
+
+.clickedMessageFr:hover{
+    background-color: #e5e5e5; !important;
+}
+
+.sendMessage{
+    height: 200px;
+    width:100%;
+    padding:2%;
+    margin-bottom: 2%;
 }

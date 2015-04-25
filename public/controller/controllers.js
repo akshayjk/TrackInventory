@@ -10,9 +10,9 @@
         $scope.loginForm = {};
         $scope.login = function () {
             console.log($scope.loginForm);
-            if($scope.loginForm.username=="admin"){
+            if ($scope.loginForm.username == "admin") {
                 $window.location.href = '../views/AdminMain.html';
-            }else{
+            } else {
                 $window.location.href = '../views/FranchiseMain.html';
             }
 
@@ -21,9 +21,10 @@
 
     App.controller("LogOutCtrl", ["$scope", "$location", "$window", function ($scope, $location, $window) {
 
-        function ComeOn(){
+        function ComeOn() {
             console.log("here is the problem")
         }
+
         ComeOn();
 
         $scope.logOut = function () {
@@ -35,17 +36,17 @@
 
     App.controller("OrderForm", ["$scope", "$location", function ($scope, $location) {
 
-        $scope.ready = function(){
+        $scope.ready = function () {
             $('#PaymentTab').attr('class', 'disabled disabledTab');
             $('#OrderTab').attr('class', 'disabled disabledTab');
-        }
-
+        };
+        $scope.Maths = 40;
         $scope.ready();
-        $scope.navActive = function(Name){
+        $scope.navActive = function (Name) {
             $('#' + Name).attr('class', 'active');
             var Tabs = ["Orders", "PreviousOrders", "Query"]
-            Tabs.forEach(function(tab){
-                if(tab!=Name){
+            Tabs.forEach(function (tab) {
+                if (tab != Name) {
                     $('#' + tab).removeClass('active');
                 }
             });
@@ -102,9 +103,9 @@
             console.log("Uniform Size : " + $scope.StudentObject.UniformSize);
         };
 
-        $scope.setUniformQty = function(){
-            if($scope.StudentObject.UniformQty==undefined){
-                $scope.StudentObject.UniformQty =1;
+        $scope.setUniformQty = function () {
+            if ($scope.StudentObject.UniformQty == undefined) {
+                $scope.StudentObject.UniformQty = 1;
             }
         };
         $scope.setUniformQty();
@@ -118,12 +119,12 @@
             $scope.TotalCost = $scope.KitCost + $scope.UniformCosts[$scope.getUniformSize()] * $scope.getUniformQty();
         }
         $scope.setTotalCost();
-        $scope.getFinalCost = function(){
+        $scope.getFinalCost = function () {
 
             var FinalCost = 0;
-            $scope.Students.forEach(function(student){
-                console.log("student " + $scope.UniformCosts[student.UniformSize] + "  " +  $scope.UniformQty);
-                FinalCost+= $scope.KitCost + $scope.UniformCosts[student.UniformSize] * student.UniformQty;
+            $scope.Students.forEach(function (student) {
+                console.log("student " + $scope.UniformCosts[student.UniformSize] + "  " + $scope.UniformQty);
+                FinalCost += $scope.KitCost + $scope.UniformCosts[student.UniformSize] * student.UniformQty;
             });
             return FinalCost
         }
@@ -134,10 +135,10 @@
             console.log("Class name : " + $scope.StudentObject.Class);
         };
 
-        $scope.getWelComeKitClass = function(){
-            if($scope.StudentObject.Class!=undefined){
+        $scope.getWelComeKitClass = function () {
+            if ($scope.StudentObject.Class != undefined) {
                 return $scope.StudentObject.Class;
-            }else{
+            } else {
                 return $scope.Class;
             }
         }
@@ -230,13 +231,11 @@
         };
 
 
-
-
     }]);
 
     App.controller("PrevOrders", ["$scope", "$location", function ($scope, $location) {
 
-        $scope.Orders =[
+        $scope.Orders = [
             {
                 "Students": [
                     {
@@ -300,13 +299,13 @@
                 "ModifiedOn": "2015-04-18T14:38:26.943Z"
             }
         ]
-        $scope.getDate = function(Obj){
+        $scope.getDate = function (Obj) {
             var str = new Date(Obj).toString();
-            return str.substring(0, str.length-30)
+            return str.substring(0, str.length - 30)
         }
     }]);
 
-    App.controller("AdminController", ["$scope", "$location", function($scope, $location){
+    App.controller("AdminController", ["$scope", "$location", function ($scope, $location) {
 
         $scope.UniformCosts = {
             "1": 10,
@@ -324,7 +323,7 @@
                         "RegistrationNumber": "AG887425",
                         "UniformSize": 2,
                         "UniformQty": 2,
-                        "Class":"PlayGroup"
+                        "Class": "PlayGroup"
 
                     },
                     {
@@ -332,42 +331,42 @@
                         "RegistrationNumber": "AG887425",
                         "UniformSize": 1,
                         "UniformQty": 2,
-                        "Class":"PlayGroup"
+                        "Class": "PlayGroup"
                     },
                     {
                         "NameOfStudent": "Akshay8",
                         "RegistrationNumber": "AG887425",
                         "UniformSize": 3,
                         "UniformQty": 2,
-                        "Class":"UKG"
+                        "Class": "UKG"
                     },
                     {
                         "NameOfStudent": "Akshay8",
                         "RegistrationNumber": "AG887425",
                         "UniformSize": 2,
                         "UniformQty": 2,
-                        "Class":"UKG"
+                        "Class": "UKG"
                     },
                     {
                         "NameOfStudent": "Akshay8",
                         "RegistrationNumber": "AG887425",
                         "UniformSize": 1,
                         "UniformQty": 2,
-                        "Class":"UKG"
+                        "Class": "UKG"
                     },
                     {
                         "NameOfStudent": "Akshay8",
                         "RegistrationNumber": "AG887425",
                         "UniformSize": 4,
                         "UniformQty": 2,
-                        "Class":"UKG"
+                        "Class": "UKG"
                     },
                     {
                         "NameOfStudent": "Akshay8",
                         "RegistrationNumber": "AG887425",
                         "UniformSize": 4,
                         "UniformQty": 2,
-                        "Class":"UKG"
+                        "Class": "UKG"
                     }
                 ],
                 "FranchiseId": "Kolkata School",
@@ -387,21 +386,21 @@
                         "RegistrationNumber": "AG887425",
                         "UniformSize": 5,
                         "UniformQty": 2,
-                        "Class":"PlayGroup"
+                        "Class": "PlayGroup"
                     },
                     {
                         "NameOfStudent": "Akshay7",
                         "RegistrationNumber": "AG887425",
                         "UniformSize": 1,
                         "UniformQty": 2,
-                        "Class":"SKG"
+                        "Class": "SKG"
                     },
                     {
                         "NameOfStudent": "Akshay8",
                         "RegistrationNumber": "AG887425",
                         "UniformSize": 2,
                         "UniformQty": 2,
-                        "Class":"Nursery"
+                        "Class": "Nursery"
                     }
                 ],
                 "FranchiseId": "Mumbai School",
@@ -415,78 +414,79 @@
                 "ModifiedOn": "2015-04-18T14:38:26.943Z"
             }
         ];
-        $scope.dispatched = [{
-            "Students": [
+        $scope.dispatched = [
+            {
+                "Students": [
 
-                {
-                    "NameOfStudent": "Akshay8",
-                    "RegistrationNumber": "AG887425",
-                    "UniformSize": 2,
-                    "UniformQty": 2,
-                    "Class":"UKG"
-                },
-                {
-                    "NameOfStudent": "Akshay8",
-                    "RegistrationNumber": "AG887425",
-                    "UniformSize": 1,
-                    "UniformQty": 2,
-                    "Class":"UKG"
-                },
-                {
-                    "NameOfStudent": "Akshay8",
-                    "RegistrationNumber": "AG887425",
-                    "UniformSize": 4,
-                    "UniformQty": 2,
-                    "Class":"UKG"
-                },
-                {
-                    "NameOfStudent": "Akshay8",
-                    "RegistrationNumber": "AG887425",
-                    "UniformSize": 4,
-                    "UniformQty": 2,
-                    "Class":"UKG"
-                }
-            ],
-            "FranchiseId": "Kolkata School",
-            "Status": "Dispatched",
-            "TotalAmount": 654354.55,
-            "ModeOfPayment": "Cash",
-            "TransactionID": "RR88283553",
-            "Address": "Some detailed address here ",
-            "OrderId": "46414234537824201",
-            "CreateOn": "2015-04-18T14:37:04.211Z",
-            "ModifiedOn": "2015-04-18T14:37:04.211Z"
-        }];
+                    {
+                        "NameOfStudent": "Akshay8",
+                        "RegistrationNumber": "AG887425",
+                        "UniformSize": 2,
+                        "UniformQty": 2,
+                        "Class": "UKG"
+                    },
+                    {
+                        "NameOfStudent": "Akshay8",
+                        "RegistrationNumber": "AG887425",
+                        "UniformSize": 1,
+                        "UniformQty": 2,
+                        "Class": "UKG"
+                    },
+                    {
+                        "NameOfStudent": "Akshay8",
+                        "RegistrationNumber": "AG887425",
+                        "UniformSize": 4,
+                        "UniformQty": 2,
+                        "Class": "UKG"
+                    },
+                    {
+                        "NameOfStudent": "Akshay8",
+                        "RegistrationNumber": "AG887425",
+                        "UniformSize": 4,
+                        "UniformQty": 2,
+                        "Class": "UKG"
+                    }
+                ],
+                "FranchiseId": "Kolkata School",
+                "Status": "Dispatched",
+                "TotalAmount": 654354.55,
+                "ModeOfPayment": "Cash",
+                "TransactionID": "RR88283553",
+                "Address": "Some detailed address here ",
+                "OrderId": "46414234537824201",
+                "CreateOn": "2015-04-18T14:37:04.211Z",
+                "ModifiedOn": "2015-04-18T14:37:04.211Z"
+            }
+        ];
         $scope.listView = false;
         $scope.orderView = true;
-        $scope.OrderNo =0;
-        $scope.showOrder = function(index){
+        $scope.OrderNo = 0;
+        $scope.showOrder = function (index) {
             $scope.listView = toggle($scope.listView);
             $scope.orderView = toggle($scope.orderView);
-            if(index!=undefined){
+            if (index != undefined) {
                 $scope.OrderNo = index;
             }
         };
 
-        function toggle(data){
-            console.log("1st " + data)
-            if(data){
+        function toggle(data) {
+            if (data) {
                 return false;
 
-            }else if(data==false){
+            } else if (data == false) {
                 return true;
 
             }
         }
-        $scope.getDate = function(dateObj){
+
+        $scope.getDate = function (dateObj) {
             var dateStr = new Date(dateObj).toDateString();
-            console.log(dateStr + " "  + dateStr.length);
             return dateStr;
 
         }
 
-        $scope.dispatchOrder = function(OrderIndex){
-            $scope.dummyOrders[OrderIndex].Status ="Dispatched"
+        $scope.dispatchOrder = function (OrderIndex) {
+            $scope.dummyOrders[OrderIndex].Status = "Dispatched"
             $scope.dispatched.push($scope.dummyOrders[OrderIndex]);
             $scope.dummyOrders.splice(OrderIndex, 1);
             $scope.listView = toggle($scope.listView);
@@ -495,159 +495,71 @@
 
     }]);
 
-    App.controller("Inventory",["$scope", function($scope){
-
-        $scope.AddInventoryData = {
-            "KitContent" :{
-                "Diary" : 0,
-                "School bag" : 0,
-                "Paint without Brush school kit" : 0,
-                "Id card and pouch":0,
-                "Evaluation Report" : 0
-            },
-            "Books":{
-                "Manners and Etttiquettes" : 0,
-                "Alphabet and Phonics Level 1 ": 0,
-                "Alphabet and Phonics Level 2" : 0,
-                "Premaths Level 2" :0,
-
-                    "Premaths Level 3":0,
-                    "Premaths Level 4":0,
-
-
-                    "Social Studies Level 2":0,
-                    "Social Studies Level 3":0,
-                    "Social Studies Level 4":0,
-
-
-                    "Science Level 2":0,
-                    "Science Level 3":0,
-                    "Science Level 4":0,
-
-
-                    "Scribble and write":0,
-                    "practice writing capital letters" : 0,
-                    "line and curves 3" : 0,
-                    "lines and curves 4":0,
-
-
-                    "Drawing&colouring for the young a" : 0,
-                    "drawing and activity a":0,
-
-
-                    "Little Enthusiast CDs":0,
-                    "Little Explorers CDs":0
-
-
-            },
-            "Uniforms" :{
-
-                    "Uniform Size 2":0,
-                    "Uniform Size 3":0,
-                    "Uniform Size 5":0,
-                    "Uniform Size 7":0,
-
-
-                    "Socks Size 2" : 0,
-                    "Socks Size 4": 0
-
-            }
-        };
+    App.controller("Inventory", ["$scope", function ($scope) {
 
         $scope.InventoryData = {
-            "KitContent" :{
-                "Diary" : 160,
-                "School bag" : 85,
-                "Paint without Brush school kit" : 94,
-                "Id card and pouch":76,
-                "Evaluation Report" : 100
+            "Kit Content": {
+                "Diary": 160,
+                "School bag": 85,
+                "Paint without Brush school kit": 94,
+                "Id card and pouch": 76,
+                "Evaluation Report": 100
             },
-            "Books":{
-                "Manners and Etttiquettes" : 20,
-                "Alphabet and Phonics Level 1 ": 45,
-                "Alphabet and Phonics Level 2" : 80,
-                "Premaths Level 2" :60,
-
-                "Premaths Level 3":49,
-                "Premaths Level 4":67,
-
-
-                "Social Studies Level 2":60,
-                "Social Studies Level 3":49,
-                "Social Studies Level 4":67,
-
-
-                "Science Level 2":60,
-                "Science Level 3":49,
-                "Science Level 4":67,
-
-
-                "Scribble and write":45,
-                "practice writing capital letters" : 50,
-                "line and curves 3" : 34,
-                "lines and curves 4":67,
-
-
-                "Drawing&colouring for the young a" : 56,
-                "drawing and activity a":70,
-
-
-                "Little Enthusiast CDs":49,
-                "Little Explorers CDs":50
-
+            "Books": {
+                "Manners and Etttiquettes": 20,
+                "Alphabet and Phonics": {
+                    "Level 1": 45,
+                    "Level 2": 80
+                },
+                "Premaths": {
+                    "Level 2": 60,
+                    "Level 3": 49,
+                    "Level 4": 67
+                },
+                "Social Studies": {
+                    "Level 2": 60,
+                    "Level 3": 49,
+                    "Level 4": 67
+                },
+                "Science": {
+                    "Level 2": 60,
+                    "Level 3": 49,
+                    "Level 4": 67
+                },
+                "Writing": {
+                    "Scribble and write": 45,
+                    "practice writing capital letters": 50,
+                    "line and curves 3": 34,
+                    "lines and curves 4": 67
+                },
+                "Colouring": {
+                    "Drawing&colouring for the young a": 56,
+                    "drawing and activity a": ""
+                },
+                "CDs": {
+                    "Little Enthusiast": 49,
+                    "Little Explorers": 50
+                }
 
             },
-            "Uniforms" :{
-
-                "Uniform Size 2":30,
-                "Uniform Size 3":40,
-                "Uniform Size 5":50,
-                "Uniform Size 7":40,
-
-
-                "Socks Size 2" : 30,
-                "Socks Size 4": 45
-
+            "Uniforms": {
+                "Uniform": {
+                    "Size 2": 30,
+                    "Size 3": 40,
+                    "Size 5": 50,
+                    "Size 7": 40
+                },
+                "Socks": {
+                    "Size 2": 30,
+                    "Size 4": 45
+                }
             }
-        };
-        $scope.Maths = "this is maths";
-        $('#addInv').hide();
-        $('#EditInvDet').hide();
-        //console.log("Inventory"+InventoryData.KitContent.Diary.value)
-
-        $scope.invEdit = function(){
-        //    $('#addInv').removeClass("disabled");
-
-            $('#EditInvDet').show();
-            $('#InvDet').hide();
         }
+        $scope.Maths = 30;
 
-
-        $scope.invAdd = function(){
-            $('#addInv').show();
-            $('#InvDet').hide();
-
-
-        }
-        $scope.editAdd = function(){
-
-            $('#EditInvDet').hide();
-            $('#InvDet').show();
-            console.log($scope.InventoryData.Books['Premaths Level 4'])
-
-
-        }
-        $scope.updateAdd = function(){
-            $('#addInv').hide();
-
-            $('#InvDet').show();
-            console.log($scope.AddInventoryData.Books['Premaths Level 4'])
-
-
-        }
     }]);
 
-    App.controller("Messages", ['$scope', function($scope){
+    App.controller("Messages", ['$scope', function ($scope) {
 
         $scope.Messages = [
             {
@@ -669,7 +581,114 @@
             },
             {
                 "FranchiseName": "Mumbai School",
-                "FranchiseId": "RR25453",
+                "FranchiseId": "RR25454",
+                "ModifiedOn": "2015-04-18T19:37:04.211Z",
+                "Messages": [
+                    {
+                        "sender": "akshay",
+                        "sent on": "2015-04-18T14:37:04.211Z",
+                        "Message": "We have a problem with order Id 5442545. We recieved one CD lesser"
+                    },
+                    {
+                        "sender": "admin",
+                        "sent on": "2015-04-18T18:37:04.211Z",
+                        "Message": "We will look into the issue"
+                    }
+                ]
+            },
+            {
+                "FranchiseName": "Dummy School 1",
+                "FranchiseId": "RR25455",
+                "ModifiedOn": "2015-04-13T19:37:04.211Z",
+                "Messages": [
+                    {
+                        "sender": "akshay",
+                        "sent on": "2015-04-18T14:37:04.211Z",
+                        "Message": "We have a problem with order Id 5442545. We recieved one CD lesser"
+                    },
+                    {
+                        "sender": "admin",
+                        "sent on": "2015-04-13T18:37:04.211Z",
+                        "Message": "We will look into the issue"
+                    },
+                    {
+                        "sender": "admin",
+                        "sent on": "2015-04-13T18:37:04.211Z",
+                        "Message": "We will look into the issue"
+                    }
+                ]
+            },
+            {
+                "FranchiseName": "Mumbai School 2",
+                "FranchiseId": "RR25456",
+                "ModifiedOn": "2015-04-18T19:37:04.211Z",
+                "Messages": [
+                    {
+                        "sender": "akshay",
+                        "sent on": "2015-04-18T14:37:04.211Z",
+                        "Message": "We have a problem with order Id 5442545. We recieved one CD lesser"
+                    },
+                    {
+                        "sender": "admin",
+                        "sent on": "2015-04-18T18:37:04.211Z",
+                        "Message": "We will look into the issue"
+                    }
+                ]
+            },
+            {
+                "FranchiseName": "Kolkata School 3",
+                "FranchiseId": "RR25457",
+                "ModifiedOn": "2015-04-18T19:37:04.211Z",
+                "Messages": [
+                    {
+                        "sender": "akshay",
+                        "sent on": "2015-04-18T14:37:04.211Z",
+                        "Message": "We have a problem with order Id 5442545. We recieved one CD lesser"
+                    },
+                    {
+                        "sender": "admin",
+                        "sent on": "2015-04-18T18:37:04.211Z",
+                        "Message": "We will look into the issue"
+                    }
+                ]
+            },
+            {
+                "FranchiseName": "Pune School",
+                "FranchiseId": "RR25458",
+                "ModifiedOn": "2015-04-18T19:37:04.211Z",
+                "Messages": [
+                    {
+                        "sender": "akshay",
+                        "sent on": "2015-04-18T14:37:04.211Z",
+                        "Message": "We have a problem with order Id 5442545. We recieved one CD lesser"
+                    },
+                    {
+                        "sender": "admin",
+                        "sent on": "2015-04-18T18:37:04.211Z",
+                        "Message": "We will look into the issue"
+                    }
+                ]
+            },
+            {
+                "FranchiseName": "Chennai School",
+                "FranchiseId": "RR25459",
+                "ModifiedOn": "2015-04-18T19:37:04.211Z",
+                "Messages": [
+                    {
+                        "sender": "akshay",
+                        "sent on": "2015-04-18T14:37:04.211Z",
+                        "Message": "We have a problem with order Id 5442545. We recieved one CD lesser"
+                    },
+                    {
+                        "sender": "admin",
+                        "sent on": "2015-04-18T18:37:04.211Z",
+                        "Message": "We will look into the issue"
+                    }
+                ]
+            },
+            {
+                "FranchiseName": "asdas School",
+                "FranchiseId": "RR25460",
                 "ModifiedOn": "2015-04-18T19:37:04.211Z",
                 "Messages": [
                     {
@@ -686,23 +705,34 @@
             }
         ];
 
-        $scope.getDate = function(dateObj){
+        $scope.getDate = function (dateObj) {
             var dateStr = new Date(dateObj).getDate().toString();
+            var monthStr = new Date(dateObj).getMonth().toString();
+            var yrStr = new Date(dateObj).getFullYear().toString();
             var date = new Date(dateObj);
             var hours = date.getHours();
             var minutes = date.getMinutes();
             var ampm = hours >= 12 ? 'pm' : 'am';
             hours = hours % 12;
             hours = hours ? hours : 12; // the hour '0' should be '12'
-            minutes = minutes < 10 ? '0'+minutes : minutes;
-            return dateStr + " " + hours + ':' + minutes + ' ' + ampm;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            return dateStr + "/" + monthStr + '/'+ yrStr + " " + hours + ':' + minutes + ' ' + ampm;
         };
-        $scope.CurrentMessage=$scope.Messages[0].Messages;
-        $scope.setMessage = function(msgValue){
+        $scope.CurrentMessage = $scope.Messages[0].Messages;
+        $scope.setMessage = function (msgValue) {
             $scope.CurrentMessage = $scope.Messages[msgValue].Messages;
+            var id =  $scope.Messages[msgValue].FranchiseId;
+            $('#' +id).addClass('clickedMessageFr');
+            $scope.Messages.forEach(function(Msg){
+                if(Msg.FranchiseId!=id){
+                    $('#' + Msg.FranchiseId).removeClass('clickedMessageFr');
+                }
+            })
+
         };
+
         $scope.clickValue = false;
-        $scope.appliedClass = function(){
+        $scope.appliedClass = function () {
 
         }
     }])
