@@ -263,7 +263,9 @@
     <div>
         <form ng-hide="formHide" ng-submit="addStudents()">
 
-           <div class ="">Common Kit Items</div>
+
+            <div class ="FranchiseName"><b>Common Kit Items</b></div>
+
             <div class="control-group col-xs-12">
                 <label class="control-label col-xs-4" for="Diary">Diary</label>
 
@@ -311,7 +313,8 @@
                 </div>
             </div>
             <!-- Text input-->
-            <div class ="">Books</div>
+            <div class ="FranchiseName"><b>Books</b></div>
+
             <div class="control-group col-xs-12">
                 <label class="control-label col-xs-4" for="Manners">Manners and Ettiquettes</label>
 
@@ -505,7 +508,7 @@
                 </div>
             </div>
 
-            <div class ="">Uniforms</div>
+            <div class ="FranchiseName"><b>Uniforms</b></div>
             <div class="control-group col-xs-12">
                 <label class="control-label col-xs-4" for="Uniform2">Uniform Size 2</label>
 
@@ -559,6 +562,7 @@
     margin-right: -250px;
     margin-top: -1700px;
 ">
+                <div class ="FranchiseName"><b>Total Kit Numbers</b></div>
                 <div class="control-group col-xs-12">
                     <label class="control-label col-xs-4" for="PlaygroundKit">Playground Kit</label>
 
@@ -640,19 +644,18 @@
                 <div class="controls">
                     <button type="submit" ng-hide="formHide" id="addMore" name="addMore" class="btn btn-primary" style="
                         margin-top: 10px;
-                        ">Update
+                        ">Add
                     </button>
                     <button type="button" ng-hide="formCancel" id="Cancel" name="Cancel" class="btn btn-primary" style="
         margin-top: 10px; margin-left:1%;
-        " ng-click="stdCancel()">Cancel
+        " ng-click="stdCancel()">Edit
                     </button>
                 </div>
             </div>
 
         </form>
 </div>
-    </div>
-</div>
+
 <div class="tab-pane" id="Query">
     Something to Display Here
 </div>
