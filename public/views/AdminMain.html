@@ -20,7 +20,6 @@
     <script src="../controller/filters.js"></script>
     <script src="../controller/controllers.js"></script>
     <script src="../App.js"></script>
-    <script src="../adminCode.js"></script>
 </head>
 <body>
 <header>
@@ -711,6 +710,9 @@
                                             </div>
                                         </div>
                                     </div>
+</form>
+</div>
+<div class="tab-pane" id="Messages" ng-controller="Messages">
 
 
 
@@ -734,6 +736,31 @@
             </div>
         </div>
     </div>
+    <div class="singleOrder col-xs-12 MessageDisplay">
+
+        <div class="col-xs-12" style="padding:2%; border-bottom:1px solid #ddd">
+            <div class="col-xs-4" style="text-align: center"><b>Franchise</b></div>
+            <div class="col-xs-8 pull-right" style="text-align: center"><b>Messages</b></div>
+        </div>
+        <div class="col-xs-12">
+            <ul class="FranchiseMessageBlock col-xs-4" style="padding-left:0%;">
+                <li ng-repeat="franchise in Messages" ng-click="setMessage($index)">
+                    <div class="FranchiseMessageDisplay"><b>{{franchise.FranchiseName}}</b><div><small>{{getDate(franchise.ModifiedOn)}}</small></div></div>
+
+                </li>
+            </ul>
+            <ul class="FranchiseMessageBlock col-xs-8" style="padding:2%;">
+                <li ng-repeat="message in CurrentMessage" class="singleOrder" ng-class="appliedClass(myObj)">
+                    <div class=""><span><small>{{message.sender}}</small></span><span class="pull-right"><small>{{getDate(message["sent on"])}}</small></span></div>
+                    <div style="padding-top: 2%">{{message.Message}}</div>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+</div>
+</div>
 
 </body>
 </html>
