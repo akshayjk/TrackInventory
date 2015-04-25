@@ -497,8 +497,65 @@
 
     App.controller("Inventory",["$scope", function($scope){
 
+        $scope.AddInventoryData = {
+            "KitContent" :{
+                "Diary" : 0,
+                "School bag" : 0,
+                "Paint without Brush school kit" : 0,
+                "Id card and pouch":0,
+                "Evaluation Report" : 0
+            },
+            "Books":{
+                "Manners and Etttiquettes" : 0,
+                "Alphabet and Phonics Level 1 ": 0,
+                "Alphabet and Phonics Level 2" : 0,
+                "Premaths Level 2" :0,
+
+                    "Premaths Level 3":0,
+                    "Premaths Level 4":0,
+
+
+                    "Social Studies Level 2":0,
+                    "Social Studies Level 3":0,
+                    "Social Studies Level 4":0,
+
+
+                    "Science Level 2":0,
+                    "Science Level 3":0,
+                    "Science Level 4":0,
+
+
+                    "Scribble and write":0,
+                    "practice writing capital letters" : 0,
+                    "line and curves 3" : 0,
+                    "lines and curves 4":0,
+
+
+                    "Drawing&colouring for the young a" : 0,
+                    "drawing and activity a":0,
+
+
+                    "Little Enthusiast CDs":0,
+                    "Little Explorers CDs":0
+
+
+            },
+            "Uniforms" :{
+
+                    "Uniform Size 2":0,
+                    "Uniform Size 3":0,
+                    "Uniform Size 5":0,
+                    "Uniform Size 7":0,
+
+
+                    "Socks Size 2" : 0,
+                    "Socks Size 4": 0
+
+            }
+        };
+
         $scope.InventoryData = {
-            "Kit Content" :{
+            "KitContent" :{
                 "Diary" : 160,
                 "School bag" : 85,
                 "Paint without Brush school kit" : 94,
@@ -507,54 +564,86 @@
             },
             "Books":{
                 "Manners and Etttiquettes" : 20,
-                "Alphabet and Phonics":{
-                    "Level 1": 45,
-                    "Level 2":80
-                },
-                "Premaths" :{
-                    "Level 2":60,
-                    "Level 3":49,
-                    "Level 4":67
-                },
-                "Social Studies":{
-                    "Level 2":60,
-                    "Level 3":49,
-                    "Level 4":67
-                },
-                "Science" :{
-                    "Level 2":60,
-                    "Level 3":49,
-                    "Level 4":67
-                },
-                "Writing":{
-                    "Scribble and write":45,
-                    "practice writing capital letters" : 50,
-                    "line and curves 3" : 34,
-                    "lines and curves 4":67
-                },
-                "Colouring":{
-                    "Drawing&colouring for the young a" : 56,
-                    "drawing and activity a":""
-                },
-                "CDs":{
-                    "Little Enthusiast":49,
-                    "Little Explorers":50
-                }
+                "Alphabet and Phonics Level 1 ": 45,
+                "Alphabet and Phonics Level 2" : 80,
+                "Premaths Level 2" :60,
+
+                "Premaths Level 3":49,
+                "Premaths Level 4":67,
+
+
+                "Social Studies Level 2":60,
+                "Social Studies Level 3":49,
+                "Social Studies Level 4":67,
+
+
+                "Science Level 2":60,
+                "Science Level 3":49,
+                "Science Level 4":67,
+
+
+                "Scribble and write":45,
+                "practice writing capital letters" : 50,
+                "line and curves 3" : 34,
+                "lines and curves 4":67,
+
+
+                "Drawing&colouring for the young a" : 56,
+                "drawing and activity a":70,
+
+
+                "Little Enthusiast CDs":49,
+                "Little Explorers CDs":50
+
 
             },
             "Uniforms" :{
-                "Uniform":{
-                    "Size 2":30,
-                    "Size 3":40,
-                    "Size 5":50,
-                    "Size 7":40
-                },
-                "Socks":{
-                    "Size 2" : 30,
-                    "Size 4": 45
-                }
+
+                "Uniform Size 2":30,
+                "Uniform Size 3":40,
+                "Uniform Size 5":50,
+                "Uniform Size 7":40,
+
+
+                "Socks Size 2" : 30,
+                "Socks Size 4": 45
+
             }
+        };
+        $scope.Maths = "this is maths";
+        $('#addInv').hide();
+        $('#EditInvDet').hide();
+        //console.log("Inventory"+InventoryData.KitContent.Diary.value)
+
+        $scope.invEdit = function(){
+        //    $('#addInv').removeClass("disabled");
+
+            $('#EditInvDet').show();
+            $('#InvDet').hide();
         }
 
+
+        $scope.invAdd = function(){
+            $('#addInv').show();
+            $('#InvDet').hide();
+
+
+        }
+        $scope.editAdd = function(){
+
+            $('#EditInvDet').hide();
+            $('#InvDet').show();
+            console.log($scope.InventoryData.Books['Premaths Level 4'])
+
+
+        }
+        $scope.updateAdd = function(){
+            $('#addInv').hide();
+
+            $('#InvDet').show();
+            console.log($scope.AddInventoryData.Books['Premaths Level 4'])
+
+
+        }
     }])
 }());
