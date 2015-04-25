@@ -233,3 +233,25 @@ h4{
 .ContactClass{
     float:right;
 }
+
+.MessageDisplay{
+    min-height: 400px;
+    max-height: 500px;
+}
+
+.FranchiseMessageDisplay{
+
+    border-bottom: 1px solid #ddd;
+    padding : 5%;
+
+}
+
+.FranchiseMessageDisplay:hover{
+    background-color: #eeeeee;
+}
+
+.FranchiseMessageBlock{
+    min-height: 400px;
+    max-height: 500px;
+    overflow-y: scroll;
+}

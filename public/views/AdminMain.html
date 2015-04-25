@@ -260,404 +260,425 @@
     </div>
 </div>
 <div class="tab-pane" id="Inventory" ng-controller="Inventory">
-    <div>
-        <form ng-hide="formHide" ng-submit="addStudents()">
+<div>
+<form ng-hide="formHide" ng-submit="addStudents()">
 
 
-            <div class ="FranchiseName"><b>Common Kit Items</b></div>
+<div class ="FranchiseName"><b>Common Kit Items</b></div>
 
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Diary">Diary</label>
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Diary">Diary</label>
 
-                <div class="controls">
-                    <input id="Diary" name="Diary" type="number" placeholder="# of Diary"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <br/>
+    <div class="controls">
+        <input id="Diary" name="Diary" type="number" placeholder="# of Diary"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<br/>
 
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Schoolbag">School bag</label>
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Schoolbag">School bag</label>
 
-                <div class="controls">
-                    <input id="Schoolbag" name="Schoobag" type="number" placeholder="# of School bag"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <!-- Text input-->
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="PaintBrush">Paint without Brush</label>
+    <div class="controls">
+        <input id="Schoolbag" name="Schoobag" type="number" placeholder="# of School bag"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<!-- Text input-->
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="PaintBrush">Paint without Brush</label>
 
-                <div class="controls">
-                    <input id="PaintBrush" name="PaintBrush" type="number" placeholder="# of Paint without Brush"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <br/>
-            <!-- Text input-->
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="cardpouch">Id card and pouchge</label>
+    <div class="controls">
+        <input id="PaintBrush" name="PaintBrush" type="number" placeholder="# of Paint without Brush"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<br/>
+<!-- Text input-->
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="cardpouch">Id card and pouchge</label>
 
-                <div class="controls">
-                    <input id="cardpouch" name="cardpouch" type="number" placeholder="# of Id card and pouch"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <!-- Text input-->
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="EvaluationReport">Evaluation Report</label>
+    <div class="controls">
+        <input id="cardpouch" name="cardpouch" type="number" placeholder="# of Id card and pouch"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<!-- Text input-->
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="EvaluationReport">Evaluation Report</label>
 
-                <div class="controls">
-                    <input id="EvaluationReport" name="EvaluationReport" type="number" placeholder="# of Evaluation Report"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <!-- Text input-->
-            <div class ="FranchiseName"><b>Books</b></div>
+    <div class="controls">
+        <input id="EvaluationReport" name="EvaluationReport" type="number" placeholder="# of Evaluation Report"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<!-- Text input-->
+<div class ="FranchiseName"><b>Books</b></div>
 
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Manners">Manners and Ettiquettes</label>
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Manners">Manners and Ettiquettes</label>
 
-                <div class="controls">
-                    <input id="Manners" name="Manners" type="number" placeholder="# of Manners and Ettiquettes Books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <br/>
-            <!-- Select Basic -->
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Alphabet1">Alphabet and Phonics Level 1 </label>
+    <div class="controls">
+        <input id="Manners" name="Manners" type="number" placeholder="# of Manners and Ettiquettes Books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<br/>
+<!-- Select Basic -->
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Alphabet1">Alphabet and Phonics Level 1 </label>
 
-                <div class="controls">
-                    <input id="Alphabet1" name="Alphabet1" type="number" placeholder="# of Alphabet and Phonics level 1 books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <br/>
-            <!-- Text input-->
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Alphabet2">Alphabet and Phonics Level 2</label>
+    <div class="controls">
+        <input id="Alphabet1" name="Alphabet1" type="number" placeholder="# of Alphabet and Phonics level 1 books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<br/>
+<!-- Text input-->
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Alphabet2">Alphabet and Phonics Level 2</label>
 
-                <div class="controls">
-                    <input id="Alphabet2" name="Alphabet2" type="number" placeholder="# of Alphabet and Phonics level 2 books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <br/>
-            <!-- Text input-->
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Premaths2">Premaths Level 2</label>
+    <div class="controls">
+        <input id="Alphabet2" name="Alphabet2" type="number" placeholder="# of Alphabet and Phonics level 2 books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<br/>
+<!-- Text input-->
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Premaths2">Premaths Level 2</label>
 
-                <div class="controls">
-                    <input id="Premaths2" name="Premaths2" type="number" placeholder="# of Premaths Level 2 books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <br/>
-            <!-- Text input-->
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Premaths2">Premaths Level 2</label>
+    <div class="controls">
+        <input id="Premaths2" name="Premaths2" type="number" placeholder="# of Premaths Level 2 books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<br/>
+<!-- Text input-->
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Premaths2">Premaths Level 2</label>
 
-                <div class="controls">
-                    <input id="Premaths2" name="Premaths2" type="number" placeholder="# of Premaths Level 2 books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <!-- Text input-->
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Premaths3">Premaths Level 3</label>
+    <div class="controls">
+        <input id="Premaths2" name="Premaths2" type="number" placeholder="# of Premaths Level 2 books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<!-- Text input-->
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Premaths3">Premaths Level 3</label>
 
-                <div class="controls">
-                    <input id="Premaths3" name="Premaths3" type="number" placeholder="# of Premaths Level 3 books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <!-- Text input-->
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Premaths2">Premaths Level 4</label>
+    <div class="controls">
+        <input id="Premaths3" name="Premaths3" type="number" placeholder="# of Premaths Level 3 books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<!-- Text input-->
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Premaths2">Premaths Level 4</label>
 
-                <div class="controls">
-                    <input id="Premaths4" name="Premaths4" type="number" placeholder="# of Premaths Level 4 books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Social2">Social Studies Level 2</label>
+    <div class="controls">
+        <input id="Premaths4" name="Premaths4" type="number" placeholder="# of Premaths Level 4 books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Social2">Social Studies Level 2</label>
 
-                <div class="controls">
-                    <input id="Social2" name="Social2" type="number" placeholder="# of Social Studies Level 2 books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <!-- Text input-->
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Social3">Social Studies Level 3</label>
+    <div class="controls">
+        <input id="Social2" name="Social2" type="number" placeholder="# of Social Studies Level 2 books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<!-- Text input-->
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Social3">Social Studies Level 3</label>
 
-                <div class="controls">
-                    <input id="Social3" name="Social3" type="number" placeholder="# of Social Studies Level 3 books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <!-- Text input-->
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Social4">Social Studies Level 4</label>
+    <div class="controls">
+        <input id="Social3" name="Social3" type="number" placeholder="# of Social Studies Level 3 books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<!-- Text input-->
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Social4">Social Studies Level 4</label>
 
-                <div class="controls">
-                    <input id="Social4" name="Social4" type="number" placeholder="# of Social Studies Level 4 books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <!-- Text input-->
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Science2">Science Level 2</label>
+    <div class="controls">
+        <input id="Social4" name="Social4" type="number" placeholder="# of Social Studies Level 4 books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<!-- Text input-->
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Science2">Science Level 2</label>
 
-                <div class="controls">
-                    <input id="Science2" name="Sciencel2" type="number" placeholder="# of Science Level 2 books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <!-- Text input-->
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Science3">Science Level 3</label>
+    <div class="controls">
+        <input id="Science2" name="Sciencel2" type="number" placeholder="# of Science Level 2 books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<!-- Text input-->
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Science3">Science Level 3</label>
 
-                <div class="controls">
-                    <input id="Science3" name="Science3" type="number" placeholder="# of Science Level 3 books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <!-- Text input-->
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Science4">Science Level 4</label>
+    <div class="controls">
+        <input id="Science3" name="Science3" type="number" placeholder="# of Science Level 3 books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<!-- Text input-->
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Science4">Science Level 4</label>
 
-                <div class="controls">
-                    <input id="Science4" name="Science4" type="number" placeholder="# of Science Level 4 books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Scribblewrite">Scribble and write</label>
+    <div class="controls">
+        <input id="Science4" name="Science4" type="number" placeholder="# of Science Level 4 books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Scribblewrite">Scribble and write</label>
 
-                <div class="controls">
-                    <input id="Scribblewrite" name="Scribblewrite" type="number" placeholder="# of Scribble and write books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <br/>
-            <!-- Text input-->
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="practice">practice writing capital letters</label>
+    <div class="controls">
+        <input id="Scribblewrite" name="Scribblewrite" type="number" placeholder="# of Scribble and write books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<br/>
+<!-- Text input-->
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="practice">practice writing capital letters</label>
 
-                <div class="controls">
-                    <input id="practice" name="practice" type="number" placeholder="# of practice writing capital letters books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <br/>
-            <!-- Text input-->
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="line3">line and curves 3</label>
+    <div class="controls">
+        <input id="practice" name="practice" type="number" placeholder="# of practice writing capital letters books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<br/>
+<!-- Text input-->
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="line3">line and curves 3</label>
 
-                <div class="controls">
-                    <input id="line3" name="line3" type="number" placeholder="# of line and curves 3 books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="line4">line and curves 4</label>
+    <div class="controls">
+        <input id="line3" name="line3" type="number" placeholder="# of line and curves 3 books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="line4">line and curves 4</label>
 
-                <div class="controls">
-                    <input id="line4" name="line4" type="number" placeholder="# of line and curves 4 books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
+    <div class="controls">
+        <input id="line4" name="line4" type="number" placeholder="# of line and curves 4 books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
 
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="activity">drawing and activity a a</label>
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="activity">drawing and activity a a</label>
 
-                <div class="controls">
-                    <input id="activity" name="activity" type="number" placeholder="# of drawing and activity a books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
+    <div class="controls">
+        <input id="activity" name="activity" type="number" placeholder="# of drawing and activity a books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
 
-            <br/>
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Drawing">Drawing&colouring for the young a</label>
+<br/>
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Drawing">Drawing&colouring for the young a</label>
 
-                <div class="controls">
-                    <input id="Drawing" name="Drawing" type="number" placeholder="# of Drawing&colouring for the young a books"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
+    <div class="controls">
+        <input id="Drawing" name="Drawing" type="number" placeholder="# of Drawing&colouring for the young a books"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
 
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="LittleEnthusiast">Little Enthusiast</label>
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="LittleEnthusiast">Little Enthusiast</label>
 
-                <div class="controls">
-                    <input id="LittleEnthusiast" name="LittleEnthusiast" type="number" placeholder="# of Little Enthusiast CDs"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
+    <div class="controls">
+        <input id="LittleEnthusiast" name="LittleEnthusiast" type="number" placeholder="# of Little Enthusiast CDs"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
 
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="LittleExplorers">Little Explorers</label>
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="LittleExplorers">Little Explorers</label>
 
-                <div class="controls">
-                    <input id="LittleExplorers" name="LittleExplorers" type="number" placeholder="# of Little Explorers CDs"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
+    <div class="controls">
+        <input id="LittleExplorers" name="LittleExplorers" type="number" placeholder="# of Little Explorers CDs"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
 
-            <div class ="FranchiseName"><b>Uniforms</b></div>
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Uniform2">Uniform Size 2</label>
+<div class ="FranchiseName"><b>Uniforms</b></div>
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Uniform2">Uniform Size 2</label>
 
-                <div class="controls">
-                    <input id="Uniform2" name="Uniform2" type="number" placeholder="# of Uniform Size 2"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Uniform3">Uniform Size 3</label>
+    <div class="controls">
+        <input id="Uniform2" name="Uniform2" type="number" placeholder="# of Uniform Size 2"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Uniform3">Uniform Size 3</label>
 
-                <div class="controls">
-                    <input id="Uniform3" name="Uniform3" type="number" placeholder="# of Uniform Size 3"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Uniform5">Uniform Size 5</label>
+    <div class="controls">
+        <input id="Uniform3" name="Uniform3" type="number" placeholder="# of Uniform Size 3"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Uniform5">Uniform Size 5</label>
 
-                <div class="controls">
-                    <input id="Uniform5" name="Uniform5" type="number" placeholder="# of Uniform Size 5"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Uniform7">Uniform Size 7</label>
+    <div class="controls">
+        <input id="Uniform5" name="Uniform5" type="number" placeholder="# of Uniform Size 5"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Uniform7">Uniform Size 7</label>
 
-                <div class="controls">
-                    <input id="Uniform7" name="Uniform7" type="number" placeholder="# of Uniform Size 7"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Socks2">Socks Size 2</label>
+    <div class="controls">
+        <input id="Uniform7" name="Uniform7" type="number" placeholder="# of Uniform Size 7"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Socks2">Socks Size 2</label>
 
-                <div class="controls">
-                    <input id="Socks2" name="Socks2" type="number" placeholder="# of Socks Size 2"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="Socks4">Socks Size 4</label>
+    <div class="controls">
+        <input id="Socks2" name="Socks2" type="number" placeholder="# of Socks Size 2"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="Socks4">Socks Size 4</label>
 
-                <div class="controls">
-                    <input id="Socks4" name="Socks4" type="number" placeholder="# of Socks Size 4"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-            <div class="KitNumbers" style="
+    <div class="controls">
+        <input id="Socks4" name="Socks4" type="number" placeholder="# of Socks Size 4"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+<div class="KitNumbers" style="
     float: right;
     margin-right: -250px;
     margin-top: -1700px;
 ">
-                <div class ="FranchiseName"><b>Total Kit Numbers</b></div>
-                <div class="control-group col-xs-12">
-                    <label class="control-label col-xs-4" for="PlaygroundKit">Playground Kit</label>
+    <div class ="FranchiseName"><b>Total Kit Numbers</b></div>
+    <div class="control-group col-xs-12">
+        <label class="control-label col-xs-4" for="PlaygroundKit">Playground Kit</label>
 
-                    <div class="controls">
-                        <input id="PlaygroundKit" name="PlaygroundKit" type="number" placeholder="# of Playgroundkit" class="col-xs-8 form-control mini ng-pristine ng-untouched ng-valid" ng-model="StudentObject.Age">
-                    </div>
-                </div>
+        <div class="controls">
+            <input id="PlaygroundKit" name="PlaygroundKit" type="number" placeholder="# of Playgroundkit" class="col-xs-8 form-control mini ng-pristine ng-untouched ng-valid" ng-model="StudentObject.Age">
+        </div>
+    </div>
 
-                <div class="control-group col-xs-12">
-                    <label class="control-label col-xs-4" for="NurseryKit">Nursery Kit</label>
+    <div class="control-group col-xs-12">
+        <label class="control-label col-xs-4" for="NurseryKit">Nursery Kit</label>
 
-                    <div class="controls">
-                        <input id="NurseryKit" name="NurseryKit" type="number" placeholder="# of Nursery Kit" class="col-xs-8 form-control mini ng-pristine ng-untouched ng-valid" ng-model="StudentObject.Age">
-                    </div>
-                </div>
+        <div class="controls">
+            <input id="NurseryKit" name="NurseryKit" type="number" placeholder="# of Nursery Kit" class="col-xs-8 form-control mini ng-pristine ng-untouched ng-valid" ng-model="StudentObject.Age">
+        </div>
+    </div>
 
-                <div class="control-group col-xs-12">
-                    <label class="control-label col-xs-4" for="LKGKit">LKG Kit</label>
+    <div class="control-group col-xs-12">
+        <label class="control-label col-xs-4" for="LKGKit">LKG Kit</label>
 
-                    <div class="controls">
-                        <input id="LKGKit" name="LKGKit" type="number" placeholder="# of LKGKit" class="col-xs-8 form-control mini ng-pristine ng-untouched ng-valid" ng-model="StudentObject.Age">
-                    </div>
-                </div>
+        <div class="controls">
+            <input id="LKGKit" name="LKGKit" type="number" placeholder="# of LKGKit" class="col-xs-8 form-control mini ng-pristine ng-untouched ng-valid" ng-model="StudentObject.Age">
+        </div>
+    </div>
 
-                <div class="control-group col-xs-12">
-                    <label class="control-label col-xs-4" for="UKG Kit">UKG Kit</label>
+    <div class="control-group col-xs-12">
+        <label class="control-label col-xs-4" for="UKG Kit">UKG Kit</label>
 
-                    <div class="controls">
-                        <input id="UKG Kit" name="UKG Kit" type="number" placeholder="# of UKG Kit" class="col-xs-8 form-control mini ng-pristine ng-untouched ng-valid" ng-model="StudentObject.Age">
-                    </div>
-                </div>
-            </div>
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="PlaygroundKit">Playground Kit</label>
-
-                <div class="controls">
-                    <input id="PlaygroundKit" name="PlaygroundKit" type="number" placeholder="# of Playgroundkit"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="NurseryKit">Nursery Kit</label>
-
-                <div class="controls">
-                    <input id="NurseryKit" name="NurseryKit" type="number" placeholder="# of Nursery Kit"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="LKGKit">LKG Kit</label>
-
-                <div class="controls">
-                    <input id="LKGKit" name="LKGKit" type="number" placeholder="# of LKGKit"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
-
-            <div class="control-group col-xs-12">
-                <label class="control-label col-xs-4" for="UKG Kit">UKG Kit</label>
-
-                <div class="controls">
-                    <input id="UKG Kit" name="UKG Kit" type="number" placeholder="# of UKG Kit"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
-                </div>
-            </div>
+        <div class="controls">
+            <input id="UKG Kit" name="UKG Kit" type="number" placeholder="# of UKG Kit" class="col-xs-8 form-control mini ng-pristine ng-untouched ng-valid" ng-model="StudentObject.Age">
+        </div>
+    </div>
 </div>
-            <!-- Button -->
-            <br/>
-            <br/>
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="PlaygroundKit">Playground Kit</label>
 
-            <div class="addmoretext">
-                <!--<label class="control-label col-xs-2" for="addMore" style="
-                    margin-top: 20px;
-                    margin-left: 7px;
-                    ">Add More</label>-->
+    <div class="controls">
+        <input id="PlaygroundKit" name="PlaygroundKit" type="number" placeholder="# of Playgroundkit"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
 
-                <div class="controls">
-                    <button type="submit" ng-hide="formHide" id="addMore" name="addMore" class="btn btn-primary" style="
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="NurseryKit">Nursery Kit</label>
+
+    <div class="controls">
+        <input id="NurseryKit" name="NurseryKit" type="number" placeholder="# of Nursery Kit"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="LKGKit">LKG Kit</label>
+
+    <div class="controls">
+        <input id="LKGKit" name="LKGKit" type="number" placeholder="# of LKGKit"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+
+<div class="control-group col-xs-12">
+    <label class="control-label col-xs-4" for="UKG Kit">UKG Kit</label>
+
+    <div class="controls">
+        <input id="UKG Kit" name="UKG Kit" type="number" placeholder="# of UKG Kit"
+               class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+    </div>
+</div>
+</div>
+<!-- Button -->
+<br/>
+<br/>
+
+<div class="addmoretext">
+    <!--<label class="control-label col-xs-2" for="addMore" style="
+        margin-top: 20px;
+        margin-left: 7px;
+        ">Add More</label>-->
+
+    <div class="controls">
+        <button type="submit" ng-hide="formHide" id="addMore" name="addMore" class="btn btn-primary" style="
                         margin-top: 10px;
                         ">Add
-                    </button>
-                    <button type="button" ng-hide="formCancel" id="Cancel" name="Cancel" class="btn btn-primary" style="
+        </button>
+        <button type="button" ng-hide="formCancel" id="Cancel" name="Cancel" class="btn btn-primary" style="
         margin-top: 10px; margin-left:1%;
         " ng-click="stdCancel()">Edit
-                    </button>
-                </div>
-            </div>
-
-        </form>
+        </button>
+    </div>
 </div>
 
-<div class="tab-pane" id="Query">
-    Something to Display Here
+</form>
+</div>
+<div class="tab-pane" id="Messages" ng-controller="Messages">
+
+    <div class="singleOrder col-xs-12 MessageDisplay">
+
+        <div class="col-xs-12" style="padding:2%; border-bottom:1px solid #ddd">
+            <div class="col-xs-4" style="text-align: center"><b>Franchise</b></div>
+            <div class="col-xs-8 pull-right" style="text-align: center"><b>Messages</b></div>
+        </div>
+        <div class="col-xs-12">
+            <ul class="FranchiseMessageBlock col-xs-4" style="padding-left:0%;">
+                <li ng-repeat="franchise in Messages" ng-click="setMessage($index)">
+                    <div class="FranchiseMessageDisplay"><b>{{franchise.FranchiseName}}</b><div><small>{{getDate(franchise.ModifiedOn)}}</small></div></div>
+
+                </li>
+            </ul>
+            <ul class="FranchiseMessageBlock col-xs-8" style="padding:2%;">
+                <li ng-repeat="message in CurrentMessage" class="singleOrder" ng-class="appliedClass(myObj)">
+                    <div class=""><span><small>{{message.sender}}</small></span><span class="pull-right"><small>{{getDate(message["sent on"])}}</small></span></div>
+                    <div style="padding-top: 2%">{{message.Message}}</div>
+                </li>
+            </ul>
+        </div>
+
+    </div>
 </div>
 </div>
 </div>
