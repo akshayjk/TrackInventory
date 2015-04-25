@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html ng-app='App'>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="../Images/LEFav.png">
+    <title>LE Orders</title>
+    <script src="../bootstrap/js/jquery-1.11.2.min.js"></script>
+    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../Stylesheets/LeWebSite.css" rel="stylesheet">
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+
+    <!--angular Files-->
+    <script src="../angularfiles/angular.min.js"></script>
+    <script src="../angularfiles/angular-route.min.js"></script>
+    <script src="../angularfiles/angular-resource.min.js"></script>
+    <script src="../angularfiles/angular-sanitize.min.js"></script>
+
+    <script>
+        $(function () {
+            $('.toggle').click(function () {
+                $('.nav-list').toggleClass('active');
+            });
+            $('#navbar li a, .nav-list li a').click(function (e) {
+                var href = $(this).attr('href');
+                if (href === '#' || /^http.*/.test(href)) {
+                    return;
+                }
+                e.preventDefault();
+                $('iframe').attr('src', href);
+                $('.nav-list').removeClass('active');
+                location.hash = href;
+            });
+            $('iframe').attr('src', location.hash.substring(1) || 'welcome.html');
+        });
+    </script>
+
+    <!--angular controller services-->
+    <script src="../controller/services.js"></script>
+    <script src="../controller/directives.js"></script>
+    <script src="../controller/filters.js"></script>
+    <script src="../controller/controllers.js"></script>
+    <script src="../App.js"></script>
+
+</head>
+<body>
+<header>
+
+    <div class="headerClass">
+        <img src="../Images/LEFav.png" class=" headerImage">
+
+        <div class="col-xs-4 headerName">Little Einstein Preschool</div>
+        <div class="col-xs-3 ContactClass"><a href="#some" class="signIn">WebSite</a> | <a href="#some" class="signIn">Contact
+            Us</a>
+        </div>
+    </div>
+</header>
+<div class="control-group col-xs-12" ng-controller="LogOutCtrl">
+    <div class="FranchiseName col-xs-4"><b>Hello Some Name !</b></div>
+    <div class="controls">
+        <button id="logout" name="logout" class="btn btn-primary logoutbutton" type="submit" ng-click="logOut()">
+            LogOut
+        </button>
+    </div>
+</div>
+<div class="col-xs-2 navColumn  menu">
+<ul class="nav nav-pills nav-stacked navigationBar">
+    <li role="presentation" class="active onHover"><a href="#Orders" class="onHoverClass"data-toggle="tab">Place Order</a></li>
+    <li role="presentation" class="onHover"><a href="#PreviousOrders" class="onHoverClass" data-toggle="tab">Previous Orders</a></li>
+    <li role="presentation" class="onHover"><a href="#Query" class="onHoverClass" data-toggle="tab">Queries</a></li>
+</ul>
+</div>
+<div class="cotainer col-xs-10">
+<div class="tab-content">
+<div class="tab-pane active" id="Orders">
+<div ng-controller="OrderForm">
+<ul id="tabs" class="nav nav-tabs col-xs-10 OrderNav" data-tabs="tabs">
+    <li class="active" id="StudentTab"><a href="#red" data-toggle="tab"><b>Students' Details</b></a></li>
+    <li class="" id="OrderTab"><a href="#orange" data-toggle="tab"><b>Order Summary</b></a></li>
+    <li class="" id="PaymentTab"><a href="#yellow" data-toggle="tab"><b>Payment Details</b></a></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane active col-xs-10" id="red">
+    <fieldset>
+        <form ng-hide="formHide" ng-submit="addStudents()">
+            <div class="control-group col-xs-12 ">
+                <label class="control-label col-xs-4" for="childname">Name of Child</label>
+
+                <div class="controls">
+                    <input id="childname" name="childname" type="text" placeholder="Enter full name of child"
+                           class="col-xs-4 form-control medium" ng-model="StudentObject.NameOfStudent" autofocus
+                            >
+                </div>
+            </div>
+            <br/>
+
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="selectClass">Class</label>
+
+                <div class="controls">
+                    <select id="selectClass" name="selectClass" class="col-xs-8 form-control small"
+                            ng-model="Class" ng-options="m for m in ClassOptions" ng-change="setClass()">
+                    </select>
+                </div>
+            </div>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="classAge">Age</label>
+
+                <div class="controls">
+                    <input id="classAge" name="classAge" type="number" placeholder="age"
+                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age">
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="parentName">Parent Name</label>
+
+                <div class="controls">
+                    <input id="parentName" name="parentName" type="text" placeholder="Mother's/Father's name"
+                           class="col-xs-8 form-control medium " ng-model="StudentObject.ParentName">
+                </div>
+            </div>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="parentsContact">Parent's Contact No.</label>
+
+                <div class="controls">
+                    <input id="parentsContact" name="parentsContact" type="tel" placeholder="Contact Number"
+                           class="col-xs-8 form-control medium " ng-model="StudentObject.ParentContact">
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="parentEmail">Parent's Email</label>
+
+                <div class="controls">
+                    <input id="parentEmail" name="parentEmail" type="email" placeholder="someone@example.com"
+                           class="col-xs-8 form-control medium" ng-model="StudentObject.ParentEmail">
+                </div>
+            </div>
+            <br/>
+            <!-- Select Basic -->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="uniformSize">Uniform Size</label>
+
+                <div class="controls">
+                    <select id="uniformSize" name="uniformSize" class="col-xs-8 form-control mini"
+                            ng-model="UniformSize" ng-options="m for m in UniformOptions" ng-change="setUniformSize()"
+                            >
+                        <!--<option>1</option>
+                        <option>2</option>
+                        <option>3</option>-->
+                    </select>
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="uniformQuant">Uniform Quantity</label>
+
+                <div class="controls">
+                    <input id="uniformQuant" name="uniformQuant" type="number" placeholder="Qty"
+                           class="col-xs-8 form-control mini" ng-model="StudentObject.UniformQty"
+                           ng-change="setTotalCost()">
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="Date">Date of Admission</label>
+
+                <div class="controls">
+                    <input id="Date" name="Date" type="DATE" placeholder="placeholder"
+                           class="col-xs-8 form-control medium" ng-model="StudentObject.DateOfAdmission">
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="regNum">Registration number</label>
+
+                <div class="controls">
+                    <input id="regNum" name="regNum" type="text" placeholder="Enter Child's Registration Number"
+                           class="col-xs-8 form-control medium" ng-model="StudentObject.RegistrationNumber">
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="receiptNo">Receipt Number</label>
+
+                <div class="controls">
+                    <input id="receiptNo" name="receiptNo" type="text" placeholder="Enter Receipt Number"
+                           class="col-xs-8 form-control medium" ng-model="StudentObject.ReceiptNumber">
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4">Welcome Kit Cost</label>
+
+                <div class="controls input-group small">
+                    <span class="input-group-addon">Rs</span>
+                    <!-- <input id="kitCost" name="kitCost" type="number" placeholder="000.00" ng-model="TotalCost"
+                    class="col-xs-8 form-control mini"> -->
+                    <h4 ng-model="TotalCost" class="col-xs-8 form-control mini " style="margin-top:0%;">
+                        {{KitCost}}</h4>
+                </div>
+            </div>
+
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4">Total Cost</label>
+
+                <div class="controls input-group small">
+                    <span class="input-group-addon">Rs</span>
+                    <!-- <input id="kitCost" name="kitCost" type="number" placeholder="000.00" ng-model="TotalCost"
+                    class="col-xs-8 form-control mini"> -->
+                    <h4 ng-model="TotalCost" class="col-xs-8 form-control mini" style="margin-top:0%;">
+                        {{TotalCost}}</h4>
+                </div>
+            </div>
+
+            <br/>
+            <!-- Button -->
+            <br/>
+            <br/>
+
+            <div class="addmoretext">
+                <!--<label class="control-label col-xs-2" for="addMore" style="
+                    margin-top: 20px;
+                    margin-left: 7px;
+                    ">Add More</label>-->
+
+                <div class="controls">
+                    <button type="submit" ng-hide="formHide" id="addMore" name="addMore" class="btn btn-primary" style="
+                        margin-top: 10px;
+                        ">Submit
+                    </button>
+                    <button type="button" ng-hide="formCancel" id="Cancel" name="Cancel" class="btn btn-primary" style="
+        margin-top: 10px; margin-left:1%;
+        " ng-click="stdCancel()">Cancel
+                    </button>
+                </div>
+            </div>
+
+        </form>
+
+    </fieldset>
+    <div class="control-group col-xs-12">
+        <div class="controls">
+            <button id="Next" name="Next" ng-hide="formButtons" class="btn btn-primary NextButton disabled" type=""
+                    ng-click="next()">
+                Next
+            </button>
+        </div>
+    </div>
+
+
+</div>
+<div class="tab-pane col-md-10" id="yellow">
+    <form ng-submit="placeOrder()">
+        <fieldset>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4">Total Amount Paid</label>
+
+                <div class="controls input-group small">
+                    <span class="input-group-addon">Rs</span>
+
+                    <div id="AmountTotal" class="col-xs-8 form-control mini">{{getFinalCost()}}</div>
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="modePayment">Mode of Payment</label>
+
+                <div class="controls">
+                    <input id="modePayment" name="modePayment" type="text" placeholder="Cash/Account Transfer"
+                           class="col-xs-8 form-control medium" ng-model="OrderForm.ModeOfPayment">
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="bankTranID">Bank Transaction id </label>
+
+                <div class="controls">
+                    <input id="bankTranID" name="bankTranID" type="text" placeholder=""
+                           class="col-xs-8 form-control medium " ng-model="OrderForm.TransactionID">
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" row="3" for="address">Address</label>
+
+                <div class="controls">
+                    <input id="address" name="address" placeholder="Enter Address for delivery" rows="3"
+                           class="col-xs-8 form-control medium " ng-model="OrderForm.Address">
+                    </input>
+                </div>
+            </div>
+            <div class="control-group col-xs-12">
+                <div class="controls col-xs-12">
+                    <button id="placeOrder" name="placeOrder" class="btn btn-primary col-xs-2"
+                            type="submit" style="margin-top:2%; padding-right:10%;" data-toggle="modal" data-target="#myModal">Place Order
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Success</h4>
+                                </div>
+                                <div class="modal-body">
+                                   Order has been placed successfuly.
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div class="tab-pane col-md-10" id="orange">
+    <table class="table  table-bordered table-hover OrderTable">
+        <thead>
+        <tr>
+            <th>No</th>
+            <th>Student</th>
+            <th>Class</th>
+            <th>Uniform Size</th>
+            <th>Uniform Quantity</th>
+            <th>Cost</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="student in Students">
+            <th scope="row">{{$index + 1}}</th>
+            <td>{{student.NameOfStudent}}</td>
+            <td>{{student.Class}}</td>
+            <td style="max-width:20%"><select type="number" class="form-control medium" ng-model="UniformArray[$index]"
+                                              ng-options="m for m in UniformOptions"
+                                              ng-change="setUniformSizeFinal($index)"></select></td>
+            <td style="max-width: 10%"><input type="number" class="form-control medium"
+                                              ng-model="Students[$index].UniformQty"></td>
+            <td>{{KitCost + UniformCosts[UniformArray[$index]] * Students[$index].UniformQty}}
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total</td>
+            <td></td>
+
+        </tr>
+
+        </tbody>
+    </table>
+    <div class="control-group col-xs-12">
+        <button type="" id="done" name="done" ng-hide="formButtons" class="btn btn-success" style="
+    margin-top: 10px;
+    " ng-click="addMore()">Add More
+        </button>
+
+        <button id="Confirm" name="Next" class="btn btn-primary NextButton" type="" ng-click="confirmOrder()">Confirm
+        </button>
+
+    </div>
+</div>
+</div>
+</div>
+</div>
+<div class="tab-pane" id="PreviousOrders">
+    <div  ng-controller="PrevOrders">
+        <table class="table  table-bordered table-hover prevOrderTable">
+            <thead>
+            <tr>
+                <th>No</th>
+                <th>Order Id</th>
+                <th>Students</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Ordered On</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="order in Orders">
+                <th scope="row">{{$index + 1}}</th>
+                <td>{{order.OrderId}}</td>
+                <td><ul style="list-style-type: none; padding-left:0%;"><li ng-repeat="student in order.Students">{{student.NameOfStudent}} Size: {{student.UniformSize}} Qty : {{student.UniformQty}}</li></ul></td>
+                <td style="max-width:20%">{{order.TotalAmount}}</td>
+                <td style="max-width: 10%"><span class="label label-info">{{order.Status}}</span></td>
+                <td>{{getDate(order.CreateOn)}}</td>
+
+
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<div class="tab-pane" id="Query">
+    Something to Display Here
+</div>
+</div>
+</div>
+
+<!--<div ng-view class="mainView"></div>-->
+<!--<footer>
+    <div class="footerClass">&copy; Little Einstein 2015</div>
+</footer>-->
+
+
+</body>
+<script src="../JavaScripts/franchiseMain.js"></script>
+</html>

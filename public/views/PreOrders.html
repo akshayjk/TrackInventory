@@ -1,0 +1,28 @@
+
+<div class="container" ng-controller="PrevOrders">
+    <table class="table  table-bordered table-hover prevOrderTable">
+        <thead>
+        <tr>
+            <th>No</th>
+            <th>Order Id</th>
+            <th>Students</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Ordered On</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="order in Orders">
+            <th scope="row">{{$index + 1}}</th>
+            <td>{{order.OrderId}}</td>
+            <td><ul style="list-style-type: none; padding-left:0%;"><li ng-repeat="student in order.Students">{{student.NameOfStudent}} Size: {{student.UniformSize}} Qty : {{student.UniformQty}}</li></ul></td>
+            <td style="max-width:20%">{{order.TotalAmount}}</td>
+            <td style="max-width: 10%">{{order.Status}}</td>
+            <td>{{getDate(order.CreateOn)}}</td>
+
+
+        </tr>
+        </tbody>
+    </table>
+
+</div>

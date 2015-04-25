@@ -1,0 +1,305 @@
+<!--
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+</body>
+</html>-->
+<div class="container" ng-controller="OrderForm">
+<ul id="tabs" class="nav nav-tabs col-xs-10 OrderNav" data-tabs="tabs">
+    <li class="active" id="StudentTab"><a href="#red" data-toggle="tab"><b>Students' Details</b></a></li>
+    <li class="" id="OrderTab"><a href="#orange" data-toggle="tab"><b>Order Summary</b></a></li>
+    <li class="" id="PaymentTab"><a href="#yellow" data-toggle="tab"><b>Payment Details</b></a></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane active col-xs-10" id="red">
+    <fieldset>
+        <form ng-hide="formHide" ng-submit="addStudents()" class="disabled">
+            <div class="control-group col-xs-12 ">
+                <label class="control-label col-xs-4" for="childname">Name of Child</label>
+
+                <div class="controls">
+                    <input id="childname" name="childname" type="text" placeholder="Enter full name of child"
+                           class="col-xs-4 form-control medium" ng-model="StudentObject.NameOfStudent" autofocus
+                           >
+                </div>
+            </div>
+            <br/>
+
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="selectClass">Class</label>
+
+                <div class="controls">
+                    <select id="selectClass" name="selectClass" class="col-xs-8 form-control small"
+                            ng-model="Class" ng-options="m for m in ClassOptions" ng-change="setClass()">
+                    </select>
+                </div>
+            </div>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="classAge">Age</label>
+
+                <div class="controls">
+                    <input id="classAge" name="classAge" type="number" placeholder="age"
+                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age" >
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="parentName">Parent Name</label>
+
+                <div class="controls">
+                    <input id="parentName" name="parentName" type="text" placeholder="Mother's/Father's name"
+                           class="col-xs-8 form-control medium " ng-model="StudentObject.ParentName" >
+                </div>
+            </div>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="parentsContact">Parent's Contact No.</label>
+
+                <div class="controls">
+                    <input id="parentsContact" name="parentsContact" type="tel" placeholder="Contact Number"
+                           class="col-xs-8 form-control medium " ng-model="StudentObject.ParentContact" >
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="parentEmail">Parent's Email</label>
+
+                <div class="controls">
+                    <input id="parentEmail" name="parentEmail" type="email" placeholder="someone@example.com"
+                           class="col-xs-8 form-control medium" ng-model="StudentObject.ParentEmail" >
+                </div>
+            </div>
+            <br/>
+            <!-- Select Basic -->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="uniformSize">Uniform Size</label>
+
+                <div class="controls">
+                    <select id="uniformSize" name="uniformSize" class="col-xs-8 form-control mini"
+                            ng-model="UniformSize" ng-options="m for m in UniformOptions" ng-change="setUniformSize()"
+                            >
+                        <!--<option>1</option>
+                        <option>2</option>
+                        <option>3</option>-->
+                    </select>
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="uniformQuant">Uniform Quantity</label>
+
+                <div class="controls">
+                    <input id="uniformQuant" name="uniformQuant" type="number" placeholder="Qty"
+                           class="col-xs-8 form-control mini" ng-model="StudentObject.UniformQty"
+                           ng-change="setTotalCost()" >
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="Date">Date of Admission</label>
+
+                <div class="controls">
+                    <input id="Date" name="Date" type="DATE" placeholder="placeholder"
+                           class="col-xs-8 form-control medium" ng-model="StudentObject.DateOfAdmission" >
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="regNum">Registration number</label>
+
+                <div class="controls">
+                    <input id="regNum" name="regNum" type="text" placeholder="Enter Child's Registration Number"
+                           class="col-xs-8 form-control medium" ng-model="StudentObject.RegistrationNumber" >
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="receiptNo">Receipt Number</label>
+
+                <div class="controls">
+                    <input id="receiptNo" name="receiptNo" type="text" placeholder="Enter Receipt Number"
+                           class="col-xs-8 form-control medium" ng-model="StudentObject.ReceiptNumber" >
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4">Welcome Kit Cost</label>
+
+                <div class="controls input-group small">
+                    <span class="input-group-addon">Rs</span>
+                    <!-- <input id="kitCost" name="kitCost" type="number" placeholder="000.00" ng-model="TotalCost"
+                    class="col-xs-8 form-control mini"> -->
+                    <h4 ng-model="TotalCost" class="col-xs-8 form-control mini " style="margin-top:0%;">
+                        {{KitCost}}</h4>
+                </div>
+            </div>
+
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4">Total Cost</label>
+
+                <div class="controls input-group small">
+                    <span class="input-group-addon">Rs</span>
+                    <!-- <input id="kitCost" name="kitCost" type="number" placeholder="000.00" ng-model="TotalCost"
+                    class="col-xs-8 form-control mini"> -->
+                    <h4 ng-model="TotalCost" class="col-xs-8 form-control mini" style="margin-top:0%;">
+                        {{TotalCost}}</h4>
+                </div>
+            </div>
+
+            <br/>
+            <!-- Button -->
+            <br/>
+            <br/>
+
+            <div class="addmoretext">
+                <!--<label class="control-label col-xs-2" for="addMore" style="
+                    margin-top: 20px;
+                    margin-left: 7px;
+                    ">Add More</label>-->
+
+                <div class="controls">
+                    <button type="submit" ng-hide="formHide" id="addMore" name="addMore" class="btn btn-primary" style="
+                        margin-top: 10px;
+                        ">Submit
+                    </button>
+                    <button type="button" ng-hide="formCancel"  id="Cancel" name="Cancel" class="btn btn-primary" style="
+        margin-top: 10px; margin-left:1%;
+        " ng-click="stdCancel()">Cancel
+                    </button>
+                </div>
+            </div>
+
+        </form>
+
+    </fieldset>
+    <div class="control-group col-xs-12">
+        <div class="controls">
+            <button id="Next" name="Next" ng-hide="formButtons" class="btn btn-primary NextButton disabled" type=""
+                    ng-click="next()">
+                Next
+            </button>
+        </div>
+    </div>
+
+
+</div>
+<div class="tab-pane col-md-10" id="yellow">
+    <form ng-submit="placeOrder()">
+        <fieldset>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" >Total Amount Paid</label>
+
+                <div class="controls input-group small">
+                    <span class="input-group-addon">Rs</span>
+                    <div id="AmountTotal" class="col-xs-8 form-control mini" >{{getFinalCost()}}</div>
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="modePayment">Mode of Payment</label>
+
+                <div class="controls">
+                    <input id="modePayment" name="modePayment" type="text" placeholder="Cash/Account Transfer"
+                           class="col-xs-8 form-control medium" ng-model="OrderForm.ModeOfPayment">
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" for="bankTranID">Bank Transaction id </label>
+
+                <div class="controls">
+                    <input id="bankTranID" name="bankTranID" type="text" placeholder=""
+                           class="col-xs-8 form-control medium " ng-model="OrderForm.TransactionID">
+                </div>
+            </div>
+            <br/>
+            <!-- Text input-->
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-4" row="3" for="address">Address</label>
+
+                <div class="controls">
+                    <input id="address" name="address" placeholder="Enter Address for delivery" rows="3"
+                           class="col-xs-8 form-control medium " ng-model="OrderForm.Address">
+                    </input>
+                </div>
+            </div>
+            <div class="control-group col-xs-12">
+                <div class="controls col-xs-12">
+                    <button id="placeOrder" name="placeOrder" class="btn btn-primary col-xs-2"
+                            type="submit" style="margin-top:2%; padding-right:10%;">Place Order
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div class="tab-pane col-md-10" id="orange">
+
+
+    <table class="table  table-bordered table-hover OrderTable">
+        <thead>
+        <tr>
+            <th>No</th>
+            <th>Student</th>
+            <th>Class</th>
+            <th>Uniform Size</th>
+            <th>Uniform Quantity</th>
+            <th>Cost</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="student in Students">
+            <th scope="row">{{$index + 1}}</th>
+            <td>{{student.NameOfStudent}}</td>
+            <td>{{student.Class}}</td>
+            <td style="max-width:20%"><select type="number" class="form-control medium" ng-model="UniformArray[$index]"
+                                              ng-options="m for m in UniformOptions"
+                                              ng-change="setUniformSizeFinal($index)"></select></td>
+            <td style="max-width: 10%"><input type="number" class="form-control medium"
+                                              ng-model="Students[$index].UniformQty"></td>
+            <td>{{KitCost + UniformCosts[UniformArray[$index]] * Students[$index].UniformQty}}
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total</td>
+            <td></td>
+
+        </tr>
+
+        </tbody>
+    </table>
+    <div class="control-group col-xs-12">
+        <button type="" id="done" name="done" ng-hide="formButtons" class="btn btn-success" style="
+    margin-top: 10px;
+    " ng-click="addMore()">Add More
+        </button>
+
+        <button id="Confirm" name="Next" class="btn btn-primary NextButton" type="" ng-click="confirmOrder()">Confirm
+        </button>
+
+    </div>
+</div>
+</div>
+
+
+</div>

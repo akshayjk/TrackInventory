@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html ng-app='App'>
+<head lang="en">
+    <title>LE Admin</title>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="../Images/LEFav.png">
+    <script src="../bootstrap/js/jquery-1.11.2.min.js"></script>
+    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../Stylesheets/LeWebSite.css" rel="stylesheet">
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+
+    <!--angular Files-->
+    <script src="../angularfiles/angular.min.js"></script>
+    <script src="../angularfiles/angular-route.min.js"></script>
+    <script src="../angularfiles/angular-resource.min.js"></script>
+    <script src="../angularfiles/angular-sanitize.min.js"></script>
+    <!--angular controller services-->
+    <script src="../controller/services.js"></script>
+    <script src="../controller/directives.js"></script>
+    <script src="../controller/filters.js"></script>
+    <script src="../controller/controllers.js"></script>
+    <script src="../App.js"></script>
+</head>
+<body>
+<header>
+
+    <div class="headerClass">
+        <img src="../Images/LEFav.png" class=" headerImage">
+
+        <div class="col-xs-4 headerName">Little Einstein Preschool</div>
+        <div class="col-xs-3 ContactClass"><a href="#some" class="signIn">WebSite</a> | <a href="#some" class="signIn">Contact
+            Us</a>
+        </div>
+    </div>
+</header>
+<div class="control-group col-xs-12" ng-controller="LogOutCtrl">
+    <div class="FranchiseName col-xs-4"><b>Hello Some Name !</b></div>
+    <div class="controls">
+        <button id="logout" name="logout" class="btn btn-primary logoutbutton" type="submit" ng-click="logOut()">
+            LogOut
+        </button>
+    </div>
+</div>
+
+<div class="col-xs-2 navColumn  menu">
+    <ul class="nav nav-pills nav-stacked navigationBar">
+        <li role="presentation" class="active onHover"><a href="#Orders" class="onHoverClass"
+                                                          data-toggle="tab">Orders</a></li>
+        <li role="presentation" class="onHover"><a href="#Inventory" class="onHoverClass"
+                                                   data-toggle="tab">Inventory</a></li>
+        <li role="presentation" class="onHover"><a href="#Accounts" class="onHoverClass" data-toggle="tab">Accounts</a>
+        </li>
+        <li role="presentation" class="onHover"><a href="#Messages" class="onHoverClass" data-toggle="tab">Messages</a>
+        </li>
+        <li role="presentation" class="onHover"><a href="#Downloads" class="onHoverClass"
+                                                   data-toggle="tab">Downloads</a></li>
+    </ul>
+</div>
+<div class="cotainer col-xs-10">
+<div class="tab-content">
+<div class="tab-pane active" id="Orders">
+    <div ng-controller="AdminController">
+        <ul id="tabs" class="nav nav-tabs col-xs-10 OrderNav" data-tabs="tabs">
+            <li class="active" id="PendingTab"><a href="#Pending" class="onHoverClass" data-toggle="tab"><b>Pending
+                <span class="badge" style="background-color: #d43f3a">{{dummyOrders.length}}</span></b></a></li>
+            <li class="" id="DispatchedTab"><a href="#Dispatched" class="onHoverClass"
+                                               data-toggle="tab"><b>Dispatched</b></a></li>
+            <li class="" id="CompletedTab"><a href="#Completed" class="onHoverClass" data-toggle="tab"><b>Completed</b></a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active col-xs-10" id="Pending">
+                <nav>
+                    <ul class="pager" ng-hide="listView">
+                        <li class="previous"><a href="#"  class="onHoverClass"><span aria-hidden="true">&larr;</span> Previous</a></li>
+                        <li class="next"><a href="#" class="onHoverClass">Next <span aria-hidden="true">&rarr;</span></a></li>
+                    </ul>
+                </nav>
+                <ul ng-hide="listView">
+                    <li style="list-style: none; padding-bottom: 1%;" ng-repeat="order in dummyOrders">
+                        <div class="OrderList">
+                            <span><button class="btn btn-success" ng-click="showOrder($index)"><b>Order Id : </b>
+                                {{order.OrderId}}
+                            </button></span> <span class="label label-info pull-right">{{order.Status}}</span>
+
+                            <div style="padding-top:3%;"><span style="padding-right:2%; color:#545454"><small><b>By
+                                : </b></small>{{order.FranchiseId}}</span><span style="padding-right:2%;color:#545454"><small>
+                                <b>Date : </b></small>{{getDate(order.CreateOn)}}</span><span class="pull-right"
+                                                                                              style="color:#545454"><small>
+                                <b>Total : </b></small><b>{{order.TotalAmount}}</b></span></div>
+                        </div>
+                    </li>
+                </ul>
+                <div ng-hide="orderView" class="singleOrder">
+
+                    <button class="btn btn-success" ng-click="showOrder()"><b>Order Id : </b>
+                        {{dummyOrders[OrderNo].OrderId}}
+                    </button>
+                    <button class="btn btn-primary pull-right" ng-click="showOrder()">Back</button>
+                    <div class="col-xs-12" style="padding:2%">
+                    <div class="col-xs-6">
+                    <div class="displayOrder"><b>Order Date : </b> {{getDate(dummyOrders[OrderNo].CreateOn)}}</div>
+                    <div class="displayOrder"><b>Amount Paid : </b>{{dummyOrders[OrderNo].TotalAmount}}  <small>    through {{dummyOrders[OrderNo].ModeOfPayment}}</small></div>
+                    <div class="displayOrder"><b>Transaction Id : </b>{{dummyOrders[OrderNo].TransactionID}}</div>
+                    </div>
+                    <div class="col-xs-4 pull-right">
+                    <div class="displayOrder"><h4 style="margin:0%;">{{dummyOrders[OrderNo].FranchiseId}}</h4></div>
+                    <div class="displayOrder">{{dummyOrders[OrderNo].Address}}</div>
+                    </div>
+                    </div>
+
+                        <form ng-submit="dispatchOrder(OrderNo)" title="First Name is Required!">
+                            <ul>
+                                <li class="col-xs-12 singleOrder" style="margin-bottom:1%;" ng-repeat="student in dummyOrders[OrderNo].Students">
+
+                                        <input class="col-xs-1" type="checkbox" required>
+
+                                    <span class="col-xs-11">
+
+                                        <div class="studentList"><span><small>Name : </small>{{student.NameOfStudent}}</span><span
+                                                style="padding-left:5%;"><small>Class : </small>{{student.Class}}</span></div>
+                                        <div class="studentList">
+                                            <span><small>Uniform Size : </small>{{student.UniformSize}}</span><span
+                                                style="padding-left:5%;"><small>Uniform Quantity : </small>{{student.UniformQty}}</span>
+                                            <span class="pull-right"><small>Individual Total : </small>{{UniformCosts[student.UniformSize]*student.UniformQty + KitCost}}</span>
+                                        </div>
+
+                                    </span>
+
+                                </li>
+                            </ul>
+                            <button class="btn btn-primary" style="margin:2%;width:15%;" type="submit">Dispatch</button>
+                        </form>
+
+                </div>
+                <nav>
+                    <ul class="pager" ng-hide="listView">
+                        <li class="previous"><a href="#" class="onHoverClass"><span aria-hidden="true">&larr;</span> Previous</a></li>
+                        <li class="next"><a href="#" class="onHoverClass">Next <span aria-hidden="true">&rarr;</span></a></li>
+                    </ul>
+                </nav>
+
+
+            </div>
+            <div class="tab-pane col-md-10" id="Dispatched">
+                <nav>
+                    <ul class="pager" ng-hide="listView">
+                        <li class="previous"><a href="#"  class="onHoverClass"><span aria-hidden="true">&larr;</span> Previous</a></li>
+                        <li class="next"><a href="#" class="onHoverClass">Next <span aria-hidden="true">&rarr;</span></a></li>
+                    </ul>
+                </nav>
+                <ul ng-hide="listView">
+                    <li style="list-style: none; padding-bottom: 1%;" ng-repeat="order in dispatched">
+                        <div class="OrderList">
+                            <span><button class="btn btn-primary" ng-click="showOrder($index)"><b>Order Id : </b>
+                                {{order.OrderId}}
+                            </button></span> <span class="label label-success pull-right">{{order.Status}}</span>
+
+                            <div style="padding-top:3%;"><span style="padding-right:2%; color:#545454"><small><b>By
+                                : </b></small>{{order.FranchiseId}}</span><span style="padding-right:2%;color:#545454"><small>
+                                <b>Date : </b></small>{{getDate(order.CreateOn)}}</span><span class="pull-right"
+                                                                                              style="color:#545454"><small>
+                                <b>Total : </b></small><b>{{order.TotalAmount}}</b></span></div>
+                        </div>
+                    </li>
+                </ul>
+                <div ng-hide="orderView" class="singleOrder">
+
+                    <button class="btn btn-primary" ng-click="showOrder()"><b>Order Id : </b>
+                        {{dispatched[OrderNo].OrderId}}
+                    </button>
+                    <button class="btn btn-primary pull-right" ng-click="showOrder()">Back</button>
+                    <div class="col-xs-12" style="padding:2%">
+                        <div class="col-xs-6">
+                            <div class="displayOrder"><b>Order Date : </b> {{getDate(dispatched[OrderNo].CreateOn)}}</div>
+                            <div class="displayOrder"><b>Amount Paid : </b>{{dispatched[OrderNo].TotalAmount}}  <small>    through {{dummyOrders[OrderNo].ModeOfPayment}}</small></div>
+                            <div class="displayOrder"><b>Transaction Id : </b>{{dispatched[OrderNo].TransactionID}}</div>
+                        </div>
+                        <div class="col-xs-4 pull-right">
+                            <div class="displayOrder"><h4 style="margin:0%;">{{dispatched[OrderNo].FranchiseId}}</h4></div>
+                            <div class="displayOrder">{{dispatched[OrderNo].Address}}</div>
+                        </div>
+                    </div>
+                    <div style="margin:2%;">
+
+                        <ul>
+                            <li class="col-xs-12 singleOrder" style="margin-bottom:1%;" ng-repeat="student in dispatched[OrderNo].Students">
+
+                                        <div class="studentList"><span><small>Name : </small>{{student.NameOfStudent}}</span><span
+                                                style="padding-left:5%;"><small>Class : </small>{{student.Class}}</span></div>
+                                        <div class="studentList">
+                                            <span><small>Uniform Size : </small>{{student.UniformSize}}</span><span
+                                                style="padding-left:5%;"><small>Uniform Quantity : </small>{{student.UniformQty}}</span>
+                                            <span class="pull-right"><small>Individual Total : </small>{{UniformCosts[student.UniformSize]*student.UniformQty + KitCost}}</span>
+                                        </div>
+                            </li>
+                        </ul>
+
+                        <button class="btn btn-primary" style="margin:2%;width:15%;" type="submit">Next</button>
+                    </div>
+                </div>
+                <nav>
+                    <ul class="pager" ng-hide="listView">
+                        <li class="previous"><a href="#" class="onHoverClass"><span aria-hidden="true">&larr;</span> Previous</a></li>
+                        <li class="next"><a href="#" class="onHoverClass">Next <span aria-hidden="true">&rarr;</span></a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="tab-pane col-md-10" id="Completed">
+                <table class="table  table-bordered table-hover OrderTable">
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Student</th>
+                        <th>Class</th>
+                        <th>Uniform Size</th>
+                        <th>Uniform Quantity</th>
+                        <th>Cost</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="student in Students">
+                        <th scope="row">{{$index + 1}}</th>
+                        <td>{{student.NameOfStudent}}</td>
+                        <td>{{student.Class}}</td>
+                        <td style="max-width:20%"><select type="number" class="form-control medium"
+                                                          ng-model="UniformArray[$index]"
+                                                          ng-options="m for m in UniformOptions"
+                                                          ng-change="setUniformSizeFinal($index)"></select></td>
+                        <td style="max-width: 10%"><input type="number" class="form-control medium"
+                                                          ng-model="Students[$index].UniformQty"></td>
+                        <td>{{KitCost + UniformCosts[UniformArray[$index]] * Students[$index].UniformQty}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Total</td>
+                        <td></td>
+
+                    </tr>
+
+                    </tbody>
+                </table>
+                <div class="control-group col-xs-12">
+                    <button type="" id="done" name="done" ng-hide="formButtons" class="btn btn-success" style="
+    margin-top: 10px;
+    " ng-click="addMore()">Add More
+                    </button>
+
+                    <button id="Confirm" name="Next" class="btn btn-primary NextButton" type=""
+                            ng-click="confirmOrder()">Confirm
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="tab-pane" id="Inventory" ng-controller="Inventory">
+    <div>
+
+
+    </div>
+</div>
+<div class="tab-pane" id="Query">
+    Something to Display Here
+</div>
+</div>
+</div>
+
+</body>
+</html>
