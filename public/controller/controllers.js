@@ -823,5 +823,25 @@
         $scope.appliedClass = function () {
 
         }
-    }])
+    }]);
+
+
+
+    App.controller("DownloadsController", ["$scope",  function ($scope) {
+
+        $scope.ClassOptions = ["PlayGroup", "Nursery", "LKG", "UKG"];
+
+        $scope.FranchiseNameList = ["Kolkata School", "Dummy School 1", "Mumbai School 2", "Kolkata School 3", "Pune School"];
+
+        $scope.OrderNameList = ["Pending", "Ordered", "Dispatched", "All"];
+
+        console.log("order",+$scope.OrderNameList[0]);
+
+        console.log("franchise",+$scope.FranchiseNameList[0]);
+        $scope.OrderFilterDef = $scope.OrderNameList[0];
+
+        $scope.FranchiseFilterDef = $scope.FranchiseNameList[0];
+    }]);
+
+
 }());
