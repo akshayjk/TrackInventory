@@ -4,7 +4,7 @@
 
     var App = angular.module("App.controllers", []);
 
-    App.controller("LoginController", ["$scope", '$location', '$window', function ($scope, $location, $window) {
+    App.controller("LoginController", ["$scope", '$location', '$window', 'LoginService', function ($scope, $location, $window, LoginService) {
         /*$scope.aVariable = 'anExampleValueWithinScope';
          $scope.valueFromService = UtilSrvc.helloWorld("User");*/
         $scope.loginForm = {};
