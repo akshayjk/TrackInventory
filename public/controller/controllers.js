@@ -4,8 +4,7 @@
 
     var App = angular.module("App.controllers", []);
 
-
-    App.controller("LoginController", ["$scope", '$window', 'LoginService', function ($scope,$window, LoginService) {
+    App.controller("LoginController", ["$scope", '$location', '$window', function ($scope, $location, $window) {
         /*$scope.aVariable = 'anExampleValueWithinScope';
          $scope.valueFromService = UtilSrvc.helloWorld("User");*/
         $scope.loginForm = {};
@@ -52,6 +51,7 @@
             $('#OrderTab').attr('class', 'disabled disabledTab');
             console.log(" session Storage " + typeof(sessionStorage.userDetails))
         };
+        $scope.Maths = 40;
         $scope.ready();
         $scope.userDetails = JSON.parse(sessionStorage.userDetails);
         $scope.UniformCosts = $scope.userDetails.FranchiseDetails.UniformCosts;
@@ -72,6 +72,7 @@
                 return 1;
             }
         };
+
         $scope.getUniformSize = function () {
             if ($scope.StudentObject.UniformSize != undefined) {
                 return $scope.StudentObject.UniformSize
@@ -86,12 +87,15 @@
                 return "PlayGroup";
             }
         };
+
         $scope.setUniformSize = function () {
+
             $scope.StudentObject.UniformSize = $scope.UniformSize;
             $scope.setTotalCost();
             $scope.UniformArray.push($scope.UniformSize);
             console.log("Uniform Size : " + $scope.StudentObject.UniformSize);
         };
+
         $scope.setUniformQty = function () {
             if ($scope.StudentObject.UniformQty == undefined) {
                 $scope.StudentObject.UniformQty = 1;
@@ -109,6 +113,7 @@
         };
         $scope.setTotalCost();
         $scope.getFinalCost = function () {
+
             var FinalCost = 0;
             $scope.Students.forEach(function (student) {
                 console.log("student " + $scope.UniformCosts[student.UniformSize] + "  " + $scope.UniformQty);
@@ -117,10 +122,12 @@
             return FinalCost
         };
         $scope.setClass = function () {
+
             $scope.StudentObject.Class = $scope.Class;
             $scope.setTotalCost();
             console.log("Class name : " + $scope.StudentObject.Class);
         };
+
         $scope.getWelComeKitClass = function () {
             if ($scope.StudentObject.Class != undefined) {
                 return $scope.StudentObject.Class;
@@ -129,6 +136,7 @@
             }
         };
         $scope.setFormCancel = function () {
+
             if ($scope.Students.length > 0) {
                 $scope.formCancel = false;
             } else {
@@ -137,6 +145,7 @@
         };
         $scope.setFormCancel();
         $scope.addStudents = function () {
+
             if ($scope.StudentObject.Class == undefined) {
                 $scope.StudentObject.Class = $scope.ClassOptions[0];
             }
@@ -163,6 +172,8 @@
             } else {
                 $scope.formCancel = true;
             }
+
+
             $('#StudentTab').attr('class', 'active');
             $('#OrderTab').attr('class', 'disabled disabledTab');
             $('#orange').hide();
@@ -185,6 +196,8 @@
             $('#orange').hide();
         };
         $scope.next = function () {
+
+
             if (Object.keys($scope.StudentObject).length > 0) {
                 if ($scope.StudentObject.Class == undefined) {
                     $scope.StudentObject.Class = $scope.ClassOptions[0];
@@ -996,4 +1009,25 @@
         $scope.AccountFilter = ['Franchise', 'Admin'];
         $scope.AccFilterDef = $scope.AccountFilter[0];
     }])
+    
+
+
+
+    App.controller("DownloadsController", ["$scope",  function ($scope) {
+
+        $scope.ClassOptions = ["PlayGroup", "Nursery", "LKG", "UKG"];
+
+        $scope.FranchiseNameList = ["Kolkata School", "Dummy School 1", "Mumbai School 2", "Kolkata School 3", "Pune School"];
+
+        $scope.OrderNameList = ["Pending", "Ordered", "Dispatched", "All"];
+
+        console.log("order",+$scope.OrderNameList[0]);
+
+        console.log("franchise",+$scope.FranchiseNameList[0]);
+        $scope.OrderFilterDef = $scope.OrderNameList[0];
+
+        $scope.FranchiseFilterDef = $scope.FranchiseNameList[0];
+    }]);
+
+
 }());
