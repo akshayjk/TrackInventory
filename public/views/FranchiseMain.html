@@ -96,7 +96,7 @@
                 <div class="controls">
                     <input id="childname" name="childname" type="text" placeholder="Enter full name of child"
                            class="col-xs-4 form-control medium" ng-model="StudentObject.NameOfStudent" autofocus
-                            req123>
+                            required>
                 </div>
             </div>
             <br/>
@@ -115,7 +115,7 @@
 
                 <div class="controls">
                     <input id="classAge" name="classAge" type="number" placeholder="age"
-                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age" req123>
+                           class="col-xs-8 form-control mini" ng-model="StudentObject.Age" required>
                 </div>
             </div>
             <br/>
@@ -125,7 +125,7 @@
 
                 <div class="controls">
                     <input id="parentName" name="parentName" type="text" placeholder="Mother's/Father's name"
-                           class="col-xs-8 form-control medium " ng-model="StudentObject.ParentName" req123>
+                           class="col-xs-8 form-control medium " ng-model="StudentObject.ParentName" required>
                 </div>
             </div>
             <!-- Text input-->
@@ -134,7 +134,7 @@
 
                 <div class="controls">
                     <input id="parentsContact" name="parentsContact" type="tel" placeholder="Contact Number"
-                           class="col-xs-8 form-control medium " ng-model="StudentObject.ParentContact" req123>
+                           class="col-xs-8 form-control medium " ng-model="StudentObject.ParentContact" required>
                 </div>
             </div>
             <br/>
@@ -144,7 +144,7 @@
 
                 <div class="controls">
                     <input id="parentEmail" name="parentEmail" type="email" placeholder="someone@example.com"
-                           class="col-xs-8 form-control medium" ng-model="StudentObject.ParentEmail" req123>
+                           class="col-xs-8 form-control medium" ng-model="StudentObject.ParentEmail" required>
                 </div>
             </div>
             <br/>
@@ -170,7 +170,7 @@
                 <div class="controls">
                     <input id="uniformQuant" name="uniformQuant" type="number" placeholder="Qty"
                            class="col-xs-8 form-control mini" ng-model="StudentObject.UniformQty"
-                           ng-change="setTotalCost()" req123>
+                           ng-change="setTotalCost()" required>
                 </div>
             </div>
             <br/>
@@ -180,7 +180,7 @@
 
                 <div class="controls">
                     <input id="Date" name="Date" type="DATE" placeholder="placeholder"
-                           class="col-xs-8 form-control medium" ng-model="StudentObject.DateOfAdmission" req123>
+                           class="col-xs-8 form-control medium" ng-model="StudentObject.DateOfAdmission" required>
                 </div>
             </div>
             <br/>
@@ -190,7 +190,7 @@
 
                 <div class="controls">
                     <input id="regNum" name="regNum" type="text" placeholder="Enter Child's Registration Number"
-                           class="col-xs-8 form-control medium" ng-model="StudentObject.RegistrationNumber" req123>
+                           class="col-xs-8 form-control medium" ng-model="StudentObject.RegistrationNumber" required>
                 </div>
             </div>
             <br/>
@@ -200,7 +200,7 @@
 
                 <div class="controls">
                     <input id="receiptNo" name="receiptNo" type="text" placeholder="Enter Receipt Number"
-                           class="col-xs-8 form-control medium" ng-model="StudentObject.ReceiptNumber" req123>
+                           class="col-xs-8 form-control medium" ng-model="StudentObject.ReceiptNumber" required>
                 </div>
             </div>
             <br/>
@@ -276,7 +276,7 @@
                 <div class="controls input-group small">
                     <span class="input-group-addon">Rs</span>
 
-                    <div id="AmountTotal" class="col-xs-8 form-control mini">{{getFinalCost()}}</div>
+                    <div id="AmountTotal" class="col-xs-8 form-control mini" ng-model="OrderForm.TotalAmount">{{getFinalCost()}}</div>
                 </div>
             </div>
             <br/>
@@ -286,7 +286,7 @@
 
                 <div class="controls">
                     <input id="modePayment" name="modePayment" type="text" placeholder="Cash/Account Transfer"
-                           class="col-xs-8 form-control medium" ng-model="OrderForm.ModeOfPayment" req123>
+                           class="col-xs-8 form-control medium" ng-model="OrderForm.ModeOfPayment" required>
                 </div>
             </div>
             <br/>
@@ -296,7 +296,7 @@
 
                 <div class="controls">
                     <input id="bankTranID" name="bankTranID" type="text" placeholder=""
-                           class="col-xs-8 form-control medium " ng-model="OrderForm.TransactionID" req123>
+                           class="col-xs-8 form-control medium " ng-model="OrderForm.TransactionID" required>
                 </div>
             </div>
             <br/>
@@ -306,7 +306,7 @@
 
                 <div class="controls">
                     <input id="address" name="address" placeholder="Enter Address for delivery" rows="3"
-                           class="col-xs-8 form-control medium " ng-model="OrderForm.Address" req123>
+                           class="col-xs-8 form-control medium " ng-model="OrderForm.Address" required>
                     </input>
                 </div>
             </div>
@@ -487,7 +487,7 @@
 
                 <div style="padding-top:3%;"><span style="padding-right:2%; color:#545454"><small><b>By
                     : </b></small>{{order.FranchiseId}}</span><span style="padding-right:2%;color:#545454"><small>
-                    <b>Date : </b></small>{{getDate(order.CreateOn)}}</span><span class="pull-right"
+                    <b>Dispatched On : </b></small>{{getDate(order.ModifiedOn)}}</span><span class="pull-right"
                                                                                   style="color:#545454"><small>
                     <b>Total : </b></small><b>{{order.TotalAmount}}</b></span></div>
             </div>
@@ -501,8 +501,8 @@
         <button class="btn btn-primary pull-right" ng-click="showOrder()">Back</button>
         <div class="col-xs-12" style="padding:2%">
             <div class="col-xs-6">
-                <div class="displayOrder"><b>Order Date : </b>
-                    {{getDate(dispatched[OrderNo].CreateOn)}}
+                <div class="displayOrder"><b>Dispatched On : </b>
+                    {{getDate(dispatched[OrderNo].ModifiedOn)}}
                 </div>
                 <div class="displayOrder"><b>Amount Paid : </b>{{dispatched[OrderNo].TotalAmount}}
                     <small> through {{dummyOrders[OrderNo].ModeOfPayment}}</small>

@@ -30,15 +30,9 @@
 
     App.controller("LogOutCtrl", ["$scope", "$location", "$window", function ($scope, $location, $window) {
 
-        function ComeOn() {
-            console.log("here is the problem" + sessionStorage.loginService)
-        }
-
-        ComeOn();
-
         $scope.logOut = function () {
             console.log("Logging out");
-            delete sessionStorage.loginService;
+            delete sessionStorage.userDetails;
             $window.location.href = '/Login';
             //$location.path('/Login')
         }
@@ -119,8 +113,11 @@
                 console.log("student " + $scope.UniformCosts[student.UniformSize] + "  " + $scope.UniformQty);
                 FinalCost += $scope.KitCost + $scope.UniformCosts[student.UniformSize] * student.UniformQty;
             });
+            $scope.TotalAmount = FinalCost;
             return FinalCost
         };
+
+
         $scope.setClass = function () {
 
             $scope.StudentObject.Class = $scope.Class;
@@ -217,10 +214,17 @@
         };
         $scope.placeOrder = function () {
             $scope.OrderForm.Students = $scope.Students;
+            $scope.OrderForm.FranchiseId = $scope.userDetails.FranchiseId;
+            $scope.OrderForm.FranchiseName = $scope.userDetails.FranchiseName;
+            $scope.OrderForm.TotalAmount = $scope.TotalAmount;
             console.log(JSON.stringify($scope.OrderForm));
             console.log("Place order was clicked");
             PlaceOrder.placeOrder($scope.OrderForm).success(function(poResponse, poStatus){
                 console.log(" po response " + poResponse.Message);
+                $scope.OrderForm = {};
+                $scope.StudentObject = {};
+                $scope.Students = [];
+                $scope.TotalAmount=0;
                 PlaceOrder.setModalMessage(poResponse.Message);
                 var modalInstance = $modal.open({
                     templateUrl: 'Modal.html',
@@ -239,7 +243,7 @@
 
             }).error(function(poErResponse, poResStatus){
                 console.log("err po " + poErResponse);
-
+                PlaceOrder.setModalMessage(poErResponse.errorMessage);
                 PlaceOrder.setModalMessage("error in placing order");
                 var modalInstance = $modal.open({
                     templateUrl: 'Modal.html',
@@ -247,6 +251,8 @@
                 });
 
                 modalInstance.result.then(function () {
+                    $scope.formHide = false;
+                    $scope.formButtons = true;
                     console.log("executed")
                 }, function () {
                     console.log('Modal dismissed at: ' + new Date());
@@ -275,151 +281,18 @@
         };
     }]);
 
-    App.controller("PrevOrders", ["$scope", "$location", function ($scope, $location) {
+    App.controller("PrevOrders", ["$scope", "$location", "PlaceOrder", function ($scope, $location, PlaceOrder) {
 
-        $scope.Orders = [
-            {
-                "Students": [
-                    {
-                        "NameOfStudent": "Akshay6",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 2,
-                        "UniformQty": 2,
-                        "Class": "PlayGroup"
+        $scope.userDetails = $scope.userDetails = JSON.parse(sessionStorage.userDetails);
+        function getOrders(){
+            $scope.Orders = PlaceOrder.getOrders($scope.userDetails.FranchiseId).success(function(getOrderResponse, getOrderStatus){
+                $scope.Orders = getOrderResponse.pending;
+                $scope.dispatched = getOrderResponse.dispatched;
+                $scope.completed = getOrderResponse.completed;
+            }).error()
+        };
 
-                    },
-                    {
-                        "NameOfStudent": "Akshay7",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 1,
-                        "UniformQty": 2,
-                        "Class": "PlayGroup"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 3,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 2,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 1,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 4,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 4,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    }
-                ],
-                "FranchiseId": "Kolkata School",
-                "Status": "Ordered",
-                "TotalAmount": 654354.55,
-                "ModeOfPayment": "Cash",
-                "TransactionID": "RR88283553",
-                "Address": "Some detailed address here ",
-                "OrderId": "4641429367824201",
-                "CreateOn": "2015-04-18T14:37:04.211Z",
-                "ModifiedOn": "2015-04-18T14:37:04.211Z"
-            },
-            {
-                "Students": [
-                    {
-                        "NameOfStudent": "Akshay6",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 5,
-                        "UniformQty": 2,
-                        "Class": "PlayGroup"
-                    },
-                    {
-                        "NameOfStudent": "Akshay7",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 1,
-                        "UniformQty": 2,
-                        "Class": "SKG"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 2,
-                        "UniformQty": 2,
-                        "Class": "Nursery"
-                    }
-                ],
-                "FranchiseId": "Mumbai School",
-                "Status": "Ordered",
-                "TotalAmount": 654354.55,
-                "ModeOfPayment": "Cash",
-                "TransactionID": "RR88283553",
-                "Address": "Some detailed address here ",
-                "OrderId": "4641429367906931",
-                "CreateOn": "2015-04-18T14:38:26.943Z",
-                "ModifiedOn": "2015-04-18T14:38:26.943Z"
-            }
-        ]
-        $scope.dispatched = [
-            {
-                "Students": [
-
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 2,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 1,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 4,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 4,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    }
-                ],
-                "FranchiseId": "Kolkata School",
-                "Status": "Dispatched",
-                "TotalAmount": 654354.55,
-                "ModeOfPayment": "Cash",
-                "TransactionID": "RR88283553",
-                "Address": "Some detailed address here ",
-                "OrderId": "46414234537824201",
-                "CreateOn": "2015-04-18T14:37:04.211Z",
-                "ModifiedOn": "2015-04-18T14:37:04.211Z"
-            }
-        ]
+        getOrders();
         $scope.getDate = function (Obj) {
             var str = new Date(Obj).toString();
             return str.substring(0, str.length - 30)
@@ -448,7 +321,7 @@
 
     }]);
 
-    App.controller("AdminController", ["$scope", "$location", function ($scope, $location) {
+    App.controller("AdminController", ["$scope", "$location", "PlaceOrder", function ($scope, $location, PlaceOrder) {
 
         $scope.UniformCosts = {
             "1": 10,
@@ -458,149 +331,21 @@
             "5": 50
         };
         $scope.KitCost = 500;
-        $scope.dummyOrders = [
-            {
-                "Students": [
-                    {
-                        "NameOfStudent": "Akshay6",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 2,
-                        "UniformQty": 2,
-                        "Class": "PlayGroup"
 
-                    },
-                    {
-                        "NameOfStudent": "Akshay7",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 1,
-                        "UniformQty": 2,
-                        "Class": "PlayGroup"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 3,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 2,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 1,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 4,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 4,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    }
-                ],
-                "FranchiseId": "Kolkata School",
-                "Status": "Ordered",
-                "TotalAmount": 654354.55,
-                "ModeOfPayment": "Cash",
-                "TransactionID": "RR88283553",
-                "Address": "Some detailed address here ",
-                "OrderId": "4641429367824201",
-                "CreateOn": "2015-04-18T14:37:04.211Z",
-                "ModifiedOn": "2015-04-18T14:37:04.211Z"
-            },
-            {
-                "Students": [
-                    {
-                        "NameOfStudent": "Akshay6",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 5,
-                        "UniformQty": 2,
-                        "Class": "PlayGroup"
-                    },
-                    {
-                        "NameOfStudent": "Akshay7",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 1,
-                        "UniformQty": 2,
-                        "Class": "SKG"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 2,
-                        "UniformQty": 2,
-                        "Class": "Nursery"
-                    }
-                ],
-                "FranchiseId": "Mumbai School",
-                "Status": "Ordered",
-                "TotalAmount": 654354.55,
-                "ModeOfPayment": "Cash",
-                "TransactionID": "RR88283553",
-                "Address": "Some detailed address here ",
-                "OrderId": "4641429367906931",
-                "CreateOn": "2015-04-18T14:38:26.943Z",
-                "ModifiedOn": "2015-04-18T14:38:26.943Z"
-            }
-        ];
-        $scope.dispatched = [
-            {
-                "Students": [
+        PlaceOrder.getOrders().success(function(getOrderResponse, getOrderStatus){
 
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 2,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 1,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 4,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 4,
-                        "UniformQty": 2,
-                        "Class": "UKG"
-                    }
-                ],
-                "FranchiseId": "Kolkata School",
-                "Status": "Dispatched",
-                "TotalAmount": 654354.55,
-                "ModeOfPayment": "Cash",
-                "TransactionID": "RR88283553",
-                "Address": "Some detailed address here ",
-                "OrderId": "46414234537824201",
-                "CreateOn": "2015-04-18T14:37:04.211Z",
-                "ModifiedOn": "2015-04-18T14:37:04.211Z"
-            }
-        ];
+            $scope.dummyOrders = getOrderResponse.pending;
+            $scope.dispatched = getOrderResponse.dispatched;
+            $scope.completed = getOrderResponse.completed;
+
+        }).error(function(getOrderErrResponse, getOrderErrResponseStatus){
+            $scope.dummyOrders =[];
+            $scope.dispatched = [];
+            $scope.completed = [];
+            console.log(getOrderErrResponse);
+        });
+
+
         $scope.listView = false;
         $scope.orderView = true;
         $scope.OrderNo = 0;
@@ -629,11 +374,17 @@
         }
 
         $scope.dispatchOrder = function (OrderIndex) {
-            $scope.dummyOrders[OrderIndex].Status = "Dispatched"
-            $scope.dispatched.push($scope.dummyOrders[OrderIndex]);
-            $scope.dummyOrders.splice(OrderIndex, 1);
-            $scope.listView = toggle($scope.listView);
-            $scope.orderView = toggle($scope.orderView);
+
+            PlaceOrder.changeOrderStatus($scope.dummyOrders[OrderIndex].OrderId, "DISPATCHED").success(function(chOrdRes, chOrdStat){
+                $scope.dummyOrders[OrderIndex].Status = "DISPATCHED";
+                $scope.dispatched.push($scope.dummyOrders[OrderIndex]);
+                $scope.dummyOrders.splice(OrderIndex, 1);
+                $scope.listView = toggle($scope.listView);
+                $scope.orderView = toggle($scope.orderView);
+            }).error(function(){
+                console.log("Some error has occurred");
+            })
+
         }
 
     }]);
@@ -947,7 +698,7 @@
             hours = hours % 12;
             hours = hours ? hours : 12; // the hour '0' should be '12'
             minutes = minutes < 10 ? '0' + minutes : minutes;
-            return dateStr + "/" + monthStr + '/'+ yrStr + " " + hours + ':' + minutes + ' ' + ampm;
+            return  hours + ':' + minutes + ' ' + ampm + " " + dateStr + "/" + monthStr + '/'+ yrStr;
         };
         $scope.CurrentMessage = $scope.Messages[0].Messages;
         $scope.setMessage = function (msgValue) {
@@ -966,7 +717,7 @@
         $scope.appliedClass = function () {
 
         }
-    }])
+    }]);
 
     App.controller("Accounts", ['$scope', function($scope){
 
@@ -1008,10 +759,7 @@
         };
         $scope.AccountFilter = ['Franchise', 'Admin'];
         $scope.AccFilterDef = $scope.AccountFilter[0];
-    }])
-    
-
-
+    }]);
 
     App.controller("DownloadsController", ["$scope",  function ($scope) {
 

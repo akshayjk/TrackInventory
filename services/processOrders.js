@@ -2,18 +2,69 @@
  * Created by Akshay on 18-04-2015.
  */
 
-var dbLayer = require('./DbOperations.js');
+var dataBase = require('./DbOperations.js');
 var define = require('./Define.js');
+var responseHandler = require('./ResponseHandler.js')
+
+
 function ProcessOrder() {
 
 }
 
-ProcessOrder.prototype.placeOrder = function (orderObject, req, res) {
+ProcessOrder.prototype.getOrders = function (req, res, body) {
+    //Fetches Orders
+    var query;
+    var franchiseID = req.query.FranchiseId;
+    if(!franchiseID){
+        query = {Status:"PENDING"};
+    }else{
+        query = {"FranchiseId": franchiseID, "Status":"PENDING"}
+    }
 
-    console.log("In order function")
+
+    var options = {
+        collection: "orders",
+        Query: query
+    };
+    //todo put the date params for the recent order fetch
+    var responseObject = {};
+    new dataBase().get(options, function (err, dataPending) {
+        if (!err) {
+
+            responseObject.pending = dataPending;
+            options.Query.Status="DISPATCHED";
+            new dataBase().get(options, function (err, dataDispatched){
+                if(!err){
+                    responseObject.dispatched = dataDispatched;
+                    options.Query.Status = "COMPLETED";
+                    new dataBase().get(options, function(err, dataCompleted){
+                        if(!err){
+                            responseObject.completed = dataCompleted;
+                            new responseHandler().sendResponse(req, res, responseObject, 200);
+                        }
+                    })
+                }
+            });
+
+        } else {
+            new responseHandler().sendResponse(req, res, err, 500);
+        }
+    })
+}
+
+ProcessOrder.prototype.placeOrder = function (req, res, orderObject) {
+
+    console.log("In order function");
+    console.log("Initial Check");
+    /*orderObject.Students.forEach(function(stud){
+        if((!stud.NameOfStudent || stud.NameOfStudent=="" || stud.NameOfStudent==null)||(!stud.Age || stud.Age=="" || stud.Age==null)||(!stud.Age || stud.Age=="" || stud.Age==null)){
+
+        }
+    })*/
+
     var orderId = generateOrderId(orderObject.FranchiseId);
     orderObject.OrderId = orderId;
-
+    console.log("Order received " + JSON.stringify(orderObject))
     //Update students collection
     var Students = orderObject.Students;
     Students.forEach(function (kid) {
@@ -25,7 +76,7 @@ ProcessOrder.prototype.placeOrder = function (orderObject, req, res) {
         collection: define.studentsCollection,
         insertObject: Students
     };
-    new dbLayer().insert(studentOptions, function (err, result) {
+    new dataBase().insert(studentOptions, function (err, result) {
         if (!err) {
             console.log("Students inserted for order Id " + orderObject.OrderId);
             var StudentArray = [];
@@ -38,7 +89,7 @@ ProcessOrder.prototype.placeOrder = function (orderObject, req, res) {
                 StudentArray.push(tempObj);
             }
             orderObject.Students = StudentArray;
-            orderObject.Status = "ORDERED";
+            orderObject.Status = "PENDING";
             console.log("Order Collection format " + JSON.stringify(orderObject));
 
             var OrderOptions = {
@@ -46,12 +97,16 @@ ProcessOrder.prototype.placeOrder = function (orderObject, req, res) {
                 insertObject: orderObject
             };
 
-            new dbLayer().insert(OrderOptions, function (err, result) {
+            new dataBase().insert(OrderOptions, function (err, result) {
                 if (!err) {
                     console.log("Order inserted for order ID " + orderObject.OrderId);
-                    var response = {}
+                    //todo Inventory database manipulation based on the Orders
+                    //todo Send Emails to the Parents of all Students
+
+                    var response = {};
                     response.success = true;
                     response.orderId = orderObject.OrderId;
+                    response.Message = "Order Successfully placed. Order Id is " + orderObject.OrderId;
                     res.setHeader("Content-Type", "application/json");
                     res.send(JSON.stringify(response));
                 } else {
@@ -68,21 +123,23 @@ ProcessOrder.prototype.placeOrder = function (orderObject, req, res) {
     })
     console.log("Student collection format " + JSON.stringify(studentOptions));
 
-
 };
 
-ProcessOrder.prototype.completeOrder = function (OrderId, Status, req, res) {
-
+ProcessOrder.prototype.changeOrderStatus = function (req, res, body) {
+    var OrderId = req.query.OrderId;
+    var Status = body.Status;
+    //todo order Id validation
+    //todo order cycle validation
     if (Status.toLowerCase() == "completed" || Status.toLowerCase() == "dispatched") {
         var orderCompleteOption = {
             collection: define.ordersCollection,
             Query: {OrderId: OrderId},
             updateObject: {Status: Status.toUpperCase()}
-        }
-        new dbLayer().update(orderCompleteOption, function (err, result) {
+        };
+        new dataBase().update(orderCompleteOption, function (err, result) {
             if (!err) {
                 console.log("Success in update");
-                var response ={};
+                var response = {};
                 response.success = true;
                 response.Status = Status;
                 res.setHeader("Content-Type", "application/json");
