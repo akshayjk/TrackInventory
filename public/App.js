@@ -8,7 +8,8 @@
         "App.directives",
         "App.filters",
         "ngRoute",
-        "ngResource"
+        "ngResource",
+        "ui.bootstrap"
     ]);
 
     App.config(function ($routeProvider) {

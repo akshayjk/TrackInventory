@@ -1,83 +1,44 @@
-//angular.module('formExample', [])
-var Controllers = angular.module('AllControllers.all',[]);
 
-Controllers.controller('ExampleController', ['$scope', function ($scope) {
-        $scope.master = {};
-        $scope.date = function(dateValue){
-            return new Date(dateValue).toLocaleDateString();
-        }
-        $scope.tableData =[
-            {
-                "Students": [
-                    {
-                        "NameOfStudent": "Akshay6",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 10,
-                        "UniformQty": 2
-                    },
-                    {
-                        "NameOfStudent": "Akshay7",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 10,
-                        "UniformQty": 2
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 10,
-                        "UniformQty": 2
-                    }
-                ],
-                "FranchiseId": "Suleman Kolkata",
-                "Status": "Ordered",
-                "TotalAmount": 654354.55,
-                "ModeOfPayment": "Cash",
-                "TransactionID": "RR88283553",
-                "Address": "Some detailed address here ",
-                "OrderId": "4641429367824201",
-                "CreateOn": "2015-04-18T14:37:04.211Z",
-                "ModifiedOn": "2015-04-18T14:37:04.211Z"
-            },
-            {
-                "Students": [
-                    {
-                        "NameOfStudent": "Akshay6",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 10,
-                        "UniformQty": 2
-                    },
-                    {
-                        "NameOfStudent": "Akshay7",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 10,
-                        "UniformQty": 2
-                    },
-                    {
-                        "NameOfStudent": "Akshay8",
-                        "RegistrationNumber": "AG887425",
-                        "UniformSize": 10,
-                        "UniformQty": 2
-                    }
-                ],
-                "FranchiseId": "Some guy in Delhi",
-                "Status": "Ordered",
-                "TotalAmount": 654354.55,
-                "ModeOfPayment": "Cash",
-                "TransactionID": "RR88283553",
-                "Address": "Some detailed address here ",
-                "OrderId": "4641429367906931",
-                "CreateOn": "2015-04-18T14:38:26.943Z",
-                "ModifiedOn": "2015-04-18T14:38:26.943Z"
+
+angular.module('ui.bootstrap.demo', ['ui.bootstrap']);
+angular.module('ui.bootstrap.demo').controller('ModalDemoCtrl', function ($scope, $modal, $log) {
+
+    $scope.items = ['item1', 'item2', 'item3'];
+
+    $scope.open = function () {
+        var modalInstance = $modal.open({
+            templateUrl: 'myModalContent.html',
+            controller: 'ModalInstanceCtrl',
+            resolve: {
+                items: function () {
+                    return $scope.items;
+                }
             }
-        ]
 
-        $scope.update = function (user) {
-            $scope.master = angular.copy(user);
-        };
+        });
 
-        $scope.reset = function () {
-            $scope.user = angular.copy($scope.master);
-        };
+        modalInstance.result.then(function (selectedItem) {
+           console.log("executed");
+            $scope.selected = selectedItem;
+        }, function () {
+            console.log('Modal dismissed at: ' + new Date());
+        });
+    };
+});
 
-        $scope.reset();
-    }]);
+// Please note that $modalInstance represents a modal window (instance) dependency.
+// It is not the same as the $modal service used above.
+
+angular.module('ui.bootstrap.demo').controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+
+    $scope.items = items;
+    $scope.selected = {
+        item: $scope.items[0]
+    };
+    $scope.ok = function () {
+        $modalInstance.close($scope.selected.item);
+    };
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+});

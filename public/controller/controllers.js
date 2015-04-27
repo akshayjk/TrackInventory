@@ -4,17 +4,27 @@
 
     var App = angular.module("App.controllers", []);
 
-    App.controller("LoginController", ["$scope", '$location', '$window', function ($scope, $location, $window) {
+
+    App.controller("LoginController", ["$scope", '$window', 'LoginService', function ($scope,$window, LoginService) {
         /*$scope.aVariable = 'anExampleValueWithinScope';
          $scope.valueFromService = UtilSrvc.helloWorld("User");*/
         $scope.loginForm = {};
+        $scope.loginError ="";
         $scope.login = function () {
             console.log($scope.loginForm);
-            if ($scope.loginForm.username == "admin") {
-                $window.location.href = '../views/AdminMain.html';
-            } else {
-                $window.location.href = '../views/FranchiseMain.html';
-            }
+            LoginService.login(JSON.stringify($scope.loginForm)).success(function(LoginResponse, LoginStatus, LoginHeaders){
+                    console.log("login response " + LoginResponse);
+                sessionStorage.userDetails = angular.toJson(LoginResponse);
+                $scope.loginError = "";
+                if(LoginResponse.Role=="Admin"){
+                        $window.location.href = '../views/AdminMain.html';
+                    }else if(LoginResponse.Role=="Franchise"){
+                        $window.location.href = '../views/FranchiseMain.html';
+                    }
+            }).error(function(LoginResponse, LoginStatus, LoginHeaders){
+                console.log(LoginResponse.errorMessage)
+                $scope.loginError = LoginResponse.errorMessage;
+            })
 
         }
     }]);
@@ -22,53 +32,36 @@
     App.controller("LogOutCtrl", ["$scope", "$location", "$window", function ($scope, $location, $window) {
 
         function ComeOn() {
-            console.log("here is the problem")
+            console.log("here is the problem" + sessionStorage.loginService)
         }
 
         ComeOn();
 
         $scope.logOut = function () {
             console.log("Logging out");
+            delete sessionStorage.loginService;
             $window.location.href = '/Login';
             //$location.path('/Login')
         }
     }]);
 
-    App.controller("OrderForm", ["$scope", "$location", function ($scope, $location) {
+    App.controller("OrderForm", ["$scope", "$location", "$modal", "PlaceOrder", function ($scope, $location, $modal, PlaceOrder) {
 
         $scope.ready = function () {
             $('#PaymentTab').attr('class', 'disabled disabledTab');
             $('#OrderTab').attr('class', 'disabled disabledTab');
+            console.log(" session Storage " + typeof(sessionStorage.userDetails))
         };
-        $scope.Maths = 40;
         $scope.ready();
-        $scope.navActive = function (Name) {
-            $('#' + Name).attr('class', 'active');
-            var Tabs = ["Orders", "PreviousOrders", "Query"]
-            Tabs.forEach(function (tab) {
-                if (tab != Name) {
-                    $('#' + tab).removeClass('active');
-                }
-            });
-            $location.path('/' + Name)
-        }
-
-        $scope.UniformCosts =
-        {
-            "1": 10,
-            "2": 20,
-            "3": 30,
-            "4": 40,
-            "5": 50
-        }
-        $scope.KitCost = 500;
-
+        $scope.userDetails = JSON.parse(sessionStorage.userDetails);
+        $scope.UniformCosts = $scope.userDetails.FranchiseDetails.UniformCosts;
+        $scope.KitCost = $scope.userDetails.FranchiseDetails.KitCost;
         $scope.formHide = false;
         $scope.formButtons = true;
         $scope.OrderForm = {};
         $scope.StudentObject = {};
         $scope.Students = [];
-        $scope.UniformOptions = [1, 2, 3, 4, 5];
+        $scope.UniformOptions = Object.keys($scope.UniformCosts);
         $scope.UniformSize = $scope.UniformOptions[0];
         $scope.Qty = 1;
         $scope.UniformArray = [];
@@ -79,7 +72,6 @@
                 return 1;
             }
         };
-
         $scope.getUniformSize = function () {
             if ($scope.StudentObject.UniformSize != undefined) {
                 return $scope.StudentObject.UniformSize
@@ -94,15 +86,12 @@
                 return "PlayGroup";
             }
         };
-
         $scope.setUniformSize = function () {
-
             $scope.StudentObject.UniformSize = $scope.UniformSize;
             $scope.setTotalCost();
             $scope.UniformArray.push($scope.UniformSize);
             console.log("Uniform Size : " + $scope.StudentObject.UniformSize);
         };
-
         $scope.setUniformQty = function () {
             if ($scope.StudentObject.UniformQty == undefined) {
                 $scope.StudentObject.UniformQty = 1;
@@ -111,51 +100,43 @@
         $scope.setUniformQty();
         $scope.setUniformSizeFinal = function (Numb) {
             $scope.Students[Numb].UniformSize = $scope.UniformArray[Numb];
-        }
+        };
         $scope.ClassOptions = ["PlayGroup", "Nursery", "LKG", "UKG"];
         $scope.Class = $scope.ClassOptions[0];
         $scope.setTotalCost = function () {
             console.log("kit cost " + $scope.KitCost + "  " + $scope.UniformCosts[$scope.getUniformSize()] * $scope.getUniformQty())
             $scope.TotalCost = $scope.KitCost + $scope.UniformCosts[$scope.getUniformSize()] * $scope.getUniformQty();
-        }
+        };
         $scope.setTotalCost();
         $scope.getFinalCost = function () {
-
             var FinalCost = 0;
             $scope.Students.forEach(function (student) {
                 console.log("student " + $scope.UniformCosts[student.UniformSize] + "  " + $scope.UniformQty);
                 FinalCost += $scope.KitCost + $scope.UniformCosts[student.UniformSize] * student.UniformQty;
             });
             return FinalCost
-        }
+        };
         $scope.setClass = function () {
-
             $scope.StudentObject.Class = $scope.Class;
             $scope.setTotalCost();
             console.log("Class name : " + $scope.StudentObject.Class);
         };
-
         $scope.getWelComeKitClass = function () {
             if ($scope.StudentObject.Class != undefined) {
                 return $scope.StudentObject.Class;
             } else {
                 return $scope.Class;
             }
-        }
-
+        };
         $scope.setFormCancel = function () {
-
             if ($scope.Students.length > 0) {
                 $scope.formCancel = false;
             } else {
                 $scope.formCancel = true;
             }
-
-        }
-
+        };
         $scope.setFormCancel();
         $scope.addStudents = function () {
-
             if ($scope.StudentObject.Class == undefined) {
                 $scope.StudentObject.Class = $scope.ClassOptions[0];
             }
@@ -182,8 +163,6 @@
             } else {
                 $scope.formCancel = true;
             }
-
-
             $('#StudentTab').attr('class', 'active');
             $('#OrderTab').attr('class', 'disabled disabledTab');
             $('#orange').hide();
@@ -191,14 +170,14 @@
             $scope.formHide = false;
             $scope.formButtons = true;
 
-        }
+        };
         $scope.stdCancel = function () {
             $('#OrderTab').attr('class', 'active');
             $('#StudentTab').attr('class', 'disabled disabledTab');
             $('#orange').show();
             $('#red').hide();
             $scope.formButtons = false;
-        }
+        };
         $scope.confirmOrder = function () {
             $('#OrderTab').attr('class', 'disabled disabledTab');
             $('#PaymentTab').attr('class', 'active');
@@ -206,8 +185,6 @@
             $('#orange').hide();
         };
         $scope.next = function () {
-
-
             if (Object.keys($scope.StudentObject).length > 0) {
                 if ($scope.StudentObject.Class == undefined) {
                     $scope.StudentObject.Class = $scope.ClassOptions[0];
@@ -224,13 +201,65 @@
             console.log(JSON.stringify($scope.Students));
             $scope.StudentObject = {}
 
-        }
+        };
         $scope.placeOrder = function () {
             $scope.OrderForm.Students = $scope.Students;
-            console.log(JSON.stringify($scope.OrderForm))
+            console.log(JSON.stringify($scope.OrderForm));
+            console.log("Place order was clicked");
+            PlaceOrder.placeOrder($scope.OrderForm).success(function(poResponse, poStatus){
+                console.log(" po response " + poResponse.Message);
+                PlaceOrder.setModalMessage(poResponse.Message);
+                var modalInstance = $modal.open({
+                    templateUrl: 'Modal.html',
+                    controller: 'ModalInstanceCtrl'
+
+                });
+
+                modalInstance.result.then(function () {
+                    console.log("executed");
+                    $scope.formHide = false;
+                    $scope.formButtons = true;
+                }, function () {
+                    console.log('Modal dismissed at: ' + new Date());
+                });
+
+
+            }).error(function(poErResponse, poResStatus){
+                console.log("err po " + poErResponse);
+
+                PlaceOrder.setModalMessage("error in placing order");
+                var modalInstance = $modal.open({
+                    templateUrl: 'Modal.html',
+                    controller: 'ModalInstanceCtrl'
+                });
+
+                modalInstance.result.then(function () {
+                    console.log("executed")
+                }, function () {
+                    console.log('Modal dismissed at: ' + new Date());
+                });
+            })
         };
 
 
+    }]);
+
+    App.controller('ModalInstanceCtrl', ['$scope','$modalInstance', 'PlaceOrder', function ($scope, $modalInstance, PlaceOrder) {
+
+        $scope.ModMsg = PlaceOrder.getModalMessage();
+
+        $scope.ok = function () {
+            $('#StudentTab').attr('class', 'active');
+            $('#OrderTab').attr('class', 'disabled disabledTab');
+            $('#PaymentTab').attr('class','disabled disabledTab')
+            $('#yellow').hide();
+            $('#red').show();
+
+            $modalInstance.close();
+        };
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
     }]);
 
     App.controller("PrevOrders", ["$scope", "$location", function ($scope, $location) {
@@ -241,23 +270,55 @@
                     {
                         "NameOfStudent": "Akshay6",
                         "RegistrationNumber": "AG887425",
-                        "UniformSize": 10,
-                        "UniformQty": 2
+                        "UniformSize": 2,
+                        "UniformQty": 2,
+                        "Class": "PlayGroup"
+
                     },
                     {
                         "NameOfStudent": "Akshay7",
                         "RegistrationNumber": "AG887425",
-                        "UniformSize": 10,
-                        "UniformQty": 2
+                        "UniformSize": 1,
+                        "UniformQty": 2,
+                        "Class": "PlayGroup"
                     },
                     {
                         "NameOfStudent": "Akshay8",
                         "RegistrationNumber": "AG887425",
-                        "UniformSize": 10,
-                        "UniformQty": 2
+                        "UniformSize": 3,
+                        "UniformQty": 2,
+                        "Class": "UKG"
+                    },
+                    {
+                        "NameOfStudent": "Akshay8",
+                        "RegistrationNumber": "AG887425",
+                        "UniformSize": 2,
+                        "UniformQty": 2,
+                        "Class": "UKG"
+                    },
+                    {
+                        "NameOfStudent": "Akshay8",
+                        "RegistrationNumber": "AG887425",
+                        "UniformSize": 1,
+                        "UniformQty": 2,
+                        "Class": "UKG"
+                    },
+                    {
+                        "NameOfStudent": "Akshay8",
+                        "RegistrationNumber": "AG887425",
+                        "UniformSize": 4,
+                        "UniformQty": 2,
+                        "Class": "UKG"
+                    },
+                    {
+                        "NameOfStudent": "Akshay8",
+                        "RegistrationNumber": "AG887425",
+                        "UniformSize": 4,
+                        "UniformQty": 2,
+                        "Class": "UKG"
                     }
                 ],
-                "FranchiseId": "35465464",
+                "FranchiseId": "Kolkata School",
                 "Status": "Ordered",
                 "TotalAmount": 654354.55,
                 "ModeOfPayment": "Cash",
@@ -272,23 +333,26 @@
                     {
                         "NameOfStudent": "Akshay6",
                         "RegistrationNumber": "AG887425",
-                        "UniformSize": 10,
-                        "UniformQty": 2
+                        "UniformSize": 5,
+                        "UniformQty": 2,
+                        "Class": "PlayGroup"
                     },
                     {
                         "NameOfStudent": "Akshay7",
                         "RegistrationNumber": "AG887425",
-                        "UniformSize": 10,
-                        "UniformQty": 2
+                        "UniformSize": 1,
+                        "UniformQty": 2,
+                        "Class": "SKG"
                     },
                     {
                         "NameOfStudent": "Akshay8",
                         "RegistrationNumber": "AG887425",
-                        "UniformSize": 10,
-                        "UniformQty": 2
+                        "UniformSize": 2,
+                        "UniformQty": 2,
+                        "Class": "Nursery"
                     }
                 ],
-                "FranchiseId": "35465464",
+                "FranchiseId": "Mumbai School",
                 "Status": "Ordered",
                 "TotalAmount": 654354.55,
                 "ModeOfPayment": "Cash",
@@ -299,10 +363,76 @@
                 "ModifiedOn": "2015-04-18T14:38:26.943Z"
             }
         ]
+        $scope.dispatched = [
+            {
+                "Students": [
+
+                    {
+                        "NameOfStudent": "Akshay8",
+                        "RegistrationNumber": "AG887425",
+                        "UniformSize": 2,
+                        "UniformQty": 2,
+                        "Class": "UKG"
+                    },
+                    {
+                        "NameOfStudent": "Akshay8",
+                        "RegistrationNumber": "AG887425",
+                        "UniformSize": 1,
+                        "UniformQty": 2,
+                        "Class": "UKG"
+                    },
+                    {
+                        "NameOfStudent": "Akshay8",
+                        "RegistrationNumber": "AG887425",
+                        "UniformSize": 4,
+                        "UniformQty": 2,
+                        "Class": "UKG"
+                    },
+                    {
+                        "NameOfStudent": "Akshay8",
+                        "RegistrationNumber": "AG887425",
+                        "UniformSize": 4,
+                        "UniformQty": 2,
+                        "Class": "UKG"
+                    }
+                ],
+                "FranchiseId": "Kolkata School",
+                "Status": "Dispatched",
+                "TotalAmount": 654354.55,
+                "ModeOfPayment": "Cash",
+                "TransactionID": "RR88283553",
+                "Address": "Some detailed address here ",
+                "OrderId": "46414234537824201",
+                "CreateOn": "2015-04-18T14:37:04.211Z",
+                "ModifiedOn": "2015-04-18T14:37:04.211Z"
+            }
+        ]
         $scope.getDate = function (Obj) {
             var str = new Date(Obj).toString();
             return str.substring(0, str.length - 30)
+        };
+
+        $scope.listView = false;
+        $scope.orderView = true;
+
+        $scope.showOrder = function (index) {
+            $scope.listView = toggle($scope.listView);
+            $scope.orderView = toggle($scope.orderView);
+            if (index != undefined) {
+                $scope.OrderNo = index;
+            }
+        };
+
+        function toggle(data) {
+            if (data) {
+                return false;
+
+            } else if (data == false) {
+                return true;
+
+            }
         }
+
     }]);
 
     App.controller("AdminController", ["$scope", "$location", function ($scope, $location) {
@@ -823,5 +953,47 @@
         $scope.appliedClass = function () {
 
         }
+    }])
+
+    App.controller("Accounts", ['$scope', function($scope){
+
+        $scope.Accounts = [
+            {
+                "FranchiseName": "Kolkata School",
+                "CreatedOn": "2015-04-18T19:37:04.211Z",
+                "FranchiseId": "RYT5653",
+                "Role": "Franchise",
+                "Address": "Some Address here "
+            },
+            {
+                "FranchiseName": "Mumbai School",
+                "CreatedOn": "2015-04-18T19:37:04.211Z",
+                "FranchiseId": "RYT5654",
+                "Role": "Franchise",
+                "Address": "Some Address here "
+            },
+            {
+                "FranchiseName": "Admin 2",
+                "CreatedOn": "2015-04-18T19:37:04.211Z",
+                "FranchiseId": "RYT5655",
+                "Role": "Admin",
+                "Address": "Some Address here "
+            }
+        ];
+        $scope.getDate = function (dateObj) {
+            var dateStr = new Date(dateObj).getDate().toString();
+            var monthStr = new Date(dateObj).getMonth().toString();
+            var yrStr = new Date(dateObj).getFullYear().toString();
+            var date = new Date(dateObj);
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            return dateStr + "/" + monthStr + '/'+ yrStr + " " + hours + ':' + minutes + ' ' + ampm;
+        };
+        $scope.AccountFilter = ['Franchise', 'Admin'];
+        $scope.AccFilterDef = $scope.AccountFilter[0];
     }])
 }());

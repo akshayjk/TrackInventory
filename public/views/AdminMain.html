@@ -14,6 +14,7 @@
     <script src="../angularfiles/angular-route.min.js"></script>
     <script src="../angularfiles/angular-resource.min.js"></script>
     <script src="../angularfiles/angular-sanitize.min.js"></script>
+    <script src="../bootstrap/js/ui-bootstrap-tpls-0.12.1.min.js"></script>
     <!--angular controller services-->
     <script src="../controller/services.js"></script>
     <script src="../controller/directives.js"></script>
@@ -412,8 +413,6 @@
 
 
 </div>
-
-
 <div class="tab-pane" id="Messages" ng-controller="Messages">
     <div class="singleOrder col-xs-12 MessageDisplay" style="overflow-y:hidden">
 
@@ -456,7 +455,33 @@
     </div>
 </div>
 <div class="tab-pane" id="Accounts" ng-controller="Accounts">
-    Accounts
+    <ul id="tabsAccounts" class="nav nav-tabs col-xs-10 OrderNav" data-tabs="tabs">
+        <li class="active" id="viewAccountsTab"><a href="#ViewAccounts" class="onHoverClass" data-toggle="tab"><b>View
+            </b></a></li>
+        <li class="" id="AddAccountTab"><a href="#Dispatched" class="onHoverClass"
+                                           data-toggle="tab"><b>Add Account</b></a></li>
+
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="ViewAccounts">
+            <div class="control-group col-xs-12">
+                <label class="control-label col-xs-2" for="FilterBy">Filter By : </label>
+                <div class="">
+                    <select id="FilterBy" name="selectFilter" class="col-xs-8 form-control small"
+                            ng-model="AccFilterDef" ng-options="m for m in AccountFilter">
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div ng-repeat="account in Accounts | filter:AccFilterDef" class="singleOrder">
+                    <div class="col-xs-12" style="margin-bottom: 2%;"><h4 class="col-xs-4" style="padding-left: 0%;">{{account.FranchiseName}}</h4><span class="col-xs-8"><button class="btn btn-danger pull-right">Delete</button></span></div>
+                    <div style="padding-left:2%;magin-left:1%;"><span><small>{{account.Address}}</small></span><span class="pull-right"><small>Created on : {{getDate(account.CreatedOn)}}</small></span></div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="AddAccount"></div>
+    </div>
+
 </div>
 </div>
 </div>

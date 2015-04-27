@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=egde"/>
-    <title>Littele Einstein Inventory Management</title>
+    <title>Little Einstein Inventory Management</title>
     <link rel="icon" type="image/png" href="Images/LEFav.png">
     <!-- LIBRARIES -->
     <script src='bootstrap/js/jquery-1.11.2.min.js'></script>
@@ -11,12 +11,11 @@
     <script src="angularfiles/angular-route.min.js"></script>
     <script src="angularfiles/angular-resource.min.js"></script>
     <script src="angularfiles/angular-sanitize.min.js"></script>
+    <script src="bootstrap/js/ui-bootstrap-tpls-0.12.1.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
 
     <!-- STYLE / THEME -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!--<link href="//cdncatalog.com/assets/flat-ui/css/flat-ui.css" rel="stylesheet">-->
-    <!--<link href="view/css/style.css" rel="stylesheet">-->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">    
     <link href="Stylesheets/LeWebSite.css" rel="stylesheet">
 </head>
 
@@ -49,6 +48,7 @@
         <h2 class="form-signin-heading">Please sign in</h2>
 
         <form ng-submit="login()">
+            <p class="bg-warning LoginContainer" style="color:red;">{{loginError}}</p>
             <label for="inputEmail" class="sr-only">Email address</label>
             <input type="text" id="inputEmail" class="form-control LoginContainer" placeholder="Username"
                    ng-model="loginForm.username" required autofocus>
@@ -63,6 +63,7 @@
             </div>
             <button class="btn btn-lg btn-primary btn-block LoginContainer" type="submit" id="loginButton">Sign in
             </button>
+
         </form>
     </div>
 </div>
