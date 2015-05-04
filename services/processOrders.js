@@ -13,41 +13,48 @@ function ProcessOrder() {
 
 ProcessOrder.prototype.getOrders = function (req, res, body) {
     //Fetches Orders
+    console.log("request for get Orders");
+
     var query;
     var franchiseID = req.query.FranchiseId;
-    if(!franchiseID){
-        query = {Status:"PENDING"};
-    }else{
-        query = {"FranchiseId": franchiseID, "Status":"PENDING"}
+    if (!franchiseID) {
+        query = {Status: "PENDING"};
+    } else {
+        query = {"FranchiseId": franchiseID, "Status": "PENDING"}
     }
-
-
     var options = {
         collection: "orders",
-        Query: query
+        Query: query,
+        sortObject:{ModifiedOn:-1}
     };
     //todo put the date params for the recent order fetch
     var responseObject = {};
     new dataBase().get(options, function (err, dataPending) {
         if (!err) {
-
             responseObject.pending = dataPending;
-            options.Query.Status="DISPATCHED";
-            new dataBase().get(options, function (err, dataDispatched){
-                if(!err){
+            console.log("responseObject pending " + JSON.stringify(responseObject));
+            options.Query.Status = "DISPATCHED";
+            new dataBase().get(options, function (err, dataDispatched) {
+                if (!err) {
                     responseObject.dispatched = dataDispatched;
+                    console.log("response Objetc dispatched " + JSON.stringify(responseObject))
                     options.Query.Status = "COMPLETED";
-                    new dataBase().get(options, function(err, dataCompleted){
-                        if(!err){
+                    new dataBase().get(options, function (err, dataCompleted) {
+                        if (!err) {
                             responseObject.completed = dataCompleted;
-                            new responseHandler().sendResponse(req, res, responseObject, 200);
+                            console.log("response Objetc completed " + JSON.stringify(responseObject))
+                            new responseHandler().sendResponse(req, res, "success", responseObject, 200);
+                        } else {
+                            new responseHandler().sendResponse(req, res, "error", err, 500);
                         }
                     })
+                } else {
+                    new responseHandler().sendResponse(req, res, "error", err, 500);
                 }
             });
 
         } else {
-            new responseHandler().sendResponse(req, res, err, 500);
+            new responseHandler().sendResponse(req, res, "error", err, 500);
         }
     })
 }
@@ -57,10 +64,10 @@ ProcessOrder.prototype.placeOrder = function (req, res, orderObject) {
     console.log("In order function");
     console.log("Initial Check");
     /*orderObject.Students.forEach(function(stud){
-        if((!stud.NameOfStudent || stud.NameOfStudent=="" || stud.NameOfStudent==null)||(!stud.Age || stud.Age=="" || stud.Age==null)||(!stud.Age || stud.Age=="" || stud.Age==null)){
+     if((!stud.NameOfStudent || stud.NameOfStudent=="" || stud.NameOfStudent==null)||(!stud.Age || stud.Age=="" || stud.Age==null)||(!stud.Age || stud.Age=="" || stud.Age==null)){
 
-        }
-    })*/
+     }
+     })*/
 
     var orderId = generateOrderId(orderObject.FranchiseId);
     orderObject.OrderId = orderId;
@@ -86,6 +93,7 @@ ProcessOrder.prototype.placeOrder = function (req, res, orderObject) {
                 tempObj.RegistrationNumber = Students[i].RegistrationNumber;
                 tempObj.UniformSize = Students[i].UniformSize;
                 tempObj.UniformQty = Students[i].UniformQty;
+                tempObj.Class = Students[i].Class;
                 StudentArray.push(tempObj);
             }
             orderObject.Students = StudentArray;
@@ -155,7 +163,7 @@ ProcessOrder.prototype.changeOrderStatus = function (req, res, body) {
 
 function generateOrderId(franchiseID) {
 
-    var pre = franchiseID.substring(franchiseID.length - 3, franchiseID.length);
+    var pre = franchiseID.substring(0, 3).toUpperCase();
     var post = new Date().getTime().toString();
     return pre + post;
 }

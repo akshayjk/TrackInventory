@@ -1,9 +1,13 @@
+/**
+ * Created by Akshay on 04-05-2015.
+ */
+
 (function () {
 
     "use strict";
 
     var App = angular.module("App", [
-        "App.FranchiseControllers",
+        "App.AdminControllers",
         "App.services",
         "App.directives",
         "App.filters",

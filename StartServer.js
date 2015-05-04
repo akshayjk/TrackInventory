@@ -16,10 +16,14 @@ var processOrder = require('./services/processOrders.js');
 var Orders = require('./routes/OrderRoutes.js'),
     Inventory = require('./routes/InventoryRoutes.js'),
     Messages = require('./routes/MessagesRoutes.js'),
-    Login = require('./routes/LoginRoutes.js');
+    Login = require('./routes/AuthRoutes.js'),
+    Download = require('./routes/DownloadsRoutes.js')
 
 app.use(express.static(path.join(__dirname + '/public')));
 
+console.log("Connecting to Database");
+
+new dataBase().connect();
 
 //Index Page Gateway
 app.get('/Login',function(req, res){
@@ -27,8 +31,9 @@ app.get('/Login',function(req, res){
 });
 
 app.use('/order', Orders);
-//app.use('/inventory', Inventory);
+app.use('/inventory', Inventory);
 app.use('/auth', Login);
+app.use('/download', Download);
 //app.use('/messages', Messages);
 
 // catch 404 and forward to error handler

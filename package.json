@@ -1,19 +1,25 @@
 {
-    "name": "ExpressApp",
-    "version": "1.0.0",
-    "description": "This is initial Express App",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/akshayjk/LEWebSite"
-    },
-    "keywords": [
-        "LE",
-        "Website"
-    ],
-    "author": "Akshay K, Saksham G",
-    "license": "MIT"
+  "name": "ExpressApp",
+  "version": "1.0.0",
+  "description": "This is initial Express App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akshayjk/LEWebSite"
+  },
+  "keywords": [
+    "LE",
+    "Website"
+  ],
+  "author": "Akshay K, Saksham G",
+  "license": "MIT",
+  "dependencies": {
+    "jwt-simple": "^0.3.0",
+    "json2csv": "^2.2.1",
+    "express":"^4.0.0",
+    "mongodb":"latest"
+  }
 }

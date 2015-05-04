@@ -20,6 +20,7 @@
             background: blue;
             color: white;
         }
+
         .splash h2 {
             font-size: 2.1em;
             font-weight: 500;
@@ -48,20 +49,25 @@
 <script src="../controller/services.js"></script>
 <script src="../controller/directives.js"></script>
 <script src="../controller/filters.js"></script>
-<script src="../controller/controllers.js"></script>
+<script src="../controller/franchiseControllers.js"></script>
 <script src="../App.js"></script>
 
-<header>
-
-    <div class="headerClass">
-        <img src="../Images/LEFav.png" class=" headerImage">
-
+<div>
+    <div class="headerClass" ng-controller="LogOutCtrl">
+        <img src="../Images/LEFav.png" class="headerImage">
         <div class="col-xs-4 headerName">Little Einstein Preschool</div>
-        <div class="col-xs-3 ContactClass"><a href="#some" class="signIn">WebSite</a> | <a href="#some" class="signIn">Contact
-            Us</a>
+        <div class="col-xs-3 ContactClass"><a href="#some" class="signIn">{{FranchiseName}}</a> | <a href="/Login" class="signIn">Log out</a>
         </div>
     </div>
-</header>
+</div>
+<!--<div class="headerClass">
+    <img src="../Images/LEFav.png" class=" headerImage">
+    <div class="col-xs-4 headerName">Little Einstein Preschool</div>
+    <div class="col-xs-3 ContactClass"><a href="#some" class="signIn">WebSite</a> | <a href="#some" class="signIn">Contact
+        Us</a>
+    </div>
+</div>
+
 <div class="control-group col-xs-12" ng-controller="LogOutCtrl">
     <div class="FranchiseName col-xs-4"><b>Hello Some Name !</b></div>
     <div class="controls">
@@ -69,13 +75,16 @@
             LogOut
         </button>
     </div>
-</div>
+</div>-->
+<div class="col-xs-12">
 <div class="col-xs-2 navColumn  menu">
-<ul class="nav nav-pills nav-stacked navigationBar">
-    <li role="presentation" class="active onHover"><a href="#Orders" class="onHoverClass"data-toggle="tab">Place Order</a></li>
-    <li role="presentation" class="onHover"><a href="#PreviousOrders" class="onHoverClass" data-toggle="tab">Previous Orders</a></li>
-    <li role="presentation" class="onHover"><a href="#Query" class="onHoverClass" data-toggle="tab">Queries</a></li>
-</ul>
+    <ul class="nav nav-pills nav-stacked navigationBar">
+        <li role="presentation" class="active onHover"><a href="#Orders" class="onHoverClass" data-toggle="tab">Place
+            Order</a></li>
+        <li role="presentation" class="onHover"><a href="#PreviousOrders" class="onHoverClass" data-toggle="tab"
+                                                   ng-click="">Previous Orders</a></li>
+        <li role="presentation" class="onHover"><a href="#Query" class="onHoverClass" data-toggle="tab">Queries</a></li>
+    </ul>
 </div>
 <div class="cotainer col-xs-10">
 <div class="tab-content">
@@ -96,13 +105,14 @@
                 <div class="controls">
                     <input id="childname" name="childname" type="text" placeholder="Enter full name of child"
                            class="col-xs-4 form-control medium" ng-model="StudentObject.NameOfStudent" autofocus
-                            required>
+                           required>
                 </div>
             </div>
             <br/>
 
             <div class="control-group col-xs-12">
                 <label class="control-label col-xs-4" for="selectClass">Class</label>
+
                 <div class="controls">
                     <select id="selectClass" name="selectClass" class="col-xs-8 form-control small"
                             ng-model="Class" ng-options="m for m in ClassOptions" ng-change="setClass()">
@@ -276,7 +286,9 @@
                 <div class="controls input-group small">
                     <span class="input-group-addon">Rs</span>
 
-                    <div id="AmountTotal" class="col-xs-8 form-control mini" ng-model="OrderForm.TotalAmount">{{getFinalCost()}}</div>
+                    <div id="AmountTotal" class="col-xs-8 form-control mini" ng-model="OrderForm.TotalAmount">
+                        {{getFinalCost()}}
+                    </div>
                 </div>
             </div>
             <br/>
@@ -382,61 +394,63 @@
 </div>
 </div>
 <div class="tab-pane" id="PreviousOrders" ng-controller="PrevOrders">
-<ul id="tabsOrders" class="nav nav-tabs col-xs-10 OrderNav" data-tabs="tabs">
-    <li class="active" id="PendingTab"><a href="#Pending" class="onHoverClass" data-toggle="tab"><b>Pending
-        <span class="badge" style="background-color: #d43f3a">{{dummyOrders.length}}</span></b></a></li>
-    <li class="" id="DispatchedTab"><a href="#Dispatched" class="onHoverClass"
-                                       data-toggle="tab"><b>Dispatched</b></a></li>
+    <ul id="tabsOrders" class="nav nav-tabs col-xs-10 OrderNav" data-tabs="tabs">
+        <li class="active" id="PendingTab"><a href="#Pending" class="onHoverClass" data-toggle="tab"><b>Pending
+            <span class="badge" style="background-color: #d43f3a">{{dummyOrders.length}}</span></b></a></li>
+        <li class="" id="DispatchedTab"><a href="#Dispatched" class="onHoverClass"
+                                           data-toggle="tab"><b>Dispatched</b></a></li>
 
-</ul>
-<div class="tab-content">
-<div class="tab-pane active col-xs-10" id="Pending">
-    <nav>
-        <ul class="pager" ng-hide="listView">
-            <li class="previous"><a href="#" class="onHoverClass"><span aria-hidden="true">&larr;</span>
-                Previous</a></li>
-            <li class="next"><a href="#" class="onHoverClass">Next <span aria-hidden="true">&rarr;</span></a></li>
-        </ul>
-    </nav>
-    <ul ng-hide="listView">
-        <li style="list-style: none; padding-bottom: 1%;" ng-repeat="order in Orders">
-            <div class="OrderList">
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active col-xs-10" id="Pending">
+            <nav>
+                <ul class="pager" ng-hide="listView">
+                    <li class="previous"><a href="#" class="onHoverClass"><span aria-hidden="true">&larr;</span>
+                        Previous</a></li>
+                    <li class="next"><a href="#" class="onHoverClass">Next <span aria-hidden="true">&rarr;</span></a>
+                    </li>
+                </ul>
+            </nav>
+            <ul ng-hide="listView">
+                <li style="list-style: none; padding-bottom: 1%;" ng-repeat="order in Orders">
+                    <div class="OrderList">
                             <span><button class="btn btn-success" ng-click="showOrder($index)"><b>Order Id : </b>
                                 {{order.OrderId}}
                             </button></span> <span class="label label-info pull-right">{{order.Status}}</span>
 
-                <div style="padding-top:3%;"><span style="padding-right:2%; color:#545454"><small><b>By
-                    : </b></small>{{order.FranchiseId}}</span><span style="padding-right:2%;color:#545454"><small>
-                    <b>Date : </b></small>{{getDate(order.CreateOn)}}</span><span class="pull-right"
-                                                                                  style="color:#545454"><small>
-                    <b>Total : </b></small><b>{{order.TotalAmount}}</b></span></div>
-            </div>
-        </li>
-    </ul>
-    <div ng-hide="orderView" class="singleOrder">
+                        <div style="padding-top:3%;"><span style="padding-right:2%; color:#545454"><small><b>By
+                            : </b></small>{{order.FranchiseName}}</span><span style="padding-right:2%;color:#545454"><small>
+                            <b>Date : </b></small>{{getDate(order.CreatedOn)}}</span><span class="pull-right"
+                                                                                           style="color:#545454"><small>
+                            <b>Total : </b></small><b>{{order.TotalAmount}}</b></span></div>
+                    </div>
+                </li>
+            </ul>
+            <div ng-hide="orderView" class="singleOrder">
 
-        <button class="btn btn-success" ng-click="showOrder()"><b>Order Id : </b>
-            {{Orders[OrderNo].OrderId}}
-        </button>
-        <button class="btn btn-primary pull-right" ng-click="showOrder()">Back</button>
-        <div class="col-xs-12" style="padding:2%">
-            <div class="col-xs-6">
-                <div class="displayOrder"><b>Order Date : </b> {{getDate(Orders[OrderNo].CreateOn)}}</div>
-                <div class="displayOrder"><b>Amount Paid : </b>{{Orders[OrderNo].TotalAmount}}
-                    <small> through {{Orders[OrderNo].ModeOfPayment}}</small>
+                <button class="btn btn-success" ng-click="showOrder()"><b>Order Id : </b>
+                    {{Orders[OrderNo].OrderId}}
+                </button>
+                <button class="btn btn-primary pull-right" ng-click="showOrder()">Back</button>
+                <div class="col-xs-12" style="padding:2%">
+                    <div class="col-xs-6">
+                        <div class="displayOrder"><b>Order Date : </b> {{getDate(Orders[OrderNo].CreatedOn)}}</div>
+                        <div class="displayOrder"><b>Amount Paid : </b>{{Orders[OrderNo].TotalAmount}}
+                            <small> through {{Orders[OrderNo].ModeOfPayment}}</small>
+                        </div>
+                        <div class="displayOrder"><b>Transaction Id : </b>{{Orders[OrderNo].TransactionID}}</div>
+                        <div class="displayOrder"><b>Franchise Id : </b>{{Orders[OrderNo].FranchiseId}}</div>
+                    </div>
+                    <div class="col-xs-4 pull-right">
+                        <div class="displayOrder"><h4 style="margin:0%;">{{Orders[OrderNo].FranchiseName}}</h4></div>
+                        <div class="displayOrder">{{Orders[OrderNo].Address}}</div>
+                    </div>
                 </div>
-                <div class="displayOrder"><b>Transaction Id : </b>{{Orders[OrderNo].TransactionID}}</div>
-            </div>
-            <div class="col-xs-4 pull-right">
-                <div class="displayOrder"><h4 style="margin:0%;">{{Orders[OrderNo].FranchiseId}}</h4></div>
-                <div class="displayOrder">{{Orders[OrderNo].Address}}</div>
-            </div>
-        </div>
 
-        <form>
-            <ul>
-                <li class="col-xs-12 singleOrder" style="margin-bottom:1%;"
-                    ng-repeat="student in Orders[OrderNo].Students">
+                <form>
+                    <ul>
+                        <li class="col-xs-12 singleOrder" style="margin-bottom:1%;"
+                            ng-repeat="student in Orders[OrderNo].Students">
 
 
 
@@ -454,100 +468,103 @@
 
                                     </span>
 
-                </li>
-            </ul>
-            <button class="btn btn-primary" style="margin:2%;width:15%;" type="button">Next</button>
-        </form>
+                        </li>
+                    </ul>
+                    <button class="btn btn-primary" style="margin:2%;width:15%;" type="button">Next</button>
+                </form>
 
-    </div>
-    <nav>
-        <ul class="pager" ng-hide="listView">
-            <li class="previous"><a href="#" class="onHoverClass"><span aria-hidden="true">&larr;</span>
-                Previous</a></li>
-            <li class="next"><a href="#" class="onHoverClass">Next <span aria-hidden="true">&rarr;</span></a></li>
-        </ul>
-    </nav>
+            </div>
+            <nav>
+                <ul class="pager" ng-hide="listView">
+                    <li class="previous"><a href="#" class="onHoverClass"><span aria-hidden="true">&larr;</span>
+                        Previous</a></li>
+                    <li class="next"><a href="#" class="onHoverClass">Next <span aria-hidden="true">&rarr;</span></a>
+                    </li>
+                </ul>
+            </nav>
 
 
-</div>
-<div class="tab-pane col-md-10" id="Dispatched">
-    <nav>
-        <ul class="pager" ng-hide="listView">
-            <li class="previous"><a href="#" class="onHoverClass"><span aria-hidden="true">&larr;</span>
-                Previous</a></li>
-            <li class="next"><a href="#" class="onHoverClass">Next <span aria-hidden="true">&rarr;</span></a></li>
-        </ul>
-    </nav>
-    <ul ng-hide="listView">
-        <li style="list-style: none; padding-bottom: 1%;" ng-repeat="order in dispatched">
-            <div class="OrderList">
+        </div>
+        <div class="tab-pane col-md-10" id="Dispatched">
+            <nav>
+                <ul class="pager" ng-hide="listView">
+                    <li class="previous"><a href="#" class="onHoverClass"><span aria-hidden="true">&larr;</span>
+                        Previous</a></li>
+                    <li class="next"><a href="#" class="onHoverClass">Next <span aria-hidden="true">&rarr;</span></a>
+                    </li>
+                </ul>
+            </nav>
+            <ul ng-hide="listView">
+                <li style="list-style: none; padding-bottom: 1%;" ng-repeat="order in dispatched">
+                    <div class="OrderList">
                             <span><button class="btn btn-primary" ng-click="showOrder($index)"><b>Order Id : </b>
                                 {{order.OrderId}}
                             </button></span> <span class="label label-success pull-right">{{order.Status}}</span>
 
-                <div style="padding-top:3%;"><span style="padding-right:2%; color:#545454"><small><b>By
-                    : </b></small>{{order.FranchiseId}}</span><span style="padding-right:2%;color:#545454"><small>
-                    <b>Dispatched On : </b></small>{{getDate(order.ModifiedOn)}}</span><span class="pull-right"
-                                                                                  style="color:#545454"><small>
-                    <b>Total : </b></small><b>{{order.TotalAmount}}</b></span></div>
-            </div>
-        </li>
-    </ul>
-    <div ng-hide="orderView" class="singleOrder">
-
-        <button class="btn btn-primary" ng-click="showOrder()"><b>Order Id : </b>
-            {{dispatched[OrderNo].OrderId}}
-        </button>
-        <button class="btn btn-primary pull-right" ng-click="showOrder()">Back</button>
-        <div class="col-xs-12" style="padding:2%">
-            <div class="col-xs-6">
-                <div class="displayOrder"><b>Dispatched On : </b>
-                    {{getDate(dispatched[OrderNo].ModifiedOn)}}
-                </div>
-                <div class="displayOrder"><b>Amount Paid : </b>{{dispatched[OrderNo].TotalAmount}}
-                    <small> through {{dummyOrders[OrderNo].ModeOfPayment}}</small>
-                </div>
-                <div class="displayOrder"><b>Transaction Id : </b>{{dispatched[OrderNo].TransactionID}}
-                </div>
-            </div>
-            <div class="col-xs-4 pull-right">
-                <div class="displayOrder"><h4 style="margin:0%;">
-                    {{dispatched[OrderNo].FranchiseId}}</h4></div>
-                <div class="displayOrder">{{dispatched[OrderNo].Address}}</div>
-            </div>
-        </div>
-        <div style="margin:2%;">
-
-            <ul>
-                <li class="col-xs-12 singleOrder" style="margin-bottom:1%;"
-                    ng-repeat="student in dispatched[OrderNo].Students">
-
-                    <div class="studentList"><span><small>Name :
-                    </small>{{student.NameOfStudent}}</span><span
-                            style="padding-left:5%;"><small>Class :</small>{{student.Class}}</span>
-                    </div>
-                    <div class="studentList">
-                        <span><small>Uniform Size :</small>{{student.UniformSize}}</span><span
-                            style="padding-left:5%;"><small>Uniform Quantity :</small>{{student.UniformQty}}</span>
-                        <span class="pull-right"><small>Individual Total :</small>{{UniformCosts[student.UniformSize]*student.UniformQty + KitCost}}</span>
+                        <div style="padding-top:3%;"><span style="padding-right:2%; color:#545454"><small><b>By
+                            : </b></small>{{order.FranchiseId}}</span><span style="padding-right:2%;color:#545454"><small>
+                            <b>Dispatched On : </b></small>{{getDate(order.ModifiedOn)}}</span><span class="pull-right"
+                                                                                                     style="color:#545454"><small>
+                            <b>Total : </b></small><b>{{order.TotalAmount}}</b></span></div>
                     </div>
                 </li>
             </ul>
+            <div ng-hide="orderView" class="singleOrder">
 
-            <button class="btn btn-primary" style="margin:2%;width:15%;" type="submit">Next</button>
+                <button class="btn btn-primary" ng-click="showOrder()"><b>Order Id : </b>
+                    {{dispatched[OrderNo].OrderId}}
+                </button>
+                <button class="btn btn-primary pull-right" ng-click="showOrder()">Back</button>
+                <div class="col-xs-12" style="padding:2%">
+                    <div class="col-xs-6">
+                        <div class="displayOrder"><b>Dispatched On : </b>
+                            {{getDate(dispatched[OrderNo].ModifiedOn)}}
+                        </div>
+                        <div class="displayOrder"><b>Amount Paid : </b>{{dispatched[OrderNo].TotalAmount}}
+                            <small> through {{dummyOrders[OrderNo].ModeOfPayment}}</small>
+                        </div>
+                        <div class="displayOrder"><b>Transaction Id : </b>{{dispatched[OrderNo].TransactionID}}
+                        </div>
+                    </div>
+                    <div class="col-xs-4 pull-right">
+                        <div class="displayOrder"><h4 style="margin:0%;">
+                            {{dispatched[OrderNo].FranchiseId}}</h4></div>
+                        <div class="displayOrder">{{dispatched[OrderNo].Address}}</div>
+                    </div>
+                </div>
+                <div style="margin:2%;">
+
+                    <ul>
+                        <li class="col-xs-12 singleOrder" style="margin-bottom:1%;"
+                            ng-repeat="student in dispatched[OrderNo].Students">
+
+                            <div class="studentList"><span><small>Name :
+                            </small>{{student.NameOfStudent}}</span><span
+                                    style="padding-left:5%;"><small>Class :</small>{{student.Class}}</span>
+                            </div>
+                            <div class="studentList">
+                                <span><small>Uniform Size :</small>{{student.UniformSize}}</span><span
+                                    style="padding-left:5%;"><small>Uniform Quantity :
+                            </small>{{student.UniformQty}}</span>
+                                <span class="pull-right"><small>Individual Total :</small>{{UniformCosts[student.UniformSize]*student.UniformQty + KitCost}}</span>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <button class="btn btn-primary" style="margin:2%;width:15%;" type="submit">Next</button>
+                </div>
+            </div>
+            <nav>
+                <ul class="pager" ng-hide="listView">
+                    <li class="previous"><a href="#" class="onHoverClass"><span
+                            aria-hidden="true">&larr;</span> Previous</a></li>
+                    <li class="next"><a href="#" class="onHoverClass">Next <span
+                            aria-hidden="true">&rarr;</span></a></li>
+                </ul>
+            </nav>
         </div>
-    </div>
-    <nav>
-        <ul class="pager" ng-hide="listView">
-            <li class="previous"><a href="#" class="onHoverClass"><span
-                    aria-hidden="true">&larr;</span> Previous</a></li>
-            <li class="next"><a href="#" class="onHoverClass">Next <span
-                    aria-hidden="true">&rarr;</span></a></li>
-        </ul>
-    </nav>
-</div>
 
-</div>
+    </div>
 </div>
 <div class="tab-pane" id="Query">
     Something to Display Here
@@ -560,6 +577,7 @@
     <div class="footerClass">&copy; Little Einstein 2015</div>
 </footer>-->
 
+</div>
 </div>
 </body>
 <script src="../JavaScripts/franchiseMain.js"></script>
