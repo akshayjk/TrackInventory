@@ -10,7 +10,6 @@ var express = require('express'),
 
 //App Modules
 var dataBase = require('./services/DbOperations.js');
-var processOrder = require('./services/processOrders.js');
 
 //App Roters
 var Orders = require('./routes/OrderRoutes.js'),
