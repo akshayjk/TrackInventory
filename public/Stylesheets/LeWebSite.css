@@ -230,8 +230,8 @@ h4{
     color:blue;
 }
 .OrderNav{
-    margin-left:2%;
-    margin-bottom: 2%;
+    margin-left:0.5%;
+    margin-bottom: 1%;
 }
 
 .ContactClass{
@@ -276,14 +276,15 @@ h4{
 }
 .OrderStrip{
     margin-left:2%;
+
 }
 .ListOrder{
     border-bottom: 1px solid #ddd;
-    padding-top: 1%;
-    padding-bottom: 1%;
+    padding-top: 0.5%;
+    padding-bottom: 0.5%;
 }
 .ListOrder:hover{
-    background-color: #f5f7e8;
+    background-color: #f9f9f9;
 }
 
 .OrderViewBtn{
@@ -317,4 +318,22 @@ h4{
 .InventoryButtons{
     color: #2e6da4;
 
+}
+
+.labelLocal{
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.select2 > .select2-choice.ui-select-match {
+    /* Because of the inclusion of Bootstrap */
+    height: 29px;
+}
+
+.kitUnit input.ng-invalid.ng-touched {
+    background-color: #FA787E;
+}
+
+p{
+    margin:0%;
 }

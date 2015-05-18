@@ -11,24 +11,23 @@ Inventory.prototype.getStatus = function (req, res, body) {
     var responseObject = {};
     var options = {
         collection: "INVENTORY",
-        Query: {Category: "BOOKS"},
-        QuerySelect: {ItemArray: 1}
+        Query: {Category: "BOOKS"}
     };
 
     new dataBase().get(options, function (err, data) {
-        if (!err) {
+        if (!err&&data.length>0) {
             console.log(JSON.stringify(data))
-            responseObject.Books = data[0].ItemArray;
+            responseObject.Books = data;
             options.Query.Category = "UNIFORMS";
             new dataBase().get(options, function (err, uniData) {
                 if (!err) {
                     console.log("uniforms " + JSON.stringify(uniData));
-                    responseObject.Uniforms = uniData[0].ItemArray;
+                    responseObject.Uniforms = uniData;
                     options.Query.Category = "COMMON";
                     new dataBase().get(options, function (err, comData) {
                         if (!err) {
                             console.log("common " + JSON.stringify(comData));
-                            responseObject.Common = comData[0].ItemArray;
+                            responseObject.Common = comData;
                             new responseHandler().sendResponse(req, res, "success", responseObject, 200);
                         } else {
                             new responseHandler().sendResponse(req, res, "error", "Error while fetching common data.", 500);
@@ -47,30 +46,23 @@ Inventory.prototype.getStatus = function (req, res, body) {
 
 Inventory.prototype.addItem = function (req, res, body) {
     //adds items to current Inventory
-    var type = Object.keys(body)[0];
-    if (type != undefined && body[type].Name != undefined && body[type].Quantity != undefined && (type.toUpperCase() == "BOOKS" || type.toUpperCase() == "UNIFORMS" || type.toUpperCase() == "COMMON")) {
+    console.log("body here " + JSON.stringify(body))
 
+    if (body.Name != undefined && body.Quantity != undefined && (body.Category.toUpperCase() == "BOOKS" || body.Category.toUpperCase() == "UNIFORMS" || body.Category.toUpperCase() == "COMMON")) {
+        body.Category = body.Category.toUpperCase();
+        body.ItemId = body.Category + new Date().getTime().toString();
         var options = {
             collection: "INVENTORY",
-            Query: {Category: type.toUpperCase()},
-            updateObject: {$addToSet: {ItemArray: body[type]}}
+            insertObject: body
         };
-        new dataBase().updateWithOperator(options, function (err, result) {
-            if (!err) {
-                var stat = JSON.parse(JSON.stringify(result)).nModified;
-                if(stat==0){
-                    var response = {};
-                    response.success = false;
-                    response.Message = "Item already exists";
-                    new responseHandler().sendResponse(req, res, "success", response, 403)
-                }else{
-                    var response = {};
-                    response.success = true;
-                    response.Message = "Item added successfully.";
-                    new responseHandler().sendResponse(req, res, "success", response, 200);
-                }
-
-            } else {
+        console.log(JSON.stringify(body));
+        new dataBase().insert(options, function(err, insertData){
+            if(!err){
+                var response = {};
+                response.success = true;
+                response.Message = "Item added successfully.";
+                new responseHandler().sendResponse(req, res, "success", response, 200);
+            }else{
                 new responseHandler().sendResponse(req, res, "error", "Error while adding new element in " + body.type, 500);
             }
         })
@@ -80,17 +72,16 @@ Inventory.prototype.addItem = function (req, res, body) {
 }
 
 Inventory.prototype.updateItem = function (req, res, body) {
-    //Updates the Inventory
-    //
-    var type = Object.keys(body)[0]
-    if (type != undefined && body[type].Name != undefined && body[type].Quantity != undefined && (type.toUpperCase() == "BOOKS" || type.toUpperCase() == "UNIFORMS" || type.toUpperCase() == "COMMON")) {
+    console.log("send Body " + JSON.stringify(body))
+    if (body.ItemId!=undefined&&body.Name != undefined && body.Quantity != undefined && (body.Category.toUpperCase() == "BOOKS" || body.Category.toUpperCase() == "UNIFORMS" || body.Category.toUpperCase() == "COMMON")) {
+
         var options = {
             collection: "INVENTORY",
-            Query: {Category: type.toUpperCase(), "ItemArray.Name": body[type].Name},
-            updateObject: {$set:{"ItemArray.$.Quantity": body[type].Quantity}}
+            Query: {ItemId: body.ItemId},
+            updateObject: {Quantity: body.Quantity}
         };
-
-        new dataBase().updateWithOperator(options, function (err, result) {
+      console.log("Here " + JSON.stringify(options))
+        new dataBase().update(options, function (err, result) {
             if (!err) {
                 console.log(JSON.stringify(result));
                 new Inventory().getStatus(req, res, body);
@@ -132,6 +123,120 @@ Inventory.prototype.deleteItem = function (req, res, body) {
         })
     }
 }
+
+Inventory.prototype.addKit = function(req, res, body){
+
+    checkKitValidity(body, function(validKitBody){
+        body.Category = "KIT";
+        body.KitId = "KIT" + new Date().getTime().toString();
+        var options ={
+            collection:"INVENTORY",
+            insertObject : body
+        };
+
+        new dataBase().insert(options, function(err, result){
+            if(!err){
+                /*var response={
+                    success:true,
+                    Message:"Kit added successfully."
+                };
+                new responseHandler().sendResponse(req, res, "success", response, 200);*/
+                new Inventory().getKits(req, res, body);
+            }
+        })
+
+    })
+    
+}
+
+Inventory.prototype.getKits = function(req, res, body){
+
+    var options ={
+        collection:"INVENTORY",
+        Query :{Category:"KIT"}
+    }
+
+    new dataBase().get(options, function(err, kitData){
+        if(!err){
+
+            new responseHandler().sendResponse(req, res, "success", kitData, 200);
+
+        }else{
+            new responseHandler().sendResponse(req, res, "error", "error while getting Kits.", 500);
+        }
+    })
+}
+
+Inventory.prototype.updateKit = function(req, res, body){
+
+
+    if(body.KitId!=undefined){
+
+        var options = {
+            collection :'INVENTORY',
+            Query :{KitId:body.KitId},
+            updateObject :{Kit:body.Kit,Name:body.Name}
+        };
+
+        new dataBase().update(options, function(err, updateResult){
+            if(!err){
+                 /*var response={
+                    success:true,
+                    Message:"Kit updated successfully."
+                };
+
+                new responseHandler().sendResponse(req, res, "success", response, 200);*/
+                new Inventory().getKits(req, res, body);
+
+            }else{
+                new responseHandler().sendResponse(req, res, "error", "error while updating Kits.", 500);
+            }
+        })
+
+
+    }else{
+        new responseHandler().sendResponse(req, res, "error", "Incorrect params", 403)
+    }
+
+
+}
+
+Inventory.prototype.deleteKit = function(req, res, body){
+    if(body.KitId!=undefined){
+        var options = {
+            collection:'INVENTORY',
+            Query:{KitId:body.KitId}
+        }
+        new dataBase().delete(options,function(err, result){
+            if(!err){
+                var response = {};
+                response.success = true;
+                response.Message = "Kit deleted successfully.";
+                new responseHandler().sendResponse(req, res, "success", response, 200);
+            }
+        })
+
+    }else{
+        new responseHandler().sendResponse(req, res, "error", "Incorrect Parameters passed.", 403);
+    }
+}
+
+function checkKitValidity(kitBody, Callback){
+
+    if(kitBody.Name!=undefined){
+        for(var i=0; i<kitBody.Kit.length; i++){
+            if(kitBody.Kit[i].ItemId==undefined || kitBody.Kit[i].Units==undefined){
+                new responseHandler().sendResponse(req, res, "error", "Incorrect params", 403);
+                break;
+            }
+        }
+        Callback(kitBody);
+    }else{
+        new responseHandler().sendResponse(req, res, "error", "Incorrect params", 403)
+    }
+}
+
+
 
 Inventory.prototype.getLogFile = function () {
     //gets the Log file for the Inventory operations

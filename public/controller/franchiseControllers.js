@@ -254,6 +254,27 @@
                 });
             })
         };
+        $scope.getKitNumber = function(kitName){
+            var numb =0;
+            $scope.Students.forEach(function(stud){
+               if(stud.Class==kitName)
+                    numb++;
+            })
+            return numb;
+        }
+
+        $scope.getUniformNumber = function(name){
+            var numb =0;
+            $scope.Students.forEach(function(stud){
+                if(stud.UniformSize==name)
+                    numb+=stud.UniformQty;
+            })
+            return numb;
+        };
+
+        $scope.getTotalCost = function(){
+
+        }
 
 
     }]);

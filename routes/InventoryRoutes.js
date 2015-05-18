@@ -36,5 +36,30 @@ router.delete('/item', function(req, res){
     })
 });
 
+router.get('/kit', function(req, res){
+    new requestData().getReqBody(req, res, function(body){
+        new InventoryServices().getKits(req, res, body);
+    })
+});
+
+router.post('/kit', function(req, res){
+    new requestData().getReqBody(req, res, function(body){
+        new InventoryServices().addKit(req, res, body);
+    })
+});
+
+router.put('/kit', function(req, res){
+    new requestData().getReqBody(req, res, function(body){
+        new InventoryServices().updateKit(req, res, body);
+    })
+});
+
+router.delete('/kit', function(req, res){
+    new requestData().getReqBody(req, res, function(body){
+        new InventoryServices().deleteKit(req, res, body);
+    })
+});
+
+
 module.exports = router;
 

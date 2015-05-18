@@ -13,7 +13,9 @@
         "App.filters",
         "ngRoute",
         "ngResource",
-        "ui.bootstrap"
+        "ui.bootstrap",
+        "ui.select",
+        "ngSanitize"
     ]);
 
     App.config(function ($routeProvider) {

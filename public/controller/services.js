@@ -98,6 +98,22 @@
             deleteItem:function(data){
                 var deleteItemReq ={method : "DELETE", url:"/inventory/item", data:data};
                 return $http(deleteItemReq);
+            },
+            addKit : function(data){
+                var createKitReq ={method : "POST", url:"/inventory/kit", data:data};
+                return $http(createKitReq);
+            },
+            getKits : function(){
+                var getKitReq ={method : "GET", url:"/inventory/kit"};
+                return $http(getKitReq);
+            },
+            updateKit: function(data){
+                var updateKitReq ={method : "PUT", url:"/inventory/kit", data:data};
+                return $http(updateKitReq);
+            },
+            deleteKit : function(data){
+                var deleteKitReq ={method : "DELETE", url:"/inventory/kit", data:data};
+                return $http(deleteKitReq);
             }
         }
     }])
