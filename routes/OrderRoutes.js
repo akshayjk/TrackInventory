@@ -6,7 +6,7 @@ var router = express.Router();
 
 //Application Modules
 var requestData = require('../services/Util.js');
-var processOrders = require('../services/ProcessOrders.js');
+var processOrders = require('../services/processOrders.js');
 
 router.get('/orders', function(req, res){
     new requestData().getReqBody(req, res, function(body){

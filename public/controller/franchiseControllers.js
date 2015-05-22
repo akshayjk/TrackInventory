@@ -262,7 +262,6 @@
             })
             return numb;
         }
-
         $scope.getUniformNumber = function(name){
             var numb =0;
             $scope.Students.forEach(function(stud){
@@ -272,9 +271,6 @@
             return numb;
         };
 
-        $scope.getTotalCost = function(){
-
-        }
 
 
     }]);
@@ -303,14 +299,14 @@
         function getOrders() {
 
             console.log("Getting previous orders")
-            $scope.Orders = PlaceOrder.getOrders($scope.userDetails.FranchiseId).success(function (getOrderResponse, getOrderStatus) {
+            PlaceOrder.getOrders($scope.userDetails.FranchiseId).success(function (getOrderResponse, getOrderStatus) {
                 $scope.Orders = getOrderResponse.pending;
                 $scope.dispatched = getOrderResponse.dispatched;
                 $scope.completed = getOrderResponse.completed;
             }).error()
         };
         $scope.refreshOrders = function () {
-
+            getOrders();
         }
         getOrders();
         $scope.getDate = function (Obj) {

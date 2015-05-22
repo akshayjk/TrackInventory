@@ -18,18 +18,20 @@
         "ngSanitize"
     ]);
 
-    App.config(function ($routeProvider) {
+    App.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         $routeProvider
             .when('/Orders', {
                 templateUrl: '/views/Orders.html'
             })
-            .when('/Query', {
-                templateUrl: 'views/Query.html'
+            .when('/Accounts', {
+                templateUrl: '/views/Accounts.html'
             })
-            .when('/PreviousOrders', {
-                templateUrl: '/views/PreOrders.html'
+            .when('/Inventory', {
+                templateUrl: '/views/Inventory.html'
             })
             .otherwise({redirectTo: '/Orders'});
-    });
+        $locationProvider.html5Mode(false);
+
+    }]);
 
 }());

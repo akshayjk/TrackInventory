@@ -15,7 +15,7 @@ Inventory.prototype.getStatus = function (req, res, body) {
     };
 
     new dataBase().get(options, function (err, data) {
-        if (!err&&data.length>0) {
+        if (!err) {
             console.log(JSON.stringify(data))
             responseObject.Books = data;
             options.Query.Category = "UNIFORMS";
@@ -61,7 +61,21 @@ Inventory.prototype.addItem = function (req, res, body) {
                 var response = {};
                 response.success = true;
                 response.Message = "Item added successfully.";
-                new responseHandler().sendResponse(req, res, "success", response, 200);
+                var options ={
+                    collection:"INVENTORY",
+                    Query:{ItemId:body.ItemId}
+                }
+
+                new dataBase().get(options, function(err, item){
+                    if(!err){
+                        response.Item =item;
+                        new responseHandler().sendResponse(req, res, "success", response, 200);
+                    }else{
+                        new responseHandler().sendResponse(req, res, "error", "Error while adding new element in " + body.type, 500);
+                    }
+                })
+
+
             }else{
                 new responseHandler().sendResponse(req, res, "error", "Error while adding new element in " + body.type, 500);
             }
@@ -105,11 +119,11 @@ Inventory.prototype.deleteItem = function (req, res, body) {
     if (type != undefined && body[type].Name != undefined && body[type].Quantity != undefined && (type.toUpperCase() == "BOOKS" || type.toUpperCase() == "UNIFORMS" || type.toUpperCase() == "COMMON")) {
         var options = {
             collection: "INVENTORY",
-            Query: {Category: type.toUpperCase()},
-            updateObject:{$pull:{ItemArray:{"Name":body[type].Name}}}
+            Query: {Category: type.toUpperCase()}
         };
         console.log(JSON.stringify(options))
-        new dataBase().updateWithOperator(options, function(err, result){
+
+        new dataBase().delete(options, function(err, result){
             if(!err){
                 console.log(JSON.stringify(result));
                 var response={
@@ -121,6 +135,19 @@ Inventory.prototype.deleteItem = function (req, res, body) {
                 new responseHandler().sendResponse(req, res, "error", "error while removing item.", 500);
             }
         })
+
+       /* new dataBase().updateWithOperator(options, function(err, result){
+            if(!err){
+                console.log(JSON.stringify(result));
+                var response={
+                    success:true,
+                    Message:"Item deleted successfully."
+                };
+                new responseHandler().sendResponse(req, res, "success", response, 200);
+            }else{
+                new responseHandler().sendResponse(req, res, "error", "error while removing item.", 500);
+            }
+        })*/
     }
 }
 

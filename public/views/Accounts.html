@@ -1,0 +1,78 @@
+<div ng-controller="Accounts">
+    <section class="content-header" >
+        <div class="nav-tabs-custom tabClass">
+            <ul id="tabsAccounts" class="nav nav-tabs" data-tabs="tabs">
+                <li class="active" id="viewAccountsTab"><a data-target="#ViewAccounts" class="onHoverClass"
+                                                           data-toggle="tab"><b>View
+                </b></a></li>
+                <li class="" id="AddAccountTab"><a data-target="#AddAccount" class="onHoverClass"
+                                                   data-toggle="tab"><b>Add Account</b></a></li>
+
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="ViewAccounts">
+                    <div>
+                        <select id="FilterBy" name="selectFilter" class="form-control"
+                                ng-model="AccFilterDef" ng-options="m for m in AccountFilter">
+                        </select>
+                    </div>
+                    <div class="box-body">
+                        <ul class="users-list clearfix">
+                            <li ng-repeat="account in Accounts | filter:AccFilterDef">
+                                <img src="../Images/user.jpg" alt="User Image"/>
+                                <a class="users-list-name" href="#">{{account.FranchiseName}}</a>
+                                <span class="users-list-date">{{account.Role}}</span>
+                                <button class="btn btn-danger btn-xs" tooltip="Are you sure?"
+                                        ng-click="deleteAccount($index)">Delete
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-pane" id="AddAccount" style="background-color:white;padding-bottom: 10px;">
+                    <div ng-show="alertMsg.view">
+                        <alert type="{{alertMsg.type}}" close="clearAlert()">{{alertMsg.Msg}}</alert>
+                    </div>
+                    <form class="col-xs-12" ng-submit="createAccount()">
+                        <div class="col-xs-12" >
+                            <div class="form-group medium">
+                                <label for="FranchiseAccEmail">Franchise Email</label>
+                                <input type="email" class="form-control" id="FranchiseAccEmail"
+                                       ng-focus="clearAlert()"
+                                       ng-model="AccountDet.FranchiseId" placeholder="someone@example.com"
+                                       autofocus required>
+                            </div>
+                            <div class="form-group medium">
+                                <label for="FranchiseAccName">Franchise Name</label>
+                                <input type="text" class="form-control" id="FranchiseAccName"
+                                       ng-model="AccountDet.FranchiseName" placeholder="LE Kolkata" required>
+                            </div>
+                            <div class="form-group medium">
+                                <label for="exampleInputPassword1">Password</label>
+                                <input type="password" class="form-control" ng-model="AccountDet.Password"
+                                       id="exampleInputPassword1" placeholder="Password" required>
+                            </div>
+                            <div class="btn-group medium">
+                                <label class="btn btn-sm btn-primary" ng-model="RoleRadioModel"
+                                       btn-radio=0>Franchise</label>
+                                <label class="btn btn-sm btn-primary" ng-model="RoleRadioModel"
+                                       btn-radio=1>Admin</label>
+                            </div>
+                            </br>
+                            </br>
+                            <div class="input-group medium" ng-hide="RoleRadioModel">
+                                <span class="input-group-addon ">Set Kit Cost</span>
+                                <input type="text" class="form-control" placeholder="Rs" ng-model="KitCost">
+                            </div>
+                            <div class="form-group" style="padding-top:2%;">
+                                <button class="btn btn-success" type="submit">Create</button>
+                            </div>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -310,7 +310,7 @@ h4{
     border-radius: 4px;
     margin-right: 1%;
     padding-left:3%;
-    padding-top:1%;
+    padding-top:0.5%;
     padding-bottom:1%;
     width:30%;
 }
@@ -336,4 +336,15 @@ h4{
 
 p{
     margin:0%;
+}
+
+.lonely{
+    color:grey;
+    text-align:center;
+    position:relative;
+    top:100px;
+}
+
+.rowCenter{
+    padding-top:1%;
 }

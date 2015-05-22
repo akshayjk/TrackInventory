@@ -20,6 +20,7 @@
                 $scope.loginError = "";
                 if (LoginResponse.Role == "ADMIN") {
                     $window.location.href = '../views/AdminMain.html';
+                    //$window.location.href = '../views/starterTest.html';
                 } else if (LoginResponse.Role == "FRANCHISE") {
                     $window.location.href = '../views/FranchiseMain.html';
                 }

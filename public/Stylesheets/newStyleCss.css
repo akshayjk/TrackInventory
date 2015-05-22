@@ -1,0 +1,63 @@
+.pending{
+    background-color: #8ab0e6;
+}
+
+.displayOrder{
+    padding-top:1%;
+    font-weight: 400;
+    margin-bottom:0%;
+}
+
+.example-modal .modal {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    right: auto;
+    left: auto;
+    display: block;
+    z-index: 1;
+}
+.example-modal .modal {
+    background: transparent!important;
+}
+
+.emptyClass{
+    color:darkgray;
+    text-align: center;
+    position: relative;
+    top:100px;
+}
+
+.tabClass{
+    min-height:500px;
+}
+
+.medium{
+    max-width: 50%;
+    min-width:200px;
+}
+@media screen and (max-width: 700px) {
+    .responsiveClass{
+        min-width: 100px;
+        overflow-x: scroll;
+        overflow-y: visible;
+    }
+
+    .responsiveClass > .table tr th,
+    .responsiveClass > .table tr td {
+        white-space: normal!important;
+    }
+}
+
+
+.addMoreItems{
+    padding-left:0%;
+    margin-top:10px;
+    margin-bottom: 2%;
+}
+.InvElementInput{
+    min-width:80px;
+    padding-left: 1%;
+}
+
+

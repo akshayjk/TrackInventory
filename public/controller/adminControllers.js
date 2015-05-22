@@ -19,7 +19,7 @@
         }
     }]);
 
-    App.controller("AdminController", ["$scope", "$location", "PlaceOrder", function ($scope, $location, PlaceOrder) {
+    App.controller("AdminController", ["$scope", "$location", "$modal","PlaceOrder", function ($scope, $location, $modal, PlaceOrder) {
 
         $scope.UniformCosts = {
             "1": 10,
@@ -28,6 +28,7 @@
             "4": 40,
             "5": 50
         };
+
         $scope.KitCost = 500;
 
         $scope.getOrders = function () {
@@ -47,10 +48,13 @@
         $scope.getOrders();
         $scope.listView = [false, false, false];
         $scope.orderView = [true, true, true];
-        $scope.OrderNo = [0,0,0];
+        $scope.OrderNo = [0, 0, 0];
         $scope.showOrder = function (index, viewIndex) {
+
+            $scope.orderList = false;
             $scope.listView[viewIndex] = toggle($scope.listView[viewIndex]);
             $scope.orderView[viewIndex] = toggle($scope.orderView[viewIndex]);
+            console.log("clicked" + index + viewIndex + ' ' + JSON.stringify($scope.listView));
             if (index != undefined) {
                 $scope.OrderNo[viewIndex] = index;
             }
@@ -65,6 +69,7 @@
 
             }
         }
+
         $scope.getDate = function (dateObj) {
             var dateStr = new Date(dateObj).getDate().toString();
             var monthStr = new Date(dateObj).getMonth().toString();
@@ -76,7 +81,7 @@
             hours = hours % 12;
             hours = hours ? hours : 12; // the hour '0' should be '12'
             minutes = minutes < 10 ? '0' + minutes : minutes;
-            return  hours + ':' + minutes + ' ' + ampm + " " + dateStr + "/" + monthStr + '/' + yrStr;
+            return hours + ':' + minutes + ' ' + ampm + " " + dateStr + "/" + monthStr + '/' + yrStr;
         };
         $scope.getName = function (name) {
             if (!name)
@@ -85,80 +90,146 @@
             var extra = 10 < name.length ? "..." : "";
             return name.substring(0, minLength) + extra;
         }
-        $scope.getStatus = function(name){
-            var splitStr = name.substring(1,name.length).toLowerCase();
+        $scope.getStatus = function (name) {
+            var splitStr = name.substring(1, name.length).toLowerCase();
             return name[0] + splitStr;
         }
+
+        $scope.CourierName = '';
+        $scope.TrackingID = '';
+        $scope.animation = true;
+        $scope.DispatchForm = {}
+
         $scope.dispatchOrder = function (OrderIndex) {
 
-            PlaceOrder.changeOrderStatus($scope.dummyOrders[OrderIndex].OrderId, "DISPATCHED").success(function (chOrdRes, chOrdStat) {
+            PlaceOrder.changeOrderStatus($scope.dummyOrders[OrderIndex].OrderId, {
+                Status: "DISPATCHED",
+                CourierName: $scope.CourierName,
+                TrackingID: $scope.TrackingID
+            }).success(function (chOrdRes, chOrdStat) {
                 $scope.dummyOrders[OrderIndex].Status = "DISPATCHED";
-                $scope.dispatched.splice(0,0,$scope.dummyOrders[OrderIndex]);
+                $scope.dispatched.splice(0, 0, $scope.dummyOrders[OrderIndex]);
                 $scope.dummyOrders.splice(OrderIndex, 1);
                 $scope.listView[0] = toggle($scope.listView[0]);
                 $scope.orderView[0] = toggle($scope.orderView[0]);
                 $scope.successMessage = "Successfully dispatched."
-                $('#OrderResponseModal').modal('show');
+                /*//$('#OrderResponseModal').modal('show');
+                 $('#dispatchResponseModal').modal('hide');
+                 $("#dispatchResponseModal").on("hide", function() {    // remove the event listeners when the dialog is dismissed
+                 $("#dispatchResponseModal a.btn").off("click");
+                 });
+                 //$('#dispatchResponseModal').modal('show');*/
             }).error(function () {
                 console.log("Some error has occurred");
             })
 
         }
 
+        //..........................................New Desing extra Vars ........................................................
+        //$scope.orderList = true;
+        $scope.dispatchModal = function () {
+            var modalInstance = $modal.open({
+                animation: $scope.animations,
+                templateUrl: 'dispatchConfirmationModal.html',
+                controller: 'dispatchConfirmationModalCtrl',
+                resolve:{
+                    summary:function(){
+                        return $scope.dummyOrders[$scope.OrderNo[0]].summary;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (form) {
+                $scope.CourierName = form.CourierName;
+                $scope.TrackingID = form.PackageTrackingNumber;
+                console.log("data returned from modal " + JSON.stringify(form))
+                $scope.dispatchOrder($scope.OrderNo[0])
+            }, function () {
+                console.log('Modal dismissed at: ' + new Date());
+            });
+        }
+
     }]);
+
+    App.controller("dispatchConfirmationModalCtrl",["$scope","$modalInstance",function($scope, $modalInstance, summary){
+        $scope.summary = summary;
+        $scope.form = {};
+        $scope.ok = function () {
+            console.log("here the form " + JSON.stringify($scope.form))
+            $modalInstance.close($scope.form);
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    }])
 
     App.controller("Inventory", ["$scope", 'Inventory', function ($scope, Inventory) {
 
-        $scope.setVariables = function(Category,dataArray){
-            $scope["set"+Category+"Model"]=[];
-            $scope["input"+Category+"Model"] = [];
-            $scope["view"+Category+"Change"]=[];
-            $scope["get"+Category+"Total"]= [];
-            dataArray.forEach(function(dat){
-                $scope["set"+Category+"Model"].push(0);
-                $scope["input"+Category+"Model"].push(0);
-                $scope["view"+Category+"Change"].push(false);
-                $scope["get"+Category+"Total"].push(0);
+        $scope.setVariables = function (Category, dataArray) {
+            $scope["set" + Category + "Model"] = [];
+            $scope["input" + Category + "Model"] = [];
+            $scope["view" + Category + "Change"] = [];
+            $scope["get" + Category + "Total"] = [];
+            dataArray.forEach(function (dat) {
+                $scope["set" + Category + "Model"].push(0);
+                $scope["input" + Category + "Model"].push(0);
+                $scope["view" + Category + "Change"].push(false);
+                $scope["get" + Category + "Total"].push(0);
             });
         };
 
-        $scope.addItem ={};
-        $scope.getStatus =function(){
-            Inventory.getStatus().success(function(statRes, statCode){
+        $scope.addItem = {};
+        $scope.getStatus = function () {
+            Inventory.getStatus().success(function (statRes, statCode) {
                 $scope.InventoryData = statRes;
-                $scope.setVariables("Books",$scope.InventoryData["Books"]);
-                $scope.setVariables("Uniforms",$scope.InventoryData["Uniforms"]);
-                $scope.setVariables("Common",$scope.InventoryData["Common"]);
+                $scope.setVariables("Books", $scope.InventoryData["Books"]);
+                $scope.setVariables("Uniforms", $scope.InventoryData["Uniforms"]);
+                $scope.setVariables("Common", $scope.InventoryData["Common"]);
                 $scope.ItemOptions = JSON.parse(JSON.stringify($scope.InventoryData.Books)).concat(JSON.parse(JSON.stringify($scope.InventoryData.Uniforms)), JSON.parse(JSON.stringify($scope.InventoryData.Common)));
 
-            }).error(function(){
+            }).error(function () {
 
             })
         };
-        $scope.getKits = function(){
-            Inventory.getKits().success(function(getKitRes, getKitStat){
+        $scope.getKits = function () {
+            Inventory.getKits().success(function (getKitRes, getKitStat) {
                 $scope.Kits = getKitRes;
-            }).error(function(gtKtEr, gtKtErStat){
+            }).error(function (gtKtEr, gtKtErStat) {
                 console.log(JSON.stringify(gtKtEr))
             })
         };
         $scope.getKits();
-        $scope.toggle = function(data){
+        $scope.toggle = function (data) {
             data = !data;
         };
         $scope.getStatus();
-        $scope.saveButton=function(Category,itemNo){
+        $scope.saveButton = function (Category, itemNo) {
             var tempUpdateObject = {};
-            tempUpdateObject= JSON.parse(JSON.stringify($scope.InventoryData[Category][itemNo]));
-            tempUpdateObject.Quantity = $scope["get"+Category+"Total"][itemNo];
-            Inventory.updateItem(tempUpdateObject).success(function(updRes, updCode){
-                $scope.InventoryData[Category][itemNo].Quantity = $scope["get"+Category+"Total"][itemNo];
-                $scope["view"+Category+"Change"][itemNo]=false;
-                $scope["input"+Category+"Model"][itemNo]=0;
-            }).error(function(updErrRes, updErrCode){
+            tempUpdateObject = JSON.parse(JSON.stringify($scope.InventoryData[Category][itemNo]));
+            tempUpdateObject.Quantity = $scope["get" + Category + "Total"][itemNo];
+            console.log("Sending data " + JSON.stringify(tempUpdateObject));
+            $scope.loadingSave = true;
+            Inventory.updateItem(tempUpdateObject).success(function (updRes, updCode) {
+                $scope.InventoryData[Category][itemNo].Quantity = $scope["get" + Category + "Total"][itemNo];
+                $scope["view" + Category + "Change"][itemNo] = false;
+                $scope["input" + Category + "Model"][itemNo] = 0;
+                $scope.loadingSave = false;
+
+            }).error(function (updErrRes, updErrCode) {
                 console.log(JSON.stringify(updErrRes));
             })
         };
+
+        $scope.saveButtonTest = function(){
+            $scope.loading = true;
+            console.log("started")
+            setTimeout(function(){
+                $scope.loading = false;
+                console.log("Endned")
+            }, 2000)
+        }
+
         $scope.getDate = function (dateObj) {
             var dateStr = new Date(dateObj).getDate().toString();
             var monthStr = new Date(dateObj).getMonth().toString();
@@ -170,134 +241,141 @@
             hours = hours % 12;
             hours = hours ? hours : 12; // the hour '0' should be '12'
             minutes = minutes < 10 ? '0' + minutes : minutes;
-            return  hours + ':' + minutes + ' ' + ampm + " " + dateStr + "/" + monthStr + '/' + yrStr;
+            return hours + ':' + minutes + ' ' + ampm + " " + dateStr + "/" + monthStr + '/' + yrStr;
         };
-        $scope.addMore = function(Category){
-            if(!$scope.addItem.Name || !$scope.addItem.Quantity){
-            }else{
-                var tempAddItem ={};
-                tempAddItem[Category]=$scope.addItem;
+        $scope.addMore = function (Category) {
+            if (!$scope.addItem.Name || !$scope.addItem.Quantity) {
+            } else {
+                var tempAddItem = {};
+                tempAddItem[Category] = $scope.addItem;
                 $scope.addItem.Category = Category;
+                $scope.loading = true;
                 console.log("add Item " + JSON.stringify($scope.addItem));
-                Inventory.addItem($scope.addItem).success(function(addRes, addStat){
-                    $scope.InventoryData[Category].push($scope.addItem);
-                    $scope.addItem ={};
-                    $scope.setVariables(Category, $scope.InventoryData[Category]);
+                setTimeout(function(){
+                    Inventory.addItem($scope.addItem).success(function (addRes, addStat) {
+                        $scope.InventoryData[Category].push(addRes.Item[0]);
+                        $scope.ItemOptions.push(addRes.Item[0]);
+                        $scope.addItem = {};
+                        $scope.setVariables(Category, $scope.InventoryData[Category]);
+                        $scope.loading = false;
+                        console.log("Item options after addition " + JSON.stringify($scope.ItemOptions))
 
-                }).error(function(addErrRes, addErrStat){
-                    console.log(JSON.stringify(addErrRes))
-                })
+                    }).error(function (addErrRes, addErrStat) {
+                        console.log(JSON.stringify(addErrRes))
+                    })
+                },2000)
+
             }
 
 
         }
-        $scope.deleteItem = function(Category, itemNo){
+        $scope.deleteItem = function (Category, itemNo) {
             var tempDeleteObject = {};
             tempDeleteObject[Category] = $scope.InventoryData[Category][itemNo];
-            Inventory.deleteItem(tempDeleteObject).success(function(delRes, delSta){
-                $scope.InventoryData[Category].splice(itemNo,1);
+            Inventory.deleteItem(tempDeleteObject).success(function (delRes, delSta) {
+                $scope.InventoryData[Category].splice(itemNo, 1);
                 $scope.setVariables(Category, $scope.InventoryData[Category]);
             })
 
         }
-        $scope.calculateChange = function(Category, index){
-            if(!$scope["set"+Category+"Model"][index]){
+        $scope.calculateChange = function (Category, index) {
+            if (!$scope["set" + Category + "Model"][index]) {
                 //Add Action
-                if($scope["input"+Category+"Model"][index]==undefined){
-                    $scope["get"+Category+"Total"][index] = $scope.InventoryData[Category][index].Quantity +0;
-                }else{
-                    $scope["get"+Category+"Total"][index] = $scope.InventoryData[Category][index].Quantity + $scope["input"+Category+"Model"][index];
+                if ($scope["input" + Category + "Model"][index] == undefined) {
+                    $scope["get" + Category + "Total"][index] = $scope.InventoryData[Category][index].Quantity + 0;
+                } else {
+                    $scope["get" + Category + "Total"][index] = $scope.InventoryData[Category][index].Quantity + $scope["input" + Category + "Model"][index];
                 }
 
-            }else{
+            } else {
                 //reset action
-                if($scope["input"+Category+"Model"][index]==undefined){
-                    $scope["get"+Category+"Total"][index] = 0;
-                }else{
-                    $scope["get"+Category+"Total"][index] = $scope["input"+Category+"Model"][index];
+                if ($scope["input" + Category + "Model"][index] == undefined) {
+                    $scope["get" + Category + "Total"][index] = 0;
+                } else {
+                    $scope["get" + Category + "Total"][index] = $scope["input" + Category + "Model"][index];
                 }
 
             }
-            $scope["view"+Category+"Change"][index]=true;
+            $scope["view" + Category + "Change"][index] = true;
         };
         $scope.KitView = false;
 
-        $scope.buildKit =0;
-        $scope.viewKit=function(index){
+        $scope.buildKit = 0;
+        $scope.viewKit = function (index) {
             $scope.KitView = true;
             $scope.currentKit = JSON.parse(JSON.stringify($scope.Kits[index]));
             $scope.toggle($scope.buildKit);
         };
         $scope.ItemSelected = {};
-        $scope.builtKit=[];
-        $scope.builtKitShow = eval($scope.builtKit.length>0);
+        $scope.builtKit = [];
+        $scope.builtKitShow = eval($scope.builtKit.length > 0);
         console.log($scope.builtKitShow);
-        $scope.addToKit = function(){
-                var tempItem = JSON.parse(JSON.stringify($scope.ItemSelected.selected));
-                delete tempItem.Quantity;
-                delete tempItem.CreatedOn;
-                delete tempItem.ModifiedOn;
-                $scope.builtKit.push(tempItem);
-                $scope.ItemSelected.selected.Units = undefined;
-                console.log("array " + JSON.stringify($scope.builtKit))
-                $scope.ItemSelected = {};
+        $scope.addToKit = function () {
+            var tempItem = JSON.parse(JSON.stringify($scope.ItemSelected.selected));
+            delete tempItem.Quantity;
+            delete tempItem.CreatedOn;
+            delete tempItem.ModifiedOn;
+            $scope.builtKit.push(tempItem);
+            $scope.ItemSelected.selected.Units = undefined;
+            console.log("array " + JSON.stringify($scope.builtKit))
+            $scope.ItemSelected = {};
 
         };
-        $scope.EditAddItem = function(){
+        $scope.EditAddItem = function () {
             delete $scope.ItemSelected.selected.CreatedOn;
             delete $scope.ItemSelected.selected.ModifiedOn;
             delete $scope.ItemSelected.selected.Quantity;
             delete $scope.ItemSelected.selected['$$hashKey'];
             $scope.currentKit.Kit.push($scope.ItemSelected.selected);
         };
-        $scope.saveEditedKit = function(){
+        $scope.saveEditedKit = function () {
             console.log(JSON.stringify($scope.currentKit));
-            Inventory.updateKit($scope.currentKit).success(function(updtKitRes, updtKitStat){
+            Inventory.updateKit($scope.currentKit).success(function (updtKitRes, updtKitStat) {
                 $scope.Kits = updtKitRes;
 
-            }).error(function(errRes, errStat){
+            }).error(function (errRes, errStat) {
                 console.log(JSON.stringify(errRes))
             })
 
         };
-        $scope.deleteKit = function(index){
-            var deleteKit ={};
-            deleteKit.KitId=$scope.Kits[index].KitId;
-            Inventory.deleteKit(deleteKit).success(function(delRes, delStat){
+        $scope.deleteKit = function (index) {
+            var deleteKit = {};
+            deleteKit.KitId = $scope.Kits[index].KitId;
+            Inventory.deleteKit(deleteKit).success(function (delRes, delStat) {
                 console.log(JSON.stringify(delRes));
                 $scope.Kits.splice(index, 1);
-                $scope.successMessage=delRes.Message;
+                $scope.successMessage = delRes.Message;
                 $('#responseModal').modal('show');
-            }).error(function(delErRes, delErStat){
+            }).error(function (delErRes, delErStat) {
                 console.log(JSON.stringify(delErRes));
             })
         }
-        $scope.removeItemKitEdit = function(index){
-            $scope.currentKit.Kit.splice(index,1);
+        $scope.removeItemKitEdit = function (index) {
+            $scope.currentKit.Kit.splice(index, 1);
         }
-        $scope.saveKit = function(name){
-            if(name!=undefined){
+        $scope.saveKit = function (name) {
+            if (name != undefined) {
                 var KitData = {};
                 KitData.Name = name;
                 KitData.Kit = $scope.builtKit;
-                Inventory.addKit(KitData).success(function(addRes, addStat){
+                Inventory.addKit(KitData).success(function (addRes, addStat) {
                     console.log("res " + JSON.stringify(addRes));
-                    $scope.builtKit =[];
-                    KitData={};
+                    $scope.builtKit = [];
+                    KitData = {};
                     $scope.Kits = addRes;
-                    $scope.successMessage="Kit Added Successfully.";
-                    $scope.buildKit =0;
+                    $scope.successMessage = "Kit Added Successfully.";
+                    $scope.buildKit = 0;
                     $('#responseModal').modal('show');
 
-                }).error(function(adKtErRes, adKtStat){
+                }).error(function (adKtErRes, adKtStat) {
                     console.log("err add Kit " + JSON.stringify(adKtErRes))
                 })
             }
 
         };
-        $scope.addToKitButton = $scope.ItemSelected.selected!=undefined?true:false;
-        $scope.removeItem = function(Numb){
-            $scope.builtKit.splice(Numb,1);
+        $scope.addToKitButton = $scope.ItemSelected.selected != undefined ? true : false;
+        $scope.removeItem = function (Numb) {
+            $scope.builtKit.splice(Numb, 1);
             console.log(JSON.stringify($scope.builtKit))
         }
 
@@ -460,7 +538,7 @@
             hours = hours % 12;
             hours = hours ? hours : 12; // the hour '0' should be '12'
             minutes = minutes < 10 ? '0' + minutes : minutes;
-            return  hours + ':' + minutes + ' ' + ampm + " " + dateStr + "/" + monthStr + '/' + yrStr;
+            return hours + ':' + minutes + ' ' + ampm + " " + dateStr + "/" + monthStr + '/' + yrStr;
         };
         $scope.CurrentMessage = $scope.Messages[0].Messages;
         $scope.setMessage = function (msgValue) {
@@ -511,7 +589,7 @@
             hours = hours % 12;
             hours = hours ? hours : 12; // the hour '0' should be '12'
             minutes = minutes < 10 ? '0' + minutes : minutes;
-            return  hours + ':' + minutes + ' ' + ampm + " " + dateStr + "/" + monthStr + '/' + yrStr;
+            return hours + ':' + minutes + ' ' + ampm + " " + dateStr + "/" + monthStr + '/' + yrStr;
         };
         $scope.AccountFilter = ['FRANCHISE', 'ADMIN'];
         $scope.AccFilterDef = $scope.AccountFilter[0];
@@ -566,13 +644,13 @@
     App.controller("DownloadsController", ["$scope", "Auth", "Downloads", function ($scope, Auth, Downloads) {
 
         $scope.ClassOptions = ["PlayGroup", "Nursery", "LKG", "UKG"];
-        $scope.FranchiseNameList=[];
+        $scope.FranchiseNameList = [];
 
 
         $scope.getFranchiseList = function () {
             Auth.getFranchiseList().success(function (AccRes) {
                 $scope.FranchiseNameList = AccRes;
-                $scope.FranchiseNameList.splice(0,0,{"FranchiseId":null, "FranchiseName":"None"});
+                $scope.FranchiseNameList.splice(0, 0, {"FranchiseId": null, "FranchiseName": "None"});
                 $scope.FranchiseName = $scope.FranchiseNameList[0];
             }).error(function (errRes) {
                 console.log("error while getting Accounts Info")
@@ -584,27 +662,27 @@
 
         $scope.downloadObject = {};
         $scope.downloadObject.FranchiseId = this.FranchiseNameOb;
-        $scope.onChangeSelected = function(){
+        $scope.onChangeSelected = function () {
             $scope.downloadObject.FranchiseId = this.FranchiseNameOb;
         }
         $scope.downloadType = ["Students", "Orders"];
-        $scope.downloadFile = function(){
+        $scope.downloadFile = function () {
             $scope.downloadObject.type = this.type;
-            Downloads.downloadFile($scope.downloadObject).success(function(downRes, downStatus){
+            Downloads.downloadFile($scope.downloadObject).success(function (downRes, downStatus) {
 
-                var objectUrl = "/download/downloadFile?type="+$scope.downloadObject.type;
-                if($scope.downloadObject.fromDate){
+                var objectUrl = "/download/downloadFile?type=" + $scope.downloadObject.type;
+                if ($scope.downloadObject.fromDate) {
                     objectUrl = objectUrl + "&fromDate=" + $scope.downloadObject.fromDate;
                 }
-                if($scope.downloadObject.toDate){
+                if ($scope.downloadObject.toDate) {
                     objectUrl = objectUrl + "&toDate=" + $scope.downloadObject.toDate;
                 }
-                if($scope.downloadObject.FranchiseId){
+                if ($scope.downloadObject.FranchiseId) {
                     objectUrl = objectUrl + "&FranchiseId=" + $scope.downloadObject.FranchiseId;
                 }
                 window.open(objectUrl);
                 //saveAs(blob, "SomeName.csv")
-            }).error(function(){
+            }).error(function () {
                 console.log("error")
             })
         }

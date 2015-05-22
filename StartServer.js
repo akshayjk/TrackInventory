@@ -29,6 +29,10 @@ app.get('/Login',function(req, res){
        res.sendFile(path.join(__dirname , '/Login.html'));
 });
 
+app.get('/LoginNew',function(req, res){
+    res.sendFile(path.join(__dirname , '/starterTest.html'));
+});
+
 app.use('/order', Orders);
 app.use('/inventory', Inventory);
 app.use('/auth', Login);

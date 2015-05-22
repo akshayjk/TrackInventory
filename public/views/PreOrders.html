@@ -1,28 +1,86 @@
+<div class="tab-pane active" id="ViewAccounts">
+    <div ng-show="alertMsg.view" class="col-xs-6">
+        <alert type="{{alertMsg.type}}" close="clearAlert()">{{alertMsg.Msg}}</alert>
+    </div>
+    <div class="control-group col-xs-12">
+        <label class="control-label col-xs-2" for="FilterBy">Filter By : </label>
 
-<div class="container" ng-controller="PrevOrders">
-    <table class="table  table-bordered table-hover prevOrderTable">
-        <thead>
-        <tr>
-            <th>No</th>
-            <th>Order Id</th>
-            <th>Students</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Ordered On</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="order in Orders">
-            <th scope="row">{{$index + 1}}</th>
-            <td>{{order.OrderId}}</td>
-            <td><ul style="list-style-type: none; padding-left:0%;"><li ng-repeat="student in order.Students">{{student.NameOfStudent}} Size: {{student.UniformSize}} Qty : {{student.UniformQty}}</li></ul></td>
-            <td style="max-width:20%">{{order.TotalAmount}}</td>
-            <td style="max-width: 10%">{{order.Status}}</td>
-            <td>{{getDate(order.CreateOn)}}</td>
+        <div>
+            <select id="FilterBy" name="selectFilter" class="form-control"
+                    ng-model="AccFilterDef" ng-options="m for m in AccountFilter">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <ul>
+            <li ng-repeat="account in Accounts | filter:AccFilterDef">
+                <div class="col-xs-12 ListOrder"><span
+                        class="col-xs-2 pull-left"><b>{{account.FranchiseName}}</b></span><span
+                        class="OrderStrip col-xs-3">{{account.FranchiseId}}</span><span
+                        class="label label-info OrderStrip">{{account.Role}}</span><span><small>
+                    <button class="btn btn-danger btn-xs pull-right" tooltip="Are you sure?"
+                            ng-click="deleteAccount($index)">Delete
+                    </button>
+                </small></span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="tab-pane" id="AddAccount">
+    <div ng-show="alertMsg.view" class="col-xs-6">
+        <alert type="{{alertMsg.type}}" close="clearAlert()">{{alertMsg.Msg}}</alert>
+    </div>
+    <form class="col-xs-12" ng-submit="createAccount()">
+        <div class="col-xs-4">
+            <div class="form-group">
+                <label for="FranchiseAccEmail">Franchise Email</label>
+                <input type="email" class="form-control" id="FranchiseAccEmail"
+                       ng-focus="clearAlert()"
+                       ng-model="AccountDet.FranchiseId" placeholder="someone@example.com"
+                       autofocus required>
+            </div>
+            <div class="form-group">
+                <label for="FranchiseAccName">Franchise Name</label>
+                <input type="text" class="form-control" id="FranchiseAccName"
+                       ng-model="AccountDet.FranchiseName" placeholder="LE Kolkata" required>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" ng-model="AccountDet.Password"
+                       id="exampleInputPassword1" placeholder="Password" required>
+            </div>
+            <div class="btn-group">
+                <label class="btn btn-sm btn-primary" ng-model="RoleRadioModel"
+                       btn-radio=0>Franchise</label>
+                <label class="btn btn-sm btn-primary" ng-model="RoleRadioModel"
+                       btn-radio=1>Admin</label>
+            </div>
+            </br>
+            </br>
+            <div class="form-group" style="padding-top:2%;">
+                <button class="btn btn-success" type="submit">Create</button>
+            </div>
+        </div>
+        <div ng-hide="RoleRadioModel" class="col-xs-8">
+            <h4>Set Costs for Franchise</h4>
 
+            <ul>
+                <li class="col-xs-8"><b>Uniforms</b></li>
+                <li class="col-xs-8" ng-repeat="(key, val) in UniformSize">
+                    <span class="col-xs-2"><label for="key">{{key}} :</label></span><span>
+                            <input type="text" class="form-control col-xs-4" id="key" ng-model="UniformSize[key]"
+                                   placeholder="Rs"></span>
+                </li>
+                <li class="col-xs-8">
+                    <label for="AccountKitCost">Kit Cost</label>
+                    <input type="text" class="form-control" id="AccountKitCost"
+                           ng-model="KitCost"
+                           placeholder="Rs">
+                </li>
+            </ul>
+        </div>
+    </form>
 
-        </tr>
-        </tbody>
-    </table>
 
 </div>

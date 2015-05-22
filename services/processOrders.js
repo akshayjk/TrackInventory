@@ -136,13 +136,14 @@ ProcessOrder.prototype.placeOrder = function (req, res, orderObject) {
 ProcessOrder.prototype.changeOrderStatus = function (req, res, body) {
     var OrderId = req.query.OrderId;
     var Status = body.Status;
+    console.log("body " + JSON.stringify(body))
     //todo order Id validation
     //todo order cycle validation
     if (Status.toLowerCase() == "completed" || Status.toLowerCase() == "dispatched") {
         var orderCompleteOption = {
             collection: define.ordersCollection,
             Query: {OrderId: OrderId},
-            updateObject: {Status: Status.toUpperCase()}
+            updateObject: {Status: Status.toUpperCase(), CourierName:body.CourierName, TrackingID:body.TrackingID}
         };
         new dataBase().update(orderCompleteOption, function (err, result) {
             if (!err) {

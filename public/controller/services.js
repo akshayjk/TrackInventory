@@ -57,12 +57,10 @@
                 var getOrdersReq = {method: 'GET', url: urlInitial};
                 return  $http(getOrdersReq);
             },
-            changeOrderStatus: function(orderId, Status){
+            changeOrderStatus: function(orderId, data){
                 var urlInit = "/order/orders"
                 var url = urlInit + "?OrderId=" + orderId;
-                var putData ={};
-                putData.Status = Status;
-                var changeOrderStatusReq = {method: 'PUT', url: url, data:putData};
+                var changeOrderStatusReq = {method: 'PUT', url: url, data:data};
                 return $http(changeOrderStatusReq);
             }
         }
