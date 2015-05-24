@@ -770,24 +770,24 @@
         };
         $scope.deleteConfirm = function(index){
             bootbox.dialog({
-                message: "I am a custom dialog",
-                title: "Custom title",
+                message: "Are you sure ?",
+                title: "Confirm Delete",
                 buttons: {
-
-                    danger: {
-                        label: "Danger!",
-                        className: "btn-danger",
-                        callback: function() {
-                            $scope.deleteAccount(index);
-                        }
-                    },
                     main: {
                         label: "Cancel",
                         className: "btn-default",
                         callback: function() {
                             console.log("Modal Dismissed");
                         }
+                    },
+                    danger: {
+                        label: "Delete",
+                        className: "btn-danger",
+                        callback: function() {
+                            $scope.deleteAccount(index);
+                        }
                     }
+
                 }
             });
         }
