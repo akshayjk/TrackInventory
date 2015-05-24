@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html ng-app="App">
+<head>
+    <meta charset="UTF-8">
+    <title>Little Einstein - Log in</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <!-- Bootstrap 3.3.4 -->
+    <link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Font Awesome Icons -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- Theme style -->
+    <link href="../../dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
+
+
+
+    <!-- LIBRARIES -->
+    <script src="angularfiles/angular.min.js"></script>
+    <script src="angularfiles/angular-route.min.js"></script>
+    <script src="angularfiles/angular-resource.min.js"></script>
+    <script src="angularfiles/angular-sanitize.min.js"></script>
+
+    <script src="controller/services.js"></script>
+    <script src="controller/loginControllerNew.js"></script>
+    <script src="loginAppNew.js"></script>
+
+
+</head>
+<body class="login-page" ng-controller="LoginController" style="background: #fff;">
+<div class="login-box">
+    <div class="login-logo">
+        <img src="Images/LE_LogoMed.png" style="width:40%;">
+        <a href="../../index2.html"><h2>Little Einstein Preschool</h2></a>
+        <p style="font-size:22px;">Inventory</p>
+    </div><!-- /.login-logo -->
+    <div class="login-box-body" style="background-color: #F2F3F4;box-shadow: 1px 1px 2px 1px #c4c4c4;">
+        <p class="login-box-msg">Sign in to start your session</p>
+        <p style="color:red;text-align: center">{{loginError}} </p>
+        <div>
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" ng-model="loginForm.username" autofocus placeholder="Username"/>
+                <span class="glyphicon glyphicon-envelope form-control-feedback" ></span>
+                <p ng-model="loginForm.username"></p>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="password" class="form-control" ng-model="loginForm.password" placeholder="Password"/>
+                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            </div>
+            <div class="row">
+                <div class="col-xs-8">
+                    <div class="checkbox icheck">
+
+                    </div>
+                </div><!-- /.col -->
+                <div class="col-xs-4">
+                    <button type="" ng-click="login()" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                </div><!-- /.col -->
+            </div>
+        </div>
+
+    </div><!-- /.login-box-body -->
+</div><!-- /.login-box -->
+
+<!-- jQuery 2.1.4 -->
+<script src="bootstrap/js/jquery-2.1.4.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+
+</body>
+</html>
