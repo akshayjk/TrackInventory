@@ -25,7 +25,7 @@
                     <div class="box-body">
                         <ul class="users-list clearfix">
                             <li ng-repeat="account in Accounts | filter:accountSearch" class="AccountsList"
-                                ng-click="showAccount($index)">
+                                ng-click="showAccount(account)">
                                 <!--<img src="../Images/user.jpg" alt="User Image"/>-->
                                 <a class="userList" href="">{{getName(account.FranchiseName)}}</a>
                                 <span class="users-list-date">{{account.Role}}</span>

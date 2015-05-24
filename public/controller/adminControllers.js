@@ -809,8 +809,8 @@
             return name.substring(0,index);
         }
         $scope.AccountView = true;
-        $scope.showAccount = function(index){
-            $scope.AccountNumber = $scope.Accounts[index];
+        $scope.showAccount = function(item){
+            $scope.AccountNumber = item;
             $scope.AccountView = !$scope.AccountView;
             $scope.AccountNumber.index = index;
         }
