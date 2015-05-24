@@ -15,10 +15,10 @@
     App.config(function ($routeProvider) {
         $routeProvider
             .when('/Orders', {
-                templateUrl: '/views/Orders.html'
+                templateUrl: '/views/FranchiseOrders.html'
             })
             .when('/Query', {
-                templateUrl: 'views/Query.html'
+                templateUrl: '/views/Query.html'
             })
             .when('/PreviousOrders', {
                 templateUrl: '/views/PreOrders.html'

@@ -1,3 +1,7 @@
+
+var dataBase = require('./DbOperations.js');
+var responseHandler = require('./responseHandler.js');
+
 var MessageArray = [
             {
                 "FranchiseName": "Kolkata School",
@@ -40,9 +44,25 @@ function Messages(){
 
 }
 
-Messages.prototype.getAllMessageChains = function(){
+Messages.prototype.getAllMessageChains = function(req, res, body){
 	//Fetches 20 most recent Message chains and depending on the request will keep on fetching remaining message chains
+    var options = {
+        collection:'MESSAGES',
+        Query:{},
+        QurySelect:{$slice:{Messages:3}},
+        sortObject:{ModifiedOn:-1},
+        sortLimit:20
+    }
 
+    new dataBase().get(options, function(err, data){
+        if(!err){
+
+            new responseHandler().sendResponse(req, res, "success", data, 200);
+        }else{
+            new responseHandler().sendResponse(req, res, "error", "error while fetching messages", 500);
+        }
+
+    })
 }
 
 Messages.prototype.getMessageChain = function(){
@@ -53,6 +73,16 @@ Messages.prototype.getMessages = function(){
 	//Fetches 20 Most recent Messages in a message chain and depending on the request will keep on fetching remaining messages
 }
 
-Message.prototype.sendMessage = function(){
-	//Deliveres a message to client 
+Message.prototype.sendMessage = function(req, res, body){
+	//Deliveres a message to client
+    //check if the message chain exists
+
+
+    //sending a message first time
+    if(body.role!=undefined){
+
+        if(body.role.toUpperCase()=="ADMIN"){
+
+        }
+    }
 }

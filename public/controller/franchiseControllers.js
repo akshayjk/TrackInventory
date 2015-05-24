@@ -30,7 +30,8 @@
 
     App.controller("LogOutCtrl", ["$scope", "$location", "$window", function ($scope, $location, $window) {
 
-        $scope.userDetails = JSON.parse(sessionStorage.userDetails);
+
+
         $scope.FranchiseName = $scope.userDetails.FranchiseName;
         $scope.logOut = function () {
             console.log("Logging out");
@@ -40,14 +41,31 @@
         }
     }]);
 
+    App.controller("GeneralContent",["$scope", function($scope){
+        $scope.userDetails = JSON.parse(sessionStorage.userDetails);
+        $scope.checkClick = function(id){
+            var MenuBar =['MenuOrd','MenuPre','MenuQry']
+            console.log("Menu click");
+            MenuBar.forEach(function(eleId){
+                $('#'+eleId).removeClass('active');
+            })
+            $('#'+id).addClass('active');
+            var screenSizes ={
+                xs: 480,
+                sm: 768,
+                md: 992,
+                lg: 1200
+            }
+            if ($(window).width() <= (screenSizes.sm - 1) && $("body").hasClass("sidebar-open")) {
+                $("body").removeClass('sidebar-open');
+            }
+        }
+    }])
+
     App.controller("OrderForm", ["$scope", "$location", "$modal", "PlaceOrder", function ($scope, $location, $modal, PlaceOrder) {
 
-        $scope.ready = function () {
-            $('#PaymentTab').attr('class', 'disabled disabledTab');
-            $('#OrderTab').attr('class', 'disabled disabledTab');
-            console.log(" session Storage " + typeof(sessionStorage.userDetails))
-        };
-        $scope.ready();
+
+
         $scope.userDetails = JSON.parse(sessionStorage.userDetails);
         $scope.UniformCosts = $scope.userDetails.FranchiseDetails.UniformCosts;
         $scope.KitCost = $scope.userDetails.FranchiseDetails.KitCost;
@@ -136,6 +154,9 @@
             }
         };
         $scope.setFormCancel();
+        $scope.studentsTab = false;
+        $scope.orderSummary = true;
+        $scope.paymentTab = true;
         $scope.addStudents = function () {
 
             if ($scope.StudentObject.Class == undefined) {
@@ -147,6 +168,8 @@
             }
             $scope.formHide = true;
             $scope.formButtons = false;
+            $scope.orderSummary = false;
+            $scope.studentsTab = true;
             $('#OrderTab').attr('class', 'active');
             $('#StudentTab').attr('class', 'disabled disabledTab');
             $('#orange').show();
@@ -165,7 +188,8 @@
                 $scope.formCancel = true;
             }
 
-
+            $scope.studentsTab =  false;
+            $scope.orderSummary = true;
             $('#StudentTab').attr('class', 'active');
             $('#OrderTab').attr('class', 'disabled disabledTab');
             $('#orange').hide();
@@ -179,6 +203,8 @@
             $('#StudentTab').attr('class', 'disabled disabledTab');
             $('#orange').show();
             $('#red').hide();
+            $scope.studentsTab = true;
+            $scope.orderSummary = false;
             $scope.formButtons = false;
         };
         $scope.confirmOrder = function () {
@@ -186,6 +212,8 @@
             $('#PaymentTab').attr('class', 'active');
             $('#yellow').show();
             $('#orange').hide();
+            $scope.orderSummary = true;
+            $scope.paymentTab = false;
         };
         $scope.next = function () {
 
@@ -231,6 +259,8 @@
                     console.log("executed");
                     $scope.formHide = false;
                     $scope.formButtons = true;
+                    $scope.studentsTab =false;
+                    $scope.paymentTab = true;
                 }, function () {
                     console.log('Modal dismissed at: ' + new Date());
                 });
@@ -271,7 +301,14 @@
             return numb;
         };
 
-
+        $scope.ready = function () {
+            $('#outerWrapper').height(function(){
+                var a = $('#studentForm').height()+ 750;
+                console.log("setting height " + a)
+                return a;
+            })
+        };
+        $scope.ready();
 
     }]);
 
@@ -314,12 +351,12 @@
             return str.substring(0, str.length - 30)
         };
 
-        $scope.listView = false;
-        $scope.orderView = true;
+        $scope.listView = [false,false];
+        $scope.orderView = [true,true];
 
-        $scope.showOrder = function (index) {
-            $scope.listView = toggle($scope.listView);
-            $scope.orderView = toggle($scope.orderView);
+        $scope.showOrder = function (No, index) {
+            $scope.listView[No] = toggle($scope.listView[No]);
+            $scope.orderView[No] = toggle($scope.orderView[No]);
             if (index != undefined) {
                 $scope.OrderNo = index;
             }
@@ -337,4 +374,70 @@
 
     }]);
 
+    App.controller("Messages",["$scope",function($scope){
+
+        $scope.Messages = {
+            "FranchiseName": "Kolkata School",
+            "FranchiseId": "RR25453",
+            "ModifiedOn": "2015-04-18T18:37:04.211Z",
+            "Messages": [
+                {
+                    "sender": "akshay",
+                    "sent on": "2015-04-18T14:37:04.211Z",
+                    "Message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+                },
+                {
+                    "sender": "admin",
+                    "sent on": "2015-04-18T18:37:04.211Z",
+                    "Message": "We will look into the issue"
+                },
+                {
+                    "sender": "akshay",
+                    "sent on": "2015-04-18T14:37:04.211Z",
+                    "Message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+                },
+                {
+                    "sender": "admin",
+                    "sent on": "2015-04-18T18:37:04.211Z",
+                    "Message": "We will look into the issue"
+                },
+                {
+                    "sender": "akshay",
+                    "sent on": "2015-04-18T14:37:04.211Z",
+                    "Message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+                },
+                {
+                    "sender": "admin",
+                    "sent on": "2015-04-18T18:37:04.211Z",
+                    "Message": "We will look into the issue"
+                },
+                {
+                    "sender": "akshay",
+                    "sent on": "2015-04-18T14:37:04.211Z",
+                    "Message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+                },
+                {
+                    "sender": "admin",
+                    "sent on": "2015-04-18T18:37:04.211Z",
+                    "Message": "We will look into the issue"
+                }
+            ]
+        }
+        $scope.getDate = function (dateObj) {
+            var dateStr = new Date(dateObj).getDate().toString();
+            var monthStr = new Date(dateObj).getMonth().toString();
+            var yrStr = new Date(dateObj).getFullYear().toString();
+            var date = new Date(dateObj);
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            return hours + ':' + minutes + ' ' + ampm + " " + dateStr + "/" + monthStr + '/' + yrStr;
+        };
+
+
+
+    }])
 }());

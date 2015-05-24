@@ -1,5 +1,5 @@
 <div ng-controller="Accounts">
-    <section class="content-header" >
+    <section class="content-header">
         <div class="nav-tabs-custom tabClass">
             <ul id="tabsAccounts" class="nav nav-tabs" data-tabs="tabs">
                 <li class="active" id="viewAccountsTab"><a data-target="#ViewAccounts" class="onHoverClass"
@@ -10,23 +10,61 @@
 
             </ul>
             <div class="tab-content">
-                <div class="tab-pane active" id="ViewAccounts">
-                    <div>
+                <div class="tab-pane active" id="ViewAccounts" ng-show="AccountView">
+                    <!--<div>
                         <select id="FilterBy" name="selectFilter" class="form-control"
                                 ng-model="AccFilterDef" ng-options="m for m in AccountFilter">
                         </select>
+                    </div>-->
+                    <div class="input-group col-xs-12 col-md-6">
+                        <input type="text" name="q" class="form-control" ng-model="accountSearch" placeholder="Search..."/>
+                    <span class="input-group-addon">
+                        <i class="fa fa-search"></i>
+                    </span>
                     </div>
                     <div class="box-body">
                         <ul class="users-list clearfix">
-                            <li ng-repeat="account in Accounts | filter:AccFilterDef">
-                                <img src="../Images/user.jpg" alt="User Image"/>
-                                <a class="users-list-name" href="#">{{account.FranchiseName}}</a>
+                            <li ng-repeat="account in Accounts | filter:accountSearch" class="AccountsList"
+                                ng-click="showAccount($index)">
+                                <!--<img src="../Images/user.jpg" alt="User Image"/>-->
+                                <a class="userList" href="">{{getName(account.FranchiseName)}}</a>
                                 <span class="users-list-date">{{account.Role}}</span>
-                                <button class="btn btn-danger btn-xs" tooltip="Are you sure?"
+                                <!--<button class="btn btn-danger btn-xs" 
                                         ng-click="deleteAccount($index)">Delete
-                                </button>
+                                </button>-->
                             </li>
                         </ul>
+                    </div>
+                </div>
+                <div id="singleAccount" ng-show="!AccountView">
+                    <div class="col-xs-12 col-md-12 singleOrder">
+                        <h3>{{AccountNumber.FranchiseName}}</h3>
+
+                        <div class="col-md-6 col-xs-12">
+                            <p><b>Franchise Id :</b>&nbsp;{{AccountNumber.FranchiseId}}</p>
+
+                            <p><b>Role :</b>&nbsp;{{AccountNumber.Role}}</p>
+
+                            <p><b>Created On :</b>&nbsp;{{getDate(AccountNumber.CreatedOn)}}</p>
+                        </div>
+                        <div class="col-md-6 col-xs-12" ng-show="AccountNumber.Role=='FRANCHISE'">
+                            <p><b>Kit Cost :</b>&nbsp;Rs  {{AccountNumber.FranchiseDetails.KitCost}}</p>
+
+                            <p><b>Uniform Costs :</b>&nbsp;
+                            <table>
+                                <tr ng-repeat="(key, value) in AccountNumber.FranchiseDetails.UniformCosts">
+                                    <td style="padding-right:10px;">Size {{key}}</td>
+                                    <td>:&nbsp;Rs {{value}}</td>
+                                </tr>
+                            </table>
+                            </p>
+                        </div>
+                        <div class="col-md-12 col-xs-12">
+                            <button class="btn btn-primary btn-sm" ng-click="AccountView = !AccountView">Back</button>
+                            <button class="btn btn-danger btn-sm" 
+                                    ng-click="deleteConfirm(AccountNumber.index)">Delete
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="tab-pane" id="AddAccount" style="background-color:white;padding-bottom: 10px;">
@@ -34,7 +72,7 @@
                         <alert type="{{alertMsg.type}}" close="clearAlert()">{{alertMsg.Msg}}</alert>
                     </div>
                     <form class="col-xs-12" ng-submit="createAccount()">
-                        <div class="col-xs-12" >
+                        <div class="col-xs-12">
                             <div class="form-group medium">
                                 <label for="FranchiseAccEmail">Franchise Email</label>
                                 <input type="email" class="form-control" id="FranchiseAccEmail"

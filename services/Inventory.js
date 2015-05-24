@@ -119,7 +119,7 @@ Inventory.prototype.deleteItem = function (req, res, body) {
     if (type != undefined && body[type].Name != undefined && body[type].Quantity != undefined && (type.toUpperCase() == "BOOKS" || type.toUpperCase() == "UNIFORMS" || type.toUpperCase() == "COMMON")) {
         var options = {
             collection: "INVENTORY",
-            Query: {Category: type.toUpperCase()}
+            Query: {ItemId:body[type].ItemId}
         };
         console.log(JSON.stringify(options))
 

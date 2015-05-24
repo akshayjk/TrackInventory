@@ -28,6 +28,23 @@
             "4": 40,
             "5": 50
         };
+        $scope.checkClick = function(id){
+            var MenuBar =['MenuInv','MenuAcc','MenuOrder','MenuMsg', 'MenuDwn']
+            console.log("Menu click");
+            MenuBar.forEach(function(eleId){
+                $('#'+eleId).removeClass('active');
+            })
+            $('#'+id).addClass('active');
+            var screenSizes ={
+                xs: 480,
+                sm: 768,
+                md: 992,
+                lg: 1200
+            }
+            if ($(window).width() <= (screenSizes.sm - 1) && $("body").hasClass("sidebar-open")) {
+                $("body").removeClass('sidebar-open');
+            }
+        }
 
         $scope.KitCost = 500;
 
@@ -187,7 +204,7 @@
                 $scope.setVariables("Uniforms", $scope.InventoryData["Uniforms"]);
                 $scope.setVariables("Common", $scope.InventoryData["Common"]);
                 $scope.ItemOptions = JSON.parse(JSON.stringify($scope.InventoryData.Books)).concat(JSON.parse(JSON.stringify($scope.InventoryData.Uniforms)), JSON.parse(JSON.stringify($scope.InventoryData.Common)));
-
+               // $scope.setInvTabHeight();
             }).error(function () {
 
             })
@@ -243,6 +260,13 @@
             minutes = minutes < 10 ? '0' + minutes : minutes;
             return hours + ':' + minutes + ' ' + ampm + " " + dateStr + "/" + monthStr + '/' + yrStr;
         };
+        /*function adjustInvTabHeight(EleId){
+            console.log("got Id " + EleId)
+            $('#InventoryTabWrapper').height(function(){
+                return $('#'+EleId).height()+ 50;
+            })
+        }*/
+
         $scope.addMore = function (Category) {
             if (!$scope.addItem.Name || !$scope.addItem.Quantity) {
             } else {
@@ -257,6 +281,11 @@
                         $scope.ItemOptions.push(addRes.Item[0]);
                         $scope.addItem = {};
                         $scope.setVariables(Category, $scope.InventoryData[Category]);
+                        $('#InventoryTabWrapper').height(function(){
+                            console.log( 'height ' + $('#'+Category).height())
+                            var ht = $('#'+Category).height();
+                            return ht + 150;
+                        })
                         $scope.loading = false;
                         console.log("Item options after addition " + JSON.stringify($scope.ItemOptions))
 
@@ -269,12 +298,48 @@
 
 
         }
+        /*$scope.setInvTabHeight = function(){
+            $('#InventoryTabWrapper').height(function(){
+                //var height = Math.max($('#Books').height(), $('#Uniforms').height(), $('#Common').height());
+                var height = Math.max($scope.InventoryData.Books.length, $scope.InventoryData.Uniforms.length, $scope.InventoryData.Common.length)
+                console.log("setting height " + height*30)
+                return height*60 + 100;
+            })
+        }*/
+
+
+        $scope.deleteItemConfirm = function(Category,itemNo){
+            bootbox.dialog({
+                message: "Are you sure ?",
+                title: "Confirm Delete",
+                buttons: {
+                    danger: {
+                        label: "Delete",
+                        className: "btn-danger",
+                        callback: function() {
+                            $scope.deleteItem(Category, itemNo)
+                        }
+                    },
+                    main: {
+                        label: "Cancel",
+                        className: "btn-default",
+                        callback: function() {
+                            console.log("Modal dismissed");
+                        }
+                    }
+                }
+            });
+        }
         $scope.deleteItem = function (Category, itemNo) {
             var tempDeleteObject = {};
             tempDeleteObject[Category] = $scope.InventoryData[Category][itemNo];
             Inventory.deleteItem(tempDeleteObject).success(function (delRes, delSta) {
                 $scope.InventoryData[Category].splice(itemNo, 1);
                 $scope.setVariables(Category, $scope.InventoryData[Category]);
+                $('#InventoryTabWrapper').height(function(){
+                    console.log("Height " + $('#'+Category).height())
+                    return $('#'+Category).height()+ 50;
+                })
             })
 
         }
@@ -338,6 +403,28 @@
             })
 
         };
+        $scope.deleteKitConfirm = function(index){
+            bootbox.dialog({
+                message: "Are you sure ?",
+                title: "Confirm Delete",
+                buttons: {
+                    danger: {
+                        label: "Delete",
+                        className: "btn-danger",
+                        callback: function() {
+                            $scope.deleteKit(index)
+                        }
+                    },
+                    main: {
+                        label: "Cancel",
+                        className: "btn-default",
+                        callback: function() {
+                            console.log("Modal dismissed");
+                        }
+                    }
+                }
+            });
+        }
         $scope.deleteKit = function (index) {
             var deleteKit = {};
             deleteKit.KitId = $scope.Kits[index].KitId;
@@ -389,6 +476,36 @@
                 "FranchiseId": "RR25453",
                 "ModifiedOn": "2015-04-18T18:37:04.211Z",
                 "Messages": [
+                    {
+                        "sender": "akshay",
+                        "sent on": "2015-04-18T14:37:04.211Z",
+                        "Message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+                    },
+                    {
+                        "sender": "admin",
+                        "sent on": "2015-04-18T18:37:04.211Z",
+                        "Message": "We will look into the issue"
+                    },
+                    {
+                        "sender": "akshay",
+                        "sent on": "2015-04-18T14:37:04.211Z",
+                        "Message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+                    },
+                    {
+                        "sender": "admin",
+                        "sent on": "2015-04-18T18:37:04.211Z",
+                        "Message": "We will look into the issue"
+                    },
+                    {
+                        "sender": "akshay",
+                        "sent on": "2015-04-18T14:37:04.211Z",
+                        "Message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+                    },
+                    {
+                        "sender": "admin",
+                        "sent on": "2015-04-18T18:37:04.211Z",
+                        "Message": "We will look into the issue"
+                    },
                     {
                         "sender": "akshay",
                         "sent on": "2015-04-18T14:37:04.211Z",
@@ -526,6 +643,29 @@
                 ]
             }
         ];
+        $scope.trimLastMessage = function(Numb){
+            var msg = $scope.Messages[Numb].Messages[$scope.Messages[Numb].Messages.length-1].Message;
+            var maxLt = 20>msg.length?20:msg.length;
+
+            return msg.substring(0,maxLt)+ "...";
+        }
+        $scope.toggleContactPanel = function(){
+
+            var ContactList = $('#ContactList').attr('class')
+            var chat = $('#chatPanel').attr('class');
+            var footer = $('#chat-footer').attr('class');
+            function toggleHiddenClass(List, id){
+                if(List.indexOf('hidden-xs')!=-1){
+                    $('#'+id).removeClass('hidden-xs');
+                }else {
+                    $('#'+id).addClass('hidden-xs');
+                }
+            }
+
+           toggleHiddenClass(ContactList, "ContactList");
+            toggleHiddenClass(chat, "chatPanel");
+            toggleHiddenClass(footer, "chat-footer");
+        }
 
         $scope.getDate = function (dateObj) {
             var dateStr = new Date(dateObj).getDate().toString();
@@ -550,6 +690,7 @@
                     $('#' + Msg.FranchiseId).removeClass('clickedMessageFr');
                 }
             })
+            $scope.toggleContactPanel();
 
         };
 
@@ -573,6 +714,7 @@
         $scope.getAccounts = function () {
             Auth.getAccounts().success(function (AccRes) {
                 $scope.Accounts = AccRes;
+                console.log(JSON.stringify(AccRes))
             }).error(function (errRes) {
                 console.log(errRes);
             })
@@ -626,6 +768,29 @@
         $scope.clearAlert = function () {
             $scope.alertMsg = {view: 0};
         };
+        $scope.deleteConfirm = function(index){
+            bootbox.dialog({
+                message: "I am a custom dialog",
+                title: "Custom title",
+                buttons: {
+
+                    danger: {
+                        label: "Danger!",
+                        className: "btn-danger",
+                        callback: function() {
+                            $scope.deleteAccount(index);
+                        }
+                    },
+                    main: {
+                        label: "Cancel",
+                        className: "btn-default",
+                        callback: function() {
+                            console.log("Modal Dismissed");
+                        }
+                    }
+                }
+            });
+        }
         $scope.deleteAccount = function (index) {
             Auth.deleteAccount($scope.Accounts[index].FranchiseId).success(function (accRes) {
                 $scope.alertMsg = {
@@ -633,10 +798,21 @@
                     Msg: accRes.Message,
                     view: 1
                 };
+                $scope.AccountView = !$scope.AccountView;
                 $scope.getAccounts();
             }).error(function (errRes) {
                 console.log("err res " + errRes);
             })
+        }
+        $scope.getName = function(name){
+            var index = 15>name.length?name.length:15;
+            return name.substring(0,index);
+        }
+        $scope.AccountView = true;
+        $scope.showAccount = function(index){
+            $scope.AccountNumber = $scope.Accounts[index];
+            $scope.AccountView = !$scope.AccountView;
+            $scope.AccountNumber.index = index;
         }
 
     }]);

@@ -1,148 +1,29 @@
-<section class="content" style="background-color: white; margin:0px 10px 10px 10px;">
-    <div ng-controller="Inventory" class="nav-tabs-custom tabClass">
-
-        <ul id="InvTabs" class="nav nav-tabs col-xs-10 OrderNav" data-tabs="tabs">
-            <li class="active" id="OverViewTabInv"><a data-target="#overviewInv" class="onHoverClass"
-                                                      data-toggle="tab"><b>Overview</b></a></li>
-            <li class="" id="BooksTabInv"><a data-target="#Books" class="onHoverClass"
-                                             data-toggle="tab"><b>Books</b></a></li>
-            <li class="" id="UniformsTabInv"><a data-target="#Uniforms" class="onHoverClass" data-toggle="tab"><b>Uniforms</b></a>
-            </li>
-            <li class="" id="CommonTabInv"><a data-target="#Common" class="onHoverClass" data-toggle="tab"><b>Common
-                Content</b></a>
-            </li>
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane active col-xs-12" id="overviewInv">
-                <div class="col-xs-12 addMoreItems" style="margin-bottom: 2%;">
-                    <b>
-                        <button type="button" ng-show="!KitView" class="btn btn-primary"
-                                ng-click="buildKit=!buildKit;KitView=false">
-                            Build A Kit
-                        </button>
-                    </b>
-                </div>
-                <div class="responsiveClass">
-                    <table ng-show="buildKit" class="table">
-                        <thead>
-                        <th>Name of Item</th>
-                        <th>Units</th>
-                        <th></th>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>
-                                <ui-select ng-model="ItemSelected.selected" theme="select2"
-                                           ng-disabled="disabled" style="min-width: 300px;">
-                                    <ui-select-match placeholder="Select or search an item">
-                                        {{$select.selected.Name}}
-                                    </ui-select-match>
-                                    <ui-select-choices
-                                            repeat="item in ItemOptions | filter: $select.search">
-                                        <div ng-bind-html="item.Name | highlight: $select.search"></div>
-                                    </ui-select-choices>
-                                </ui-select>
-
-                            </td>
-                            </td>
-                            <td><input class="InvElementInput kitUnit"
-                                       ng-model="ItemSelected.selected.Units" type="number" required></td>
-                            <td>
-                                <button class="btn btn-primary btn-sm"
-                                        ng-disabled="ItemSelected.selected!=undefined&&ItemSelected.selected.Units!=undefined?false:true;"
-                                        ng-click="addToKit('Books')">Add to Kit
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <table class="table table-striped responsiveClass" ng-show="builtKit.length>0&&buildKit"
-                       style="border-bottom: 2px solid #ddd;">
-                    <thead style="font-weight:600">
-                    <tr>
-                        <td>#</td>
-                        <td>Name of Item</td>
-                        <td>Units</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="item in builtKit track by $id($index)">
-                        <td>{{$index+1}}</td>
-                        <td>{{item.Name}}</td>
-                        <td>{{item.Units}}</td>
-                        <td>
-                            <button type="button" class="close" aria-label="Close"
-                                    ng-click="removeItem($index)"><span aria-hidden="true">&times;</span>
+<div ng-controller="Inventory">
+    <section class="content-header">
+        <div  class="nav-tabs-custom tabClass" id="InventoryTabWrapper">
+            <ul id="InvTabs" class="nav nav-tabs OrderNav" data-tabs="tabs">
+                <li class="active" id="OverViewTabInv"><a data-target="#overviewInv" class="onHoverClass"
+                                                          data-toggle="tab"><b>Overview</b></a></li>
+                <li class="" id="BooksTabInv"><a data-target="#Books" class="onHoverClass"
+                                                 data-toggle="tab"><b>Books</b></a></li>
+                <li class="" id="UniformsTabInv"><a data-target="#Uniforms" class="onHoverClass" data-toggle="tab"><b>Uniforms</b></a>
+                </li>
+                <li class="" id="CommonTabInv"><a data-target="#Common" class="onHoverClass" data-toggle="tab"><b>Common
+                    Content</b></a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="overviewInv">
+                    <div class="col-xs-12 addMoreItems" style="margin-bottom: 2%;">
+                        <b>
+                            <button type="button" ng-show="!KitView" class="btn btn-primary addItemClass"
+                                    ng-click="buildKit=!buildKit;KitView=false">
+                                Build A Kit
                             </button>
-                        </td>
-                    </tr>
-                    </tbody>
-
-                </table>
-                <form ng-show="builtKit.length>0&&buildKit">
-                    <form class="form-horizontal">
-                        <div class="control-group">
-                            <label class="control-label" for="KitName">Name Your Kit</label>
-
-                            <div class="controls">
-                                <input id="KitName" name="textinput" ng-model="KitName"
-                                       class="InvElementInput" type="text">
-                                            <span><button class="btn btn-success btn-sm" ng-click="saveKit(KitName)">
-                                                Save
-                                            </button><button class="btn btn-primary btn-sm" style="margin-left:0.5%;"
-                                                             ng-click="buildKit=!buildKit">
-                                                Cancel
-                                            </button></span>
-                            </div>
-                        </div>
-                    </form>
-                </form>
-                <div ng-show="Kits.length==0">
-                    <h2 class="emptyClass">Its lonely here!</h2>
-
-                </div>
-                <div class="responsiveClass">
-                <table class="table table-hover" ng-show="!buildKit&&!KitView&&Kits.length>0">
-                    <thead style="font-weight: 600">
-                    <tr>
-                        <td>No</td>
-                        <td>Kit</td>
-                        <td>Overview</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="kit in Kits">
-                        <td>{{$index+1}}</td>
-                        <td>{{kit.Name}}</td>
-                        <td>Includes {{kit.Kit.length}} items</td>
-                        <td style="width:20%;">
-                            <div><span><button type="button" class="btn btn-primary btn-xs pull-left"
-                                               ng-click="KitView==!KitView;viewKit($index)">View
-                            </button></span><span><button class="btn btn-danger btn-xs"
-                                                          style="margin-left:2%;"
-                                                          ng-click="deleteKit($index)">Delete
-                            </button></span></div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                </div>
-                    <div ng-show="KitView">
-                    <div class="singleOrder">
-                        <div class="col-xs-12"><span class="pull-right" style="width:10%;"
-                                                     ng-show="!EditKit"><button
-                                class="btn btn-success btn-sm" style="margin-right:2%;" ng-model="EditKit"
-                                btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">Edit
-                        </button><button class="btn btn-primary btn-sm " ng-click="KitView=!KitView">Back
-                        </button></span><span class="pull-right" style="width:12%;" ng-show="EditKit"><button
-                                class="btn btn-success btn-sm" style="margin-right:2%;"
-                                ng-click="EditKit=!EditKit;saveEditedKit()">Save
-                        </button><button class="btn btn-primary btn-sm " ng-click="EditKit=!EditKit">
-                            Cancel
-                        </button></span></div>
-
-                        <table ng-show="EditKit" class="table responsiveClass">
+                        </b>
+                    </div>
+                    <div class="responsiveClass">
+                        <table ng-show="buildKit" class="table">
                             <thead>
                             <th>Name of Item</th>
                             <th>Units</th>
@@ -163,327 +44,449 @@
                                     </ui-select>
 
                                 </td>
-
-                                <td><input class="InvElementInput kitUnit"
-                                           ng-model="ItemSelected.selected.Units" type="number" required>
                                 </td>
+                                <td><input class="InvElementInput kitUnit"
+                                           ng-model="ItemSelected.selected.Units" type="number" required></td>
                                 <td>
                                     <button class="btn btn-primary btn-sm"
                                             ng-disabled="ItemSelected.selected!=undefined&&ItemSelected.selected.Units!=undefined?false:true;"
-                                            ng-click="EditAddItem()">Add to Kit
+                                            ng-click="addToKit('Books')">Add to Kit
                                     </button>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <table class="table table-striped responsiveClass" ng-show="builtKit.length>0&&buildKit"
+                           style="border-bottom: 2px solid #ddd;">
+                        <thead style="font-weight:600">
+                        <tr>
+                            <td>#</td>
+                            <td>Name of Item</td>
+                            <td>Units</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in builtKit track by $id($index)">
+                            <td>{{$index+1}}</td>
+                            <td>{{item.Name}}</td>
+                            <td>{{item.Units}}</td>
+                            <td>
+                                <button type="button" class="close" aria-label="Close"
+                                        ng-click="removeItem($index)"><span aria-hidden="true">&times;</span>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
 
-                        <div>
-                            <h3>{{currentKit.Name}}</h3>
+                    </table>
+                    <form ng-show="builtKit.length>0&&buildKit">
+                        <form class="form-horizontal">
+                            <div class="control-group">
+                                <label class="control-label" for="KitName">Name Your Kit</label>
 
-                            <p><b>Id :</b>&nbsp;{{currentKit.KitId}}</p>
+                                <div class="controls">
+                                    <input id="KitName" name="textinput" ng-model="KitName"
+                                           class="InvElementInput" type="text">
+                                            <span><button class="btn btn-success btn-sm" ng-click="saveKit(KitName)">
+                                                Save
+                                            </button><button class="btn btn-primary btn-sm" style="margin-left:0.5%;"
+                                                             ng-click="buildKit=!buildKit">
+                                                Cancel
+                                            </button></span>
+                                </div>
+                            </div>
+                        </form>
+                    </form>
 
-                            <p><b>Created On :</b>&nbsp;{{getDate(currentKit.CreatedOn)}}</p>
-                            <table class="table table-condensed">
-                                <thead style="font-weight:600;">
-                                <tr>
-                                    <td>No</td>
-                                    <td>Item</td>
-                                    <td>Category</td>
-                                    <td>Units</td>
-                                </tr>
+                    <div class="responsiveClass">
+                        <table class="table table-hover" ng-show="!buildKit&&!KitView&&Kits.length>0">
+                            <thead style="font-weight: 600">
+                            <tr>
+                                <td>No</td>
+                                <td>Kit</td>
+                                <td>Overview</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="kit in Kits">
+                                <td>{{$index+1}}</td>
+                                <td>{{kit.Name}}</td>
+                                <td>Includes {{kit.Kit.length}} items</td>
+                                <td style="width:20%;">
+                                    <div><span><button type="button" class="btn btn-primary btn-xs pull-left"
+                                                       ng-click="KitView==!KitView;viewKit($index)">View
+                                    </button></span><span><button class="btn btn-danger btn-xs"
+                                                                  style="margin-left:2%;"
+                                                                  ng-click="deleteKit($index)">Delete
+                                    </button></span></div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div ng-show="KitView">
+                        <div class="singleOrder">
+                            <div class="col-xs-12"><span class="pull-right" style="width:10%;"
+                                                         ng-show="!EditKit"><button
+                                    class="btn btn-success btn-sm" style="margin-right:2%;" ng-model="EditKit"
+                                    btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">Edit
+                            </button><button class="btn btn-primary btn-sm " ng-click="KitView=!KitView">Back
+                            </button></span><span class="pull-right" style="width:12%;" ng-show="EditKit"><button
+                                    class="btn btn-success btn-sm" style="margin-right:2%;"
+                                    ng-click="EditKit=!EditKit;saveEditedKit()">Save
+                            </button><button class="btn btn-primary btn-sm " ng-click="EditKit=!EditKit">
+                                Cancel
+                            </button></span></div>
+
+                            <table ng-show="EditKit" class="table responsiveClass">
+                                <thead>
+                                <th>Name of Item</th>
+                                <th>Units</th>
+                                <th></th>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="item in currentKit.Kit">
-                                    <td>{{$index+1}}</td>
-                                    <td>{{item.Name}}</td>
-                                    <td>{{item.Category}}</td>
-                                    <td>{{item.Units}}</td>
-                                    <td ng-show="EditKit">
-                                        <button type="button" class="close" aria-label="Close"
-                                                ng-click="removeItemKitEdit($index)"><span
-                                                aria-hidden="true">&times;</span>
+                                <tr>
+                                    <td>
+                                        <ui-select ng-model="ItemSelected.selected" theme="select2"
+                                                   ng-disabled="disabled" style="min-width: 300px;">
+                                            <ui-select-match placeholder="Select or search an item">
+                                                {{$select.selected.Name}}
+                                            </ui-select-match>
+                                            <ui-select-choices
+                                                    repeat="item in ItemOptions | filter: $select.search">
+                                                <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+
+                                    </td>
+
+                                    <td><input class="InvElementInput kitUnit"
+                                               ng-model="ItemSelected.selected.Units" type="number" required>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm"
+                                                ng-disabled="ItemSelected.selected!=undefined&&ItemSelected.selected.Units!=undefined?false:true;"
+                                                ng-click="EditAddItem()">Add to Kit
                                         </button>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
 
+                            <div>
+                                <h3>{{currentKit.Name}}</h3>
+
+                                <p><b>Id :</b>&nbsp;{{currentKit.KitId}}</p>
+
+                                <p><b>Created On :</b>&nbsp;{{getDate(currentKit.CreatedOn)}}</p>
+                                <table class="table table-condensed">
+                                    <thead style="font-weight:600;">
+                                    <tr>
+                                        <td>No</td>
+                                        <td>Item</td>
+                                        <td>Category</td>
+                                        <td>Units</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="item in currentKit.Kit">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{item.Name}}</td>
+                                        <td>{{item.Category}}</td>
+                                        <td>{{item.Units}}</td>
+                                        <td ng-show="EditKit">
+                                            <button type="button" class="close" aria-label="Close"
+                                                    ng-click="removeItemKitEdit($index)"><span
+                                                    aria-hidden="true">&times;</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <div ng-show="Kits.length==0&&!buildKit">
+                        <h2 class="emptyClass">Its lonely here!</h2>
+
+                    </div>
+
+                    <!--<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="deleteKit">
+                        Launch demo modal
+                    </button>-->
+
+                    <!-- Modal -->
 
 
-                <!--<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="deleteKit">
-                    Launch demo modal
-                </button>-->
 
-                <!-- Modal -->
-
-
-
-                <!-- Conformation Modal-->
-                <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
-                     aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="confirmationModalTitle">Confirm Delete</h4>
-                            </div>
-                            <div class="modal-body">
-                                Are you sure you want to delete?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close
-                                </button>
-                                <button type="button" class="btn btn-danger">Delete</button>
+                    <!-- Conformation Modal-->
+                    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
+                         aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="confirmationModalTitle">Confirm Delete</h4>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                    </button>
+                                    <button type="button" class="btn btn-danger">Delete</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- Conformation Modal-->
+                    <!-- Conformation Modal-->
 
 
 
-            </div>
-            <div class="tab-pane col-xs-12" id="Books">
-                <div class="col-xs-12 addMoreItems">
-                    <b>
-                        <button type="button" class="btn btn-primary" ng-model="AddBooks" btn-checkbox
-                                btn-checkbox-true="1"
-                                btn-checkbox-false="0">
-                            Add More Books
-                        </button>
-                    </b>
                 </div>
-                <div class="responsiveClass" ng-show="AddBooks">
-                    <table  class="table">
-                        <thead>
-                        <th>Name of Book</th>
-                        <th>Initial Quantity</th>
-                        <th></th>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><input class="InvElementInput" ng-model="addItem.Name" type="text"
-                                       style="width:100%;"></td>
-                            <td><input class="InvElementInput" ng-model="addItem.Quantity" type="number">
-                            </td>
-                            <td>
-                                <button class="btn btn-primary btn-sm" ladda="loading" ng-click="addMore('Books')" data-style="expand-right">
-                                    Save
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div ng-show="InventoryData.Books.length==0&&!AddBooks">
-                    <h2 class="emptyClass">Its lonely here!</h2>
-                </div>
-                <div class="responsiveClass" ng-show="InventoryData.Books.length>0">
-                <table class="table no-margin table-condensed" style="border-bottom: 1px solid #ddd;" >
-                    <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Name</th>
-                        <th class="col-xs-3">Quantity</th>
-                        <th>Update Quantity</th>
+                <div class="tab-pane " id="Books">
+                    <div class="col-xs-12 addMoreItems">
+                        <b>
+                            <button type="button" class="btn btn-primary addItemClass" ng-model="AddBooks" btn-checkbox
+                                    btn-checkbox-true="1"
+                                    btn-checkbox-false="0">
+                                Add More Books
+                            </button>
+                        </b>
+                    </div>
+                    <div class="responsiveClass" ng-show="AddBooks">
+                        <table  class="table ">
+                            <thead>
+                            <th>Name of Book</th>
+                            <th>Initial Quantity</th>
+                            <th></th>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><input class="InvElementInput" ng-model="addItem.Name" type="text"
+                                           style="width:100%;"></td>
+                                <td><input class="InvElementInput" ng-model="addItem.Quantity" type="number">
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" ladda="loading" data-spinner-size="10" ng-click="addMore('Books')" data-style="slide-left">
+                                        Save
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div ng-show="InventoryData.Books.length==0&&!AddBooks" class="table-responsive">
+                        <h2 class="emptyClass">Its lonely here!</h2>
+                    </div>
+                    <div class="responsiveClass" ng-show="InventoryData.Books.length>0">
+                        <table class="table no-margin table-condensed" style="border-bottom: 1px solid #ddd;" >
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Name</th>
+                                <th class="col-xs-3">Quantity</th>
+                                <th>Update Quantity</th>
 
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="book in InventoryData.Books">
-                        <td><b>{{$index+1}}</b></td>
-                        <td>{{book.Name}}</td>
-                        <td>{{book.Quantity}}<span ng-show="viewBooksChange[$index]">&nbsp;&rarr;&nbsp;<b
-                                style="background-color: #f6ff8c">{{getBooksTotal[$index]}}</b></span></td>
-                        <td><span><input class="InvElementInput mini" type="number" style="min-width: 80px;"
-                                         ng-model="inputBooksModel[$index]"
-                                         ng-change="calculateChange('Books',$index)"></span><span><div
-                                class="btn-group"
-                                style="margin-bottom:1%;margin-left:1%;">
-                            <label
-                                    class="btn btn-xs btn-default InventoryButtons"
-                                    ng-model="setBooksModel[$index]"
-                                    btn-radio=0>Add</label><label
-                                class="btn btn-xs btn-default InventoryButtons"
-                                ng-model="setBooksModel[$index]" btn-radio=1>Set</label>
-                        </div></span></td>
-                        <td style="min-width:100px;"><span>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="book in InventoryData.Books">
+                                <td><b>{{$index+1}}</b></td>
+                                <td>{{book.Name}}</td>
+                                <td>{{book.Quantity}}<span ng-show="viewBooksChange[$index]">&nbsp;&rarr;&nbsp;<b
+                                        style="background-color: #f6ff8c">{{getBooksTotal[$index]}}</b></span></td>
+                                <td><span><input class="InvElementInput mini" type="number" style="min-width: 80px;"
+                                                 ng-model="inputBooksModel[$index]"
+                                                 ng-change="calculateChange('Books',$index)"></span><span><div
+                                        class="btn-group"
+                                        style="margin-bottom:1%;margin-left:1%;">
+                                    <label
+                                            class="btn btn-xs btn-default InventoryButtons"
+                                            ng-model="setBooksModel[$index]"
+                                            btn-radio=0>Add</label><label
+                                        class="btn btn-xs btn-default InventoryButtons"
+                                        ng-model="setBooksModel[$index]" btn-radio=1>Set</label>
+                                </div></span></td>
+                                <td style="min-width:100px;"><span>
 
                             <button class="btn btn-xs btn-primary" ladda="loadingSave" data-spinner-size="10"  data-style="expand-right" ng-click="saveButton('Books',$index)"><span class="ladda-label">Save</span></button>
                         </span><span><button class="btn btn-xs btn-danger pull-right"
-                                             ng-click="deleteItem('Books',$index)" tooltip="Are you sure ?"
+                                             ng-click="deleteItemConfirm('Books',$index)" 
                                              style="margin-top:0.5%;">Delete
-                        </button></span></td>
-                    </tr>
+                                </button></span></td>
+                            </tr>
 
-                    </tbody>
-                </table>
-                <!--<button class="btn btn-primary" ladda="loading" data-style="slide-right" ng-click="saveButtonTest()">Save</button>-->
+                            </tbody>
+                        </table>
+                        <!--<button class="btn btn-primary" ladda="loading" data-style="slide-right" ng-click="saveButtonTest()">Save</button>-->
+                    </div>
                 </div>
-                </div>
-            <div class="tab-pane col-xs-12" id="Uniforms">
-                <div class="col-xs-12 addMoreItems" style="margin-bottom: 2%;">
-                    <b>
-                        <button type="button" class="btn btn-primary" ng-model="AddUniforms" btn-checkbox
-                                btn-checkbox-true="1"
-                                btn-checkbox-false="0">
-                            Add More Items
-                        </button>
-                    </b>
-                </div>
-                <div class="responsiveClass">
-                    <table ng-show="AddUniforms" class="table">
-                        <thead>
-                        <th>Name of Item</th>
-                        <th>Initial Quantity</th>
-                        <th></th>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><input class="InvElementInput" ng-model="addItem.Name" type="text"
-                                       style="width:100%;"></td>
-                            <td><input class="InvElementInput" ng-model="addItem.Quantity" type="number">
-                            </td>
-                            <td>
-                                <button class="btn btn-primary btn-sm" ng-click="addMore('Uniforms')">Add
-                                    Item
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div ng-show="InventoryData.Uniforms.length==0&&!AddUniforms">
-                    <h2 class="emptyClass">Its lonely here!</h2>
+                <div class="tab-pane" id="Uniforms">
+                    <div class="col-xs-12 addMoreItems" style="margin-bottom: 2%;">
+                        <b>
+                            <button type="button" class="btn btn-primary addItemClass" ng-model="AddUniforms" btn-checkbox
+                                    btn-checkbox-true="1"
+                                    btn-checkbox-false="0">
+                                Add More Items
+                            </button>
+                        </b>
+                    </div>
+                    <div class="responsiveClass">
+                        <table ng-show="AddUniforms" class="table">
+                            <thead>
+                            <th>Name of Item</th>
+                            <th>Initial Quantity</th>
+                            <th></th>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><input class="InvElementInput" ng-model="addItem.Name" type="text"
+                                           style="width:100%;"></td>
+                                <td><input class="InvElementInput" ng-model="addItem.Quantity" type="number">
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" ng-click="addMore('Uniforms')">Add
+                                        Item
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div ng-show="InventoryData.Uniforms.length==0&&!AddUniforms">
+                        <h2 class="emptyClass">Its lonely here!</h2>
 
-                </div>
-                <div class="responsiveClass" ng-show="InventoryData.Uniforms.length>0">
+                    </div>
+                    <div class="responsiveClass" ng-show="InventoryData.Uniforms.length>0">
 
-                    <table class="table table-condensed responsiveClass" style="border-bottom: 1px solid #ddd;" >
-                    <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Name</th>
-                        <th class="col-xs-3">Quantity</th>
-                        <th>Update Quantity</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="uniform in InventoryData.Uniforms">
-                        <td><b>{{$index+1}}</b></td>
-                        <td>{{uniform.Name}}</td>
-                        <td>{{uniform.Quantity}}<span ng-show="viewUniformsChange[$index]">&nbsp;&rarr;&nbsp;<b
-                                style="background-color: #f6ff8c">{{getUniformsTotal[$index]}}</b></span>
-                        </td>
-                        <td><span><input class="InvElementInput mini" type="number"
-                                         ng-model="inputUniformsModel[$index]"
-                                         ng-change="calculateChange('Uniforms',$index)"></span><span><div
-                                class="btn-group"
-                                style="margin-bottom:1%;margin-left:1%;">
-                            <label
-                                    class="btn btn-xs btn-default InventoryButtons"
-                                    ng-model="setUniformsModel[$index]"
-                                    btn-radio=0>Add</label><label
-                                class="btn btn-xs btn-default InventoryButtons"
-                                ng-model="setUniformsModel[$index]"
-                                btn-radio=1>Set</label></div></span>
-                        </td>
-                        <td style="min-width:100px;"><span>
+                        <table class="table table-condensed responsiveClass" style="border-bottom: 1px solid #ddd;" >
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Name</th>
+                                <th class="col-xs-3">Quantity</th>
+                                <th>Update Quantity</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="uniform in InventoryData.Uniforms">
+                                <td><b>{{$index+1}}</b></td>
+                                <td>{{uniform.Name}}</td>
+                                <td>{{uniform.Quantity}}<span ng-show="viewUniformsChange[$index]">&nbsp;&rarr;&nbsp;<b
+                                        style="background-color: #f6ff8c">{{getUniformsTotal[$index]}}</b></span>
+                                </td>
+                                <td><span><input class="InvElementInput mini" type="number"
+                                                 ng-model="inputUniformsModel[$index]"
+                                                 ng-change="calculateChange('Uniforms',$index)"></span><span><div
+                                        class="btn-group"
+                                        style="margin-bottom:1%;margin-left:1%;">
+                                    <label
+                                            class="btn btn-xs btn-default InventoryButtons"
+                                            ng-model="setUniformsModel[$index]"
+                                            btn-radio=0>Add</label><label
+                                        class="btn btn-xs btn-default InventoryButtons"
+                                        ng-model="setUniformsModel[$index]"
+                                        btn-radio=1>Set</label></div></span>
+                                </td>
+                                <td style="min-width:100px;"><span>
                             <button class="btn btn-xs btn-primary" ng-click="saveButton('Uniforms',$index)">Save
                             </button>
                         </span><span><button class="btn btn-xs btn-danger pull-right"
-                                             ng-click="deleteItem('Uniforms',$index)" tooltip="Are you sure ?"
+                                             ng-click="deleteItemConfirm('Uniforms',$index)" 
                                              style="margin-top:0.5%;">Delete
-                        </button></span></td>
-                    </tr>
+                                </button></span></td>
+                            </tr>
 
-                    </tbody>
-                </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                </div>
-            <div class="tab-pane col-xs-12" id="Common">
-                <div class="col-xs-12 addMoreItems" style="margin-bottom: 2%;">
-                    <b>
-                        <button type="button" class="btn btn-primary" ng-model="AddCommon" btn-checkbox
-                                btn-checkbox-true="1"
-                                btn-checkbox-false="0">
-                            Add More Items
-                        </button>
-                    </b>
-                </div>
-                <div class="responsiveClass">
-                    <table ng-show="AddCommon" class="table">
-                        <thead>
-                        <th>Name of Item</th>
-                        <th>Initial Quantity</th>
-                        <th></th>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><input class="InvElementInput" ng-model="addItem.Name" type="text"
-                                       style="width:100%;"></td>
-                            <td><input class="InvElementInput" ng-model="addItem.Quantity" type="number">
-                            </td>
-                            <td>
-                                <button class="btn btn-primary btn-sm" ng-click="addMore('Common')">Add
-                                    Item
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div ng-show="InventoryData.Common.length==0&&!AddCommon">
-                    <h2 class="emptyClass">Its lonely here!</h2>
+                <div class="tab-pane " id="Common">
+                    <div class="col-xs-12 addMoreItems" style="margin-bottom: 2%;">
+                        <b>
+                            <button type="button" class="btn btn-primary addItemClass" ng-model="AddCommon" btn-checkbox
+                                    btn-checkbox-true="1"
+                                    btn-checkbox-false="0">
+                                Add More Items
+                            </button>
+                        </b>
+                    </div>
+                    <div class="responsiveClass">
+                        <table ng-show="AddCommon" class="table">
+                            <thead>
+                            <th>Name of Item</th>
+                            <th>Initial Quantity</th>
+                            <th></th>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><input class="InvElementInput" ng-model="addItem.Name" type="text"
+                                           style="width:100%;"></td>
+                                <td><input class="InvElementInput" ng-model="addItem.Quantity" type="number">
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" ng-click="addMore('Common')">Add
+                                        Item
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div ng-show="InventoryData.Common.length==0&&!AddCommon">
+                        <h2 class="emptyClass">Its lonely here!</h2>
 
-                </div>
-                <div class="responsiveClass" ng-show="InventoryData.Common.length>0">
-                <table class="table table-condensed" style="border-bottom: 1px solid #ddd;" >
-                    <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Name</th>
-                        <th class="col-xs-3">Quantity</th>
-                        <th>Update Quantity</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="Common in InventoryData.Common">
-                        <td><b>{{$index+1}}</b></td>
-                        <td>{{Common.Name}}</td>
-                        <td>{{Common.Quantity}}<span ng-show="viewCommonChange[$index]">&nbsp;&rarr;&nbsp;<b
-                                style="background-color: #f6ff8c">{{getCommonTotal[$index]}}</b></span></td>
-                        <td><span><input class="InvElementInput mini" type="number"
-                                         ng-model="inputCommonModel[$index]"
-                                         ng-change="calculateChange('Common',$index)"></span><span><div
-                                class="btn-group"
-                                style="margin-bottom:1%;margin-left:1%;">
-                            <label
-                                    class="btn btn-xs btn-default InventoryButtons"
-                                    ng-model="setCommonModel[$index]"
-                                    btn-radio=0>Add</label><label
-                                class="btn btn-xs btn-default InventoryButtons"
-                                ng-model="setCommonModel[$index]" btn-radio=1>Set</label>
-                        </div></span></td>
-                        <td style="min-width:100px;">
+                    </div>
+                    <div class="responsiveClass" ng-show="InventoryData.Common.length>0">
+                        <table class="table table-condensed" style="border-bottom: 1px solid #ddd;" >
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Name</th>
+                                <th class="col-xs-3">Quantity</th>
+                                <th>Update Quantity</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="Common in InventoryData.Common">
+                                <td><b>{{$index+1}}</b></td>
+                                <td>{{Common.Name}}</td>
+                                <td>{{Common.Quantity}}<span ng-show="viewCommonChange[$index]">&nbsp;&rarr;&nbsp;<b
+                                        style="background-color: #f6ff8c">{{getCommonTotal[$index]}}</b></span></td>
+                                <td><span><input class="InvElementInput mini" type="number"
+                                                 ng-model="inputCommonModel[$index]"
+                                                 ng-change="calculateChange('Common',$index)"></span><span><div
+                                        class="btn-group"
+                                        style="margin-bottom:1%;margin-left:1%;">
+                                    <label
+                                            class="btn btn-xs btn-default InventoryButtons"
+                                            ng-model="setCommonModel[$index]"
+                                            btn-radio=0>Add</label><label
+                                        class="btn btn-xs btn-default InventoryButtons"
+                                        ng-model="setCommonModel[$index]" btn-radio=1>Set</label>
+                                </div></span></td>
+                                <td style="min-width:100px;">
                             <span>
                             <button class="btn btn-xs btn-primary" ng-click="saveButton('Common',$index)">Save</button>
                         </span><span><button class="btn btn-xs btn-danger pull-right"
-                                             ng-click="deleteItem('Common',$index)" tooltip="Are you sure ?"
+                                             ng-click="deleteItemConfirm('Common',$index)" 
                                              style="margin-top:0.5%;">Delete
-                        </button></span>
-                        </td>
-                    </tr>
+                                </button></span>
+                                </td>
+                            </tr>
 
-                    </tbody>
-                </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                </div>
+            </div>
         </div>
-    </div>
 
-</section>
+
+    </section>
+
+</div>

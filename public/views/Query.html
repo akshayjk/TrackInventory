@@ -1,32 +1,45 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Franchise Query Page</title>
-    <link rel="icon" type="image/png" href="../public/Images/LEFav.png">
-    <script src="../public/bootstrap/js/Jquery"></script>
-    <link href="../public/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../public/Stylesheets/LeWebSite.css" rel="stylesheet">
-    <script src="../public/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../public/JavaScripts/query.js"></script>
+<section class="content" ng-controller="Messages">
+    <div >
+        <!-- DIRECT CHAT -->
+        <div class="box box-primary direct-chat direct-chat-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Messages</h3>
+
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <!-- Conversations are loaded here -->
+                <div class="direct-chat-messages" style="background-color: #f0f4ef">
+                    <!-- Message. Default to the left -->
+
+                    <div class="direct-chat-msg" ng-repeat="message in Messages.Messages">
+                        <!--<div class='direct-chat-primary clearfix'>
+                            <span class='direct-chat-name pull-left'>{{message.sender}}</span>
+                            <span class='direct-chat-timestamp pull-right'>{{getDate(message["sent on"])}}</span>
+                        </div>--><!-- /.direct-chat-primary -->
+                        <div style="border:1px solid #ddd;border-radius:3px;padding:10px;background-color: white;">
+                            <div class='direct-chat-primary'>
+                                <span class='direct-chat-name pull-left'>{{message.sender}}</span>
+                                <span class='direct-chat-timestamp pull-right'>{{getDate(message["sent on"])}}</span>
+                            </div></br>
+                            {{message.Message}}
+                        </div><!-- /.direct-chat-text -->
+                    </div><!-- /.direct-chat-msg -->
 
 
-</head>
-<body>
-<div class="col-md-2 navColumn">
-    <ul class="nav nav-pills nav-stacked navigationBar">
-        <li role="presentation" ><a href="../FranchiseMain.html">Place Order</a></li>
-        <li role="presentation"><a href="PreviousOrders.html">Previous Orders</a></li>
-        <li role="presentation" class="active"><a href="#">Queries</a></li>
-    </ul>
 
+                </div><!--/.direct-chat-messages-->
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+                <form action="#" method="post">
+                    <div class="input-group">
+                        <input type="text" name="message" placeholder="Type Message ..." class="form-control"/>
+	                          <span class="input-group-btn">
+	                            <button type="button" class="btn btn-primary btn-flat">Send</button>
+	                          </span>
+                    </div>
+                </form>
+            </div><!-- /.box-footer-->
+        </div><!--/.direct-chat -->
+    </div>
 
-</div>
-<div class="container">
-
-    
-
-
-</div>
-</body>
-</html>
+</section>

@@ -1,0 +1,141 @@
+<div ng-controller="Messages">
+    <!-- DIRECT CHAT -->
+    <div class="col-md-12">
+        <div class="box box-info direct-chat direct-chat-info">
+            <div class="box-header with-border">
+                <!--<h3 class="box-title col-md-4 ContactListWhite" style="text-align: center">Franchise</h3>-->
+                <h3 class="box-title col-md-8">Messages</h3>
+                <div class="box-tools pull-right visible-xs">
+                    <button class="btn btn-box-tool" ng-click="toggleContactPanel()"><i class="fa fa-comments"></i></button>
+
+                </div>
+
+            </div><!-- /.box-header -->
+
+            <div class="box-body"  style="background-color: white;">
+                <div class="col-md-4" id='ContactList' style="max-height: 500px;overflow-y: scroll">
+                <ul class='contacts-list'>
+                    <li class="messageList"  ng-repeat="franchise in Messages" ng-click="setMessage($index)">
+                            <div id="{{franchise.FranchiseId}}" style="padding: 10px;margin: 0%;">
+                            <div class='contacts-list-info'>
+                                <span class='contacts-list-name'>
+                                  {{franchise.FranchiseName}}
+                                  <small class='contacts-list-date pull-right'>{{getDate(franchise.ModifiedOn)}}</small>
+                                </span>
+                                <span class='contacts-list-msg'>{{trimLastMessage($index)}}</span>
+                            </div><!-- /.contacts-list-info -->
+                            </div>
+                    </li><!-- End Contact Item -->
+
+                </ul>
+                </div>
+                <!-- Conversations are loaded here -->
+                <div class="col-md-8 hidden-xs" id="chatPanel">
+                <div class="direct-chat-messages ">
+                    <!-- Message. Default to the left -->
+                    <div class="direct-chat-msg" ng-repeat="message in CurrentMessage">
+                        <div class="message.sender=='admin'?right:''">
+                        <div class='direct-chat-info clearfix'>
+                            <span class='direct-chat-name pull-left'>{{message.sender}}</span>
+                            <span class='direct-chat-timestamp pull-right'>{{getDate(message["sent on"])}}</span>
+                        </div><!-- /.direct-chat-info -->
+                        <!--<img class="direct-chat-img" src="dist/img/user1-128x128.jpg" alt="message user image" />--><!-- /.direct-chat-img -->
+                        <div class="direct-chat-text">
+                            {{message.Message}}
+                        </div><!-- /.direct-chat-text -->
+                        </div>
+                    </div><!-- /.direct-chat-msg -->
+
+
+
+                </div><!--/.direct-chat-messages-->
+                </div>
+
+                <!-- Contacts are loaded here -->
+                <div class="direct-chat-contacts">
+                    <ul class='contacts-list'>
+                        <li>
+                            <a href='#'>
+
+                                <div class='contacts-list-info'>
+                                <span class='contacts-list-name'>
+                                  Count Dracula
+                                  <small class='contacts-list-date pull-right'>2/28/2015</small>
+                                </span>
+                                    <span class='contacts-list-msg'>How have you been? I was...</span>
+                                </div><!-- /.contacts-list-info -->
+                            </a>
+                        </li><!-- End Contact Item -->
+                        <li>
+                            <a href='#'>
+
+                                <div class='contacts-list-info'>
+                                <span class='contacts-list-name'>
+                                  Sarah Doe
+                                  <small class='contacts-list-date pull-right'>2/23/2015</small>
+                                </span>
+                                    <span class='contacts-list-msg'>I will be waiting for...</span>
+                                </div><!-- /.contacts-list-info -->
+                            </a>
+                        </li><!-- End Contact Item -->
+                        <li>
+                            <a href='#'>
+                                <div class='contacts-list-info'>
+                                <span class='contacts-list-name'>
+                                  Nadia Jolie
+                                  <small class='contacts-list-date pull-right'>2/20/2015</small>
+                                </span>
+                                    <span class='contacts-list-msg'>I'll call you back at...</span>
+                                </div><!-- /.contacts-list-info -->
+                            </a>
+                        </li><!-- End Contact Item -->
+                        <li>
+                            <a href='#'>
+                                <div class='contacts-list-info'>
+                                <span class='contacts-list-name'>
+                                  Nora S. Vans
+                                  <small class='contacts-list-date pull-right'>2/10/2015</small>
+                                </span>
+                                    <span class='contacts-list-msg'>Where is your new...</span>
+                                </div><!-- /.contacts-list-info -->
+                            </a>
+                        </li><!-- End Contact Item -->
+                        <li>
+                            <a href='#'>
+                                <div class='contacts-list-info'>
+                                <span class='contacts-list-name'>
+                                  John K.
+                                  <small class='contacts-list-date pull-right'>1/27/2015</small>
+                                </span>
+                                    <span class='contacts-list-msg'>Can I take a look at...</span>
+                                </div><!-- /.contacts-list-info -->
+                            </a>
+                        </li><!-- End Contact Item -->
+                        <li>
+                            <a href='#'>
+                                <div class='contacts-list-info'>
+                                <span class='contacts-list-name'>
+                                  Kenneth M.
+                                  <small class='contacts-list-date pull-right'>1/4/2015</small>
+                                </span>
+                                    <span class='contacts-list-msg'>Never mind I found...</span>
+                                </div><!-- /.contacts-list-info -->
+                            </a>
+                        </li><!-- End Contact Item -->
+                    </ul><!-- /.contatcts-list -->
+                </div><!-- /.direct-chat-pane -->
+                <div class="box-footer hidden-xs" id="chat-footer">
+                    <form action="#" method="post">
+                        <div class="input-group">
+                            <input type="text" name="message" placeholder="Type Message ..." class="form-control"/>
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-info btn-flat">Send</button>
+                          </span>
+                        </div>
+                    </form>
+                </div><!-- /.box-footer-->
+            </div><!-- /.box-body -->
+
+        </div><!--/.direct-chat -->
+    </div>
+</div><!-- /.col -->

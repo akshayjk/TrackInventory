@@ -15,7 +15,8 @@
         "ngResource",
         "ui.bootstrap",
         "ui.select",
-        "ngSanitize"
+        "ngSanitize",
+        "angular-ladda"
     ]);
 
     App.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
@@ -28,6 +29,9 @@
             })
             .when('/Inventory', {
                 templateUrl: '/views/Inventory.html'
+            })
+            .when('/Messages', {
+                templateUrl: '/views/Messages.html'
             })
             .otherwise({redirectTo: '/Orders'});
         $locationProvider.html5Mode(false);

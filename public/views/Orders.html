@@ -23,15 +23,13 @@
                         <div class="box-tools pull-right">
                             <ul class="pagination pagination-sm inline">
                                 <li><a href="#">&laquo;</a></li>
-                                <li><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
+
                                 <li><a href="#">&raquo;</a></li>
                             </ul>
                         </div>
                     </div>
                     <div class="box-body" ng-hide="listView[0]">
-                        <div class="table-responsive">
+                        <div class="responsiveClass">
                             <div  ng-show="dummyOrders.length==0">
                                 <h3 class="emptyClass">Wohooo! No orders pending !!</h3>
                             </div>
@@ -151,8 +149,19 @@
 
                 </div>
                 <div class="tab-pane" id="Dispatched">
+                    <div class="col-xs-12 ">
+
+                        <button class="btn btn-default btn-sm" ng-click="getOrders()"><i class="fa fa-refresh"></i></button>
+
+                        <div class="box-tools pull-right">
+                            <ul class="pagination pagination-sm inline">
+                                <li><a href="#">&laquo;</a></li>
+                                <li><a href="#">&raquo;</a></li>
+                            </ul>
+                        </div>
+                    </div>
                     <div class="box-body" ng-hide="listView[2]">
-                        <div class="table-responsive">
+                        <div class="responsiveClass">
                             <div ng-show="dispatched.length==0">
                                 <h2 class="emptyClass">No orders completed yet !</h2>
                             </div>
@@ -189,8 +198,19 @@
 
                 </div>
                 <div class="tab-pane" id="Completed">
+                    <div class="col-xs-12 ">
+
+                        <button class="btn btn-default btn-sm" ng-click="getOrders()"><i class="fa fa-refresh"></i></button>
+
+                        <div class="box-tools pull-right">
+                            <ul class="pagination pagination-sm inline">
+                                <li><a href="#">&laquo;</a></li>
+                                <li><a href="#">&raquo;</a></li>
+                            </ul>
+                        </div>
+                    </div>
                     <div class="box-body" ng-hide="listView[2]">
-                        <div class="table-responsive">
+                        <div class="responsiveClass">
                             <div ng-show="completed.length==0">
                                 <h2 class="emptyClass">No orders completed yet !</h2>
                             </div>
@@ -229,11 +249,6 @@
             </div>
 
         </div>
-
-        <!-- /.box-footer -->
-        <!-- </div> -->
-        <!-- /.box -->
-
     </section>
     <div ng-show="listView[0]">
 
@@ -291,19 +306,26 @@
 
                 </div>
                 <div class="col-sm-4 invoice-col">
+
                     <h4>Summary</h4>
+
+                    <b>Kits</b>
                     <table>
                         <tr ng-repeat="kit in dummyOrders[OrderNo[0]].Summary.Kits">
                             <td>{{kit.KitName}}</td>
-                            <td>{{kit.Qty}}</td>
+                            <td>&nbsp;&nbsp;{{kit.Qty}}</td>
                         </tr>
                     </table>
+
+
+                    <b>Uniforms</b>
                     <table>
                         <tr ng-repeat="uniform in dummyOrders[OrderNo[0]].Summary.Uniforms">
                             <td>{{uniform.UniformName}}</td>
-                            <td>{{uniform.Qty}}</td>
+                            <td>&nbsp;&nbsp;{{uniform.Qty}}</td>
                         </tr>
                     </table>
+
                 </div>
             </div>
             <!-- /.row -->
