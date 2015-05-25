@@ -158,7 +158,7 @@
 
             modalInstance.result.then(function (form) {
                 $scope.CourierName = form.CourierName;
-                $scope.TrackingID = form.PackageTrackingNumber;
+                $scope.TrackingID = form.TrackingID;
                 console.log("data returned from modal " + JSON.stringify(form))
                 $scope.dispatchOrder($scope.OrderNo[0])
             }, function () {
@@ -791,8 +791,8 @@
                 }
             });
         }
-        $scope.deleteAccount = function (index) {
-            Auth.deleteAccount($scope.Accounts[index].FranchiseId).success(function (accRes) {
+        $scope.deleteAccount = function (Account) {
+            Auth.deleteAccount(Account.FranchiseId).success(function (accRes) {
                 $scope.alertMsg = {
                     type: 'success',
                     Msg: accRes.Message,

@@ -160,7 +160,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="box-body" ng-hide="listView[2]">
+                    <div class="box-body" ng-hide="listView[1]">
                         <div class="responsiveClass">
                             <div ng-show="dispatched.length==0">
                                 <h2 class="emptyClass">No orders completed yet !</h2>
@@ -404,6 +404,10 @@
                         {{dispatched[OrderNo[1]].Address}}</br>
                         Email: {{dispatched[OrderNo[1]].FranchiseId}}
                     </address>
+                    <p class="displayOrder"><b>Courier Name : </b>{{dispatched[OrderNo[1]].CourierName}}
+                    </p>
+                    <p class="displayOrder"><b>Package Tracking Number : </b>{{dispatched[OrderNo[1]].TrackingID}}
+                    </p>
 
                 </div>
 
