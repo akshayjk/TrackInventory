@@ -151,7 +151,7 @@
                 controller: 'dispatchConfirmationModalCtrl',
                 resolve:{
                     summary:function(){
-                        return $scope.dummyOrders[$scope.OrderNo[0]].summary;
+                        return $scope.dummyOrders[$scope.OrderNo[0]].Summary;
                     }
                 }
             });
@@ -170,6 +170,7 @@
 
     App.controller("dispatchConfirmationModalCtrl",["$scope","$modalInstance",function($scope, $modalInstance, summary){
         $scope.summary = summary;
+        console.log("summary here " + JSON.stringify($scope.summary))
         $scope.form = {};
         $scope.ok = function () {
             console.log("here the form " + JSON.stringify($scope.form))
@@ -440,11 +441,12 @@
         $scope.removeItemKitEdit = function (index) {
             $scope.currentKit.Kit.splice(index, 1);
         }
-        $scope.saveKit = function (name) {
+        $scope.saveKit = function (name, kitVisibility) {
             if (name != undefined) {
                 var KitData = {};
                 KitData.Name = name;
                 KitData.Kit = $scope.builtKit;
+                KitData.Visibility = kitVisibility;
                 Inventory.addKit(KitData).success(function (addRes, addStat) {
                     console.log("res " + JSON.stringify(addRes));
                     $scope.builtKit = [];
@@ -464,7 +466,10 @@
         $scope.removeItem = function (Numb) {
             $scope.builtKit.splice(Numb, 1);
             console.log(JSON.stringify($scope.builtKit))
-        }
+        };
+
+        $scope.KitVisibility =["Visible", "Hidden"];
+        $scope.kitOption = $scope.KitVisibility[0];
 
     }]);
 

@@ -61,6 +61,20 @@ DBLayer.prototype.get = function (options, callback) {
 
         });
     }
+    /*db.collection('INVENTORY').find({ItemId:{$in:["BOOKS1432451276442","BOOKS1432451574799","BOOKS1432456276833"]}}, {Quantity:1,ItemId:1, Name:1,_id:0}).toArray(function(err, data){
+        console.log("data " + JSON.stringify(data))
+        callback(data);
+    })*/
+
+}
+
+DBLayer.prototype.getNew = function(options, callback){
+    console.log("query here " + JSON.stringify(options.Query) + " and query select " + JSON.stringify(options.QuerySelect));
+
+    db.collection(options.collection).find(options.Query, options.QuerySelect).toArray(function(err, data){
+        console.log("data " + JSON.stringify(data))
+        callback(err, data);
+    })
 
 
 }
@@ -134,5 +148,13 @@ DBLayer.prototype.delete = function(options, callback){
         }
     });
 }
+
+DBLayer.prototype.bulkInsert = function(options, callback){
+
+    var bulkInsert = db.collection(options.collection).initializeUnorderedBulkOp();
+    callback(bulkInsert);
+
+}
+
 
 module.exports = DBLayer;

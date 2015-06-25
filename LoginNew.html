@@ -36,6 +36,7 @@
         <p class="login-box-msg">Sign in to start your session</p>
         <p style="color:red;text-align: center">{{loginError}} </p>
         <div>
+            <form ng-submit="login()">
             <div class="form-group has-feedback">
                 <input type="text" class="form-control" ng-model="loginForm.username" autofocus placeholder="Username"/>
                 <span class="glyphicon glyphicon-envelope form-control-feedback" ></span>
@@ -52,9 +53,10 @@
                     </div>
                 </div><!-- /.col -->
                 <div class="col-xs-4">
-                    <button type="" ng-click="login()" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                    <button type=""  class="btn btn-primary btn-block btn-flat">Sign In</button>
                 </div><!-- /.col -->
             </div>
+            </form>
         </div>
 
     </div><!-- /.login-box-body -->

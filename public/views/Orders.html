@@ -88,15 +88,15 @@
                                     <h4>Check List</h4>
                                     <h4>Summary</h4>
                                     <table>
-                                        <tr ng-repeat="kit in dummyOrders[OrderNo[0]].Summary.Kits">
-                                            <td>{{kit.KitName}}</td>
-                                            <td>{{kit.Qty}}</td>
+                                        <tr ng-repeat="(kit, value) in summary.Kits">
+                                            <td>{{kit}} :</td>
+                                            <td>&nbsp;&nbsp;{{value}}</td>
                                         </tr>
                                     </table>
                                     <table>
-                                        <tr ng-repeat="uniform in dummyOrders[OrderNo[0]].Summary.Uniforms">
-                                            <td>{{uniform.UniformName}}</td>
-                                            <td>{{uniform.Qty}}</td>
+                                        <tr ng-repeat="(uniform, value) in summary.Uniforms">
+                                            <td>Size {{uniform}}  :</td>
+                                            <td>&nbsp;&nbsp;{{uniform.Qty}}</td>
                                         </tr>
                                     </table>
 
@@ -305,27 +305,28 @@
                     </p>
 
                 </div>
-                <div class="col-sm-4 invoice-col">
+                <div class="col-sm-12 col-xs-12 invoice-col">
 
                     <h4>Summary</h4>
-
+                    <div class="col-md-4 col-xs-12">
                     <b>Kits</b>
                     <table>
-                        <tr ng-repeat="kit in dummyOrders[OrderNo[0]].Summary.Kits">
-                            <td>{{kit.KitName}}</td>
-                            <td>&nbsp;&nbsp;{{kit.Qty}}</td>
+                        <tr ng-repeat="(kit,value) in dummyOrders[OrderNo[0]].Summary.Kits">
+                            <td>{{kit}} :</td>
+                            <td>&nbsp;&nbsp;{{value}}</td>
                         </tr>
                     </table>
-
+                    </div>
+                    <div class="col-md-4 col-xs-12">
 
                     <b>Uniforms</b>
                     <table>
-                        <tr ng-repeat="uniform in dummyOrders[OrderNo[0]].Summary.Uniforms">
-                            <td>{{uniform.UniformName}}</td>
-                            <td>&nbsp;&nbsp;{{uniform.Qty}}</td>
+                        <tr ng-repeat="(uniform, value) in dummyOrders[OrderNo[0]].Summary.Uniforms">
+                            <td>Size {{uniform}} :</td>
+                            <td>&nbsp;&nbsp;{{value}}</td>
                         </tr>
                     </table>
-
+                    </div>
                 </div>
             </div>
             <!-- /.row -->
@@ -349,9 +350,9 @@
                             <td>{{$index + 1}}</td>
                             <td>{{student.NameOfStudent}}</td>
                             <td>{{student.Class}}</td>
-                            <td>{{student.UniformSize}}</td>
+                            <td>{{student.UniformSize.UniformSize}}</td>
                             <td>{{student.UniformQty}}</td>
-                            <td>{{UniformCosts[student.UniformSize]*student.UniformQty +
+                            <td>{{UniformCosts[student.UniformSize.UniformSize]*student.UniformQty +
                                 KitCost}}
                             </td>
                         </tr>

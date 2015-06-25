@@ -14,7 +14,7 @@
             <tab-heading><b>Students</b></tab-heading>
             <div id="studentForm" style="background-color: white;padding:2%;" class="col-xs-12">
                 <fieldset>
-                    <form ng-hide="formHide" ng-submit="addStudents()">
+                    <form ng-hide="formHide" ng-submit="addStudents(Class, UniformSize, Qty)">
                         <div class="col-md-6 col-xs-12">
                             <div class="control-group ">
                                 <label class="control-label" for="childname">Name of Child</label>
@@ -24,7 +24,7 @@
                                            placeholder="Enter full name of child"
                                            class=" form-control medium"
                                            ng-model="StudentObject.NameOfStudent" autofocus
-                                           required>
+                                           req1234>
                                 </div>
                             </div>
                             <br/>
@@ -36,8 +36,9 @@
                                     <select id="selectClass" name="selectClass"
                                             class="form-control small"
                                             ng-model="Class" ng-options="m for m in ClassOptions"
-                                            ng-change="setClass()">
+                                            >
                                     </select>
+                                    <p>Selected Class {{Class}}</p>
                                 </div>
                             </div>
                             <!-- Text input-->
@@ -47,7 +48,7 @@
                                 <div class="controls">
                                     <input id="classAge" name="classAge" type="number" placeholder="age"
                                            class="form-control mini" ng-model="StudentObject.Age"
-                                           required>
+                                           req1234>
                                 </div>
                             </div>
                             <br/>
@@ -59,7 +60,7 @@
                                     <input id="parentName" name="parentName" type="text"
                                            placeholder="Mother's/Father's name"
                                            class="form-control medium "
-                                           ng-model="StudentObject.ParentName" required>
+                                           ng-model="StudentObject.ParentName" req1234>
                                 </div>
                             </div>
                             <!-- Text input-->
@@ -71,7 +72,7 @@
                                     <input id="parentsContact" name="parentsContact" type="tel"
                                            placeholder="Contact Number"
                                            class="form-control medium "
-                                           ng-model="StudentObject.ParentContact" required>
+                                           ng-model="StudentObject.ParentContact" req1234>
                                 </div>
                             </div>
                             <br/>
@@ -84,7 +85,7 @@
                                     <input id="parentEmail" name="parentEmail" type="email"
                                            placeholder="someone@example.com"
                                            class="form-control medium"
-                                           ng-model="StudentObject.ParentEmail" required>
+                                           ng-model="StudentObject.ParentEmail" req1234>
                                 </div>
                             </div>
                             <br/>
@@ -98,11 +99,11 @@
                                 <div class="controls">
                                     <select id="uniformSize" name="uniformSize"
                                             class="form-control mini"
-                                            ng-model="UniformSize" ng-options="m for m in UniformOptions"
-                                            ng-change="setUniformSize()"
-                                            >
+                                            ng-model="UniformSize" ng-options="item.UniformSize for item in UniformOptions">
 
                                     </select>
+                                    <p>The Cost {{UniformSize}}</p>
+                                    <p>Calculated {{CalculateHere}}</p>
                                 </div>
                             </div>
                             <br/>
@@ -115,8 +116,8 @@
                                     <input id="uniformQuant" name="uniformQuant" type="number"
                                            placeholder="Qty"
                                            class="form-control mini"
-                                           ng-model="StudentObject.UniformQty"
-                                           ng-change="setTotalCost()" required>
+                                           ng-model="Qty"
+                                           req1234>
                                 </div>
                             </div>
                             <br/>
@@ -127,7 +128,7 @@
                                 <div class="controls">
                                     <input id="Date" name="Date" type="DATE" placeholder="placeholder"
                                            class=" form-control medium"
-                                           ng-model="StudentObject.DateOfAdmission" required>
+                                           ng-model="StudentObject.DateOfAdmission" req1234>
                                 </div>
                             </div>
                             <br/>
@@ -140,7 +141,7 @@
                                     <input id="regNum" name="regNum" type="text"
                                            placeholder="Enter Child's Registration Number"
                                            class=" form-control medium"
-                                           ng-model="StudentObject.RegistrationNumber" required>
+                                           ng-model="StudentObject.RegistrationNumber" req1234>
                                 </div>
                             </div>
                             <br/>
@@ -152,7 +153,7 @@
                                     <input id="receiptNo" name="receiptNo" type="text"
                                            placeholder="Enter Receipt Number"
                                            class="form-control medium"
-                                           ng-model="StudentObject.ReceiptNumber" required>
+                                           ng-model="StudentObject.ReceiptNumber" req1234>
                                 </div>
                             </div>
                             <br/>
@@ -178,7 +179,7 @@
                                     class="col-xs-8 form-control mini"> -->
                                     <h4 ng-model="TotalCost" class="form-control mini"
                                         style="margin-top:0%;">
-                                        {{TotalCost}}</h4>
+                                        {{KitCost + UniformSize.UniformCost*Qty}}</h4>
                                 </div>
                             </div>
 
@@ -234,7 +235,7 @@
                     <h4>Uniforms</h4>
                     <table>
                         <tr ng-repeat="uniform in UniformOptions">
-                            <td>Size &nbsp; {{uniform}}&nbsp;</td>
+                            <td>Size &nbsp; {{uniform.UniformSize}}&nbsp;</td>
                             <td>: &nbsp; &nbsp; {{getUniformNumber(uniform)}}</td>
                         </tr>
                     </table>
@@ -265,14 +266,16 @@
                             <td style="max-width:20%;width:15%;"><select type="number" style="width:100%;"
                                                                          class="InvElementInput"
                                                                          ng-model="UniformArray[$index]"
-                                                                         ng-options="m for m in UniformOptions"
-                                                                         ng-change="setUniformSizeFinal($index)"></select>
+                                                                         ng-options="m.UniformSize for m in UniformOptions"
+                                                                         ng-change="setUniformSizeFinal($index,UniformArray[$index])"></select>
+                                <p>{{UniformArray[$index]}}</p>
                             </td>
                             <td style="max-width: 10%; width:15%;"><input type="number" style="width:100%;"
                                                                           class="InvElementInput"
-                                                                          ng-model="Students[$index].UniformQty"></td>
-                            <td style="text-align: center">{{KitCost + UniformCosts[UniformArray[$index]] *
-                                Students[$index].UniformQty}}
+                                                                          ng-model="Students[$index].UniformQty">
+                            <p>{{Students[$index].UniformQty}}</p>
+                            </td>
+                            <td style="text-align: center">{{KitCost + UniformArray[$index].UniformCost*Students[$index].UniformQty}}
                             </td>
                         </tr>
 
@@ -320,7 +323,7 @@
                             <input id="modePayment" name="modePayment" type="text"
                                    placeholder="Cash/Account Transfer"
                                    class="col-xs-8 form-control medium"
-                                   ng-model="OrderForm.ModeOfPayment" required>
+                                   ng-model="OrderForm.ModeOfPayment" req1234>
                         </div>
                     </div>
                     <br/>
@@ -331,7 +334,7 @@
                         <div class="controls">
                             <input id="BankName" name="bankTranID" type="text" placeholder=""
                                    class="col-xs-8 form-control medium "
-                                   ng-model="OrderForm.BankName" required>
+                                   ng-model="OrderForm.BankName" req1234>
                         </div>
                     </div>
                     <br/>
@@ -343,7 +346,7 @@
                         <div class="controls">
                             <input id="bankTranID" name="bankTranID" type="text" placeholder=""
                                    class="col-xs-8 form-control medium "
-                                   ng-model="OrderForm.TransactionID" required>
+                                   ng-model="OrderForm.TransactionID" req1234>
                         </div>
                     </div>
                     <br/>
@@ -356,7 +359,7 @@
                                    style="height:60px;"
                                    placeholder="Enter Address for delivery" row="3"
                                    class="col-xs-8 form-control medium "
-                                   ng-model="OrderForm.Address" required>
+                                   ng-model="OrderForm.Address" req1234>
                             </textarea>
                         </div>
                     </div>

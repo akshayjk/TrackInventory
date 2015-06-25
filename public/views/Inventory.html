@@ -88,7 +88,8 @@
                                 <div class="controls">
                                     <input id="KitName" name="textinput" ng-model="KitName"
                                            class="InvElementInput" type="text">
-                                            <span><button class="btn btn-success btn-sm" ng-click="saveKit(KitName)">
+                                    Status : <select id="kitStatus" name="kitStatus" ng-model="kitOption" ng-options="option for option in KitVisibility"></select>
+                                            <span><button class="btn btn-success btn-sm" ng-click="saveKit(KitName, kitOption)">
                                                 Save
                                             </button><button class="btn btn-primary btn-sm" style="margin-left:0.5%;"
                                                              ng-click="buildKit=!buildKit">
@@ -105,14 +106,19 @@
                             <tr>
                                 <td>No</td>
                                 <td>Kit</td>
-                                <td>Overview</td>
+                                <td></td>
+                                <td>Max No</td>
+                                <td>Limiting Item</td>
+                                <td></td>
                             </tr>
                             </thead>
                             <tbody>
                             <tr ng-repeat="kit in Kits">
                                 <td>{{$index+1}}</td>
                                 <td>{{kit.Name}}</td>
-                                <td>Includes {{kit.Kit.length}} items</td>
+                                <td><label class="label" style="background-color: #8ab0e6;">{{kit.Visibility}}</label></td>
+                                <td>{{kit.Limit.Quantity}}</td>
+                                <td>{{kit.Limit.Name}}</td>
                                 <td style="width:20%;">
                                     <div><span><button type="button" class="btn btn-primary btn-xs pull-left"
                                                        ng-click="KitView==!KitView;viewKit($index)">View

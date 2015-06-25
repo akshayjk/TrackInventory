@@ -67,14 +67,14 @@
 
 
         $scope.userDetails = JSON.parse(sessionStorage.userDetails);
-        $scope.UniformCosts = $scope.userDetails.FranchiseDetails.UniformCosts;
+        $scope.UniformCosts =[{UniformSize:2,UniformCost:10},{UniformSize:3,UniformCost:20},{UniformSize:5,UniformCost:30},{UniformSize:7,UniformCost:40}] //$scope.userDetails.FranchiseDetails.UniformCosts;
         $scope.KitCost = $scope.userDetails.FranchiseDetails.KitCost;
         $scope.formHide = false;
         $scope.formButtons = true;
         $scope.OrderForm = {};
         $scope.StudentObject = {};
         $scope.Students = [];
-        $scope.UniformOptions = Object.keys($scope.UniformCosts);
+        $scope.UniformOptions = $scope.UniformCosts;
         $scope.UniformSize = $scope.UniformOptions[0];
         $scope.Qty = 1;
         $scope.UniformArray = [];
@@ -82,16 +82,16 @@
             if ($scope.StudentObject.UniformQty != undefined) {
                 return $scope.StudentObject.UniformQty
             } else {
-                return 1;
+                return $scope.UniformCosts[0].UniformSize;
             }
         };
-        $scope.getUniformSize = function () {
+        /*$scope.getUniformSize = function () {
             if ($scope.StudentObject.UniformSize != undefined) {
                 return $scope.StudentObject.UniformSize
             } else {
-                return 1;
+                return $scope.UniformCosts[0];
             }
-        };
+        };*/
         $scope.getStudentClass = function () {
             if ($scope.StudentObject.Class != undefined) {
                 return $scope.StudentObject.Class;
@@ -99,8 +99,8 @@
                 return "PlayGroup";
             }
         };
-        $scope.setUniformSize = function () {
-
+        /*$scope.setUniformSize = function () {
+            console.log("here " + JSON.stringify($scope.UniformSize))
             $scope.StudentObject.UniformSize = $scope.UniformSize;
             $scope.setTotalCost();
             $scope.UniformArray.push($scope.UniformSize);
@@ -111,23 +111,25 @@
                 $scope.StudentObject.UniformQty = 1;
             }
         };
-        $scope.setUniformQty();
-        $scope.setUniformSizeFinal = function (Numb) {
-            $scope.Students[Numb].UniformSize = $scope.UniformArray[Numb];
+        $scope.setUniformQty();*/
+        $scope.setUniformSizeFinal = function (Numb,UniformSize) {
+            $scope.Students[Numb].UniformSize = UniformSize;
         };
         $scope.ClassOptions = ["PlayGroup", "Nursery", "LKG", "UKG"];
         $scope.Class = $scope.ClassOptions[0];
-        $scope.setTotalCost = function () {
-            console.log("kit cost " + $scope.KitCost + "  " + $scope.UniformCosts[$scope.getUniformSize()] * $scope.getUniformQty())
-            $scope.TotalCost = $scope.KitCost + $scope.UniformCosts[$scope.getUniformSize()] * $scope.getUniformQty();
-        };
-        $scope.setTotalCost();
+        $scope.CalculateHere = $scope.KitCost + $scope.UniformSize.UniformCost;
+        $scope.TotalCost = $scope.KitCost + $scope.UniformSize.UniformCost;
+        /*$scope.setTotalCost = function () {
+            console.log("kit cost " + $scope.KitCost + "  " + $scope.UniformSize + " " +  $scope.getUniformQty())
+            $scope.TotalCost = $scope.KitCost + $scope.UniformSize.UniformCost * $scope.getUniformQty();
+        };*/
+       // $scope.setTotalCost();
         $scope.getFinalCost = function () {
 
             var FinalCost = 0;
             $scope.Students.forEach(function (student) {
                 console.log("student " + $scope.UniformCosts[student.UniformSize] + "  " + $scope.UniformQty);
-                FinalCost += $scope.KitCost + $scope.UniformCosts[student.UniformSize] * student.UniformQty;
+                FinalCost += $scope.KitCost + student.UniformSize.UniformCost * student.UniformQty;
             });
             $scope.TotalAmount = FinalCost;
             return FinalCost
@@ -157,14 +159,19 @@
         $scope.studentsTab = false;
         $scope.orderSummary = true;
         $scope.paymentTab = true;
-        $scope.addStudents = function () {
-
+        $scope.addStudents = function (Class,UniformSize, UniformQuantity) {
+            var Total = $scope.KitCost + UniformSize.UniformCost*UniformQuantity;
+            console.log("Class " + Class + "size " + UniformSize + " Qty " + UniformQuantity + " Total " +Total)
+            $scope.StudentObject.Class=Class;
+            $scope.StudentObject.UniformSize = UniformSize;
+            $scope.StudentObject.UniformQty = UniformQuantity;
+            $scope.UniformArray.push(UniformSize);
             if ($scope.StudentObject.Class == undefined) {
                 $scope.StudentObject.Class = $scope.ClassOptions[0];
             }
             if ($scope.StudentObject.UniformSize == undefined) {
-                $scope.StudentObject.UniformSize = $scope.UniformOptions[0];
-                $scope.UniformArray.push($scope.UniformOptions[0]);
+                $scope.StudentObject.UniformSize = $scope.UniformOptions[0].UniformSize;
+                $scope.UniformArray.push($scope.UniformOptions[0].UniformSize);
             }
             $scope.formHide = true;
             $scope.formButtons = false;
