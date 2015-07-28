@@ -190,82 +190,6 @@ Inventory.prototype.getKits = function(req, res, body){
 
                 new responseHandler().sendResponse(req, res, "success", kitArray, 200);
             })
-
-            function getKitLimitValue(kitArr, count, callback){
-                console.log("called " + count + " length " + kitArr.length)
-                if(count<kitArr.length){
-                    var items =[];
-                    for(var i=0;i<kitArr[count].Kit.length;i++){
-                        items.push({ItemId:kitArr[count].Kit[i].ItemId});
-                    }
-
-                   /* kitArr[count].Kit.forEach(function(kitItem){
-                        items.push({ItemId:kitItem.ItemId});
-                    });*/
-                    console.log(" kit Items find in " + JSON.stringify(items))
-                    var options ={
-                        collection:"INVENTORY",
-                        Query:{$or:items},
-                        QuerySelect:{Quantity:1,ItemId:1, Name:1,_id:0}
-                    };
-                    console.log("options " + JSON.stringify(options))
-                    var min ={};
-                    new dataBase().getNew(options, function(err, data){
-                        console.log(" kit items " + JSON.stringify(data))
-                        if(!err){
-                            kitArr[count].Limit = {};
-                            kitArr[count].Limit.Quantity =0;
-                            kitArr[count].Limit.Name='';
-
-                            var countLimit =0;
-                            function addLimit(dataArr,countLimit, count,kitArr, callback){
-                                console.log("in the addLimit "+ dataArr.length + "  value " + countLimit);
-                                //var CurrentMax = Math.floor(dataArr[countLimit].Quantity/kitArr[count].Kit[countLimit].Units);
-                                if(countLimit==0&&dataArr.length>0){
-                                    kitArr[count].Limit.Quantity=Math.floor(dataArr[countLimit].Quantity/kitArr[count].Kit[countLimit].Units);
-                                }
-                                if(countLimit<dataArr.length){
-                                    console.log("in if condition for countLimit " +countLimit+ " data arr qty " + dataArr[countLimit].Quantity +" Name " + dataArr[countLimit].Name+ " Units  " + kitArr[count].Kit[countLimit].Units + "  " + "current " + kitArr[count].Limit.Quantity);
-                                    if(Math.floor(dataArr[countLimit].Quantity/kitArr[count].Kit[countLimit].Units)<kitArr[count].Limit.Quantity){
-                                        console.log("changing the Limit  to " + Math.floor(dataArr[countLimit].Quantity/kitArr[count].Kit[countLimit].Units))
-                                        kitArr[count].Limit.Quantity = Math.floor(dataArr[countLimit].Quantity/kitArr[count].Kit[countLimit].Units);
-                                        console.log("Quantity changed to " + kitArr[count].Limit.Quantity)
-                                        console.log("changing name to " + dataArr[countLimit].Name)
-                                        kitArr[count].Limit.Name = dataArr[countLimit].Name;
-                                        countLimit++;
-                                        addLimit(dataArr,countLimit,count,kitArr, callback);
-                                    }else{
-                                        countLimit++;
-                                        addLimit(dataArr,countLimit,count,kitArr, callback);
-                                    }
-                                }else{
-                                    console.log("hitting callback " + JSON.stringify(kitArr[count]));
-                                    callback()
-                                }
-                            }
-
-                            addLimit(data,countLimit,count, kitArr,function(){
-                                console.log("completed addlimit received Kit Array" + JSON.stringify(kitArr));
-                                count++;
-                                getKitLimitValue(kitArr, count, callback);
-                            })
-
-
-
-                        }else{
-                            new responseHandler().sendResponse(req, res, "error", "error while compiling Kit Data.", 500);
-                        }
-                    });
-
-                }else{
-                    console.log("calculated kits " + JSON.stringify(kitArr));
-
-                    callback(kitArr);
-                }
-            }
-
-
-
         }else{
             new responseHandler().sendResponse(req, res, "error", "error while getting Kits.", 500);
         }
@@ -341,6 +265,86 @@ function checkKitValidity(kitBody, Callback){
     }
 }
 
+function getKitLimitValue(kitArr, count, callback){
+    if(count<kitArr.length){
+        var items =[];
+        for(var i=0;i<kitArr[count].Kit.length;i++){
+            items.push({ItemId:kitArr[count].Kit[i].ItemId});
+        }
+        //sorting the KIT
+        function compare(a,b){
+            if (a.Name < b.Name)
+                return -1;
+            if (a.Name> b.Name)
+                return 1;
+            return 0;
+        }
+
+        kitArr[count].Kit = kitArr[count].Kit.sort(compare);
+        console.log("sorted kit array "  + JSON.stringify(kitArr[count].Kit))
+        var options ={
+            collection:"INVENTORY",
+            Query:{$or:items},
+            QuerySelect:{Quantity:1,ItemId:1, Name:1,_id:0},
+            sortObject:{Name:1}
+        };
+        var min ={};
+
+        new dataBase().get(options, function(err, data){
+            console.log(" kit items " + JSON.stringify(data));
+            if(!err){
+                kitArr[count].Limit = {};
+                kitArr[count].Limit.Quantity =0;
+                kitArr[count].Limit.Name='';
+
+                var countLimit =0;
+                console.log("KIT here " + JSON.stringify(kitArr))
+                addLimit(data,countLimit,count, kitArr,function(){
+                    console.log("completed addlimit received Kit Array" + JSON.stringify(kitArr));
+                    count++;
+                    getKitLimitValue(kitArr, count, callback);
+                })
+            }else{
+                new responseHandler().sendResponse(req, res, "error", "error while compiling Kit Data.", 500);
+            }
+        });
+
+    }else{
+        callback(kitArr);
+    }
+}
+
+function addLimit(dataArr,countLimit, count,kitArr, callback){
+    console.log("in the add limit function " + JSON.stringify(kitArr[count].Limit))
+    console.log("the data array item " + JSON.stringify(dataArr[countLimit]))
+    console.log("the kit item " + JSON.stringify(kitArr[count].Kit[countLimit]))
+    if(dataArr[countLimit]!=undefined){
+        kitArr[count].Kit[countLimit].Quantity = dataArr[countLimit].Quantity;
+    }
+    if(countLimit==0&&dataArr.length>0){
+        kitArr[count].Limit.Quantity=Math.floor(dataArr[countLimit].Quantity/kitArr[count].Kit[countLimit].Units);
+        kitArr[count].Limit.Name = dataArr[countLimit].Name;
+    }
+    if(countLimit<dataArr.length){
+        console.log("in the comparison function ")
+
+        console.log("the calculations " + Math.floor(dataArr[countLimit].Quantity/kitArr[count].Kit[countLimit].Units) + " limit qty now " + kitArr[count].Limit.Quantity)
+        if(Math.floor(dataArr[countLimit].Quantity/kitArr[count].Kit[countLimit].Units)<kitArr[count].Limit.Quantity){
+            console.log("received #################################################################")
+            kitArr[count].Limit.Quantity = Math.floor(dataArr[countLimit].Quantity/kitArr[count].Kit[countLimit].Units);
+            console.log("the name " + dataArr[countLimit].Name)
+            kitArr[count].Limit.Name = dataArr[countLimit].Name;
+            countLimit++;
+            addLimit(dataArr,countLimit,count,kitArr, callback);
+        }else{
+            countLimit++;
+            addLimit(dataArr,countLimit,count,kitArr, callback);
+        }
+    }else{
+        console.log("hitting callback " + JSON.stringify(kitArr[count]));
+        callback()
+    }
+}
 
 
 Inventory.prototype.getLogFile = function () {

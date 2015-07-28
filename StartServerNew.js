@@ -29,9 +29,13 @@ app.get('/Login',function(req, res){
        res.sendFile(path.join(__dirname , '/loginNew.html'));
 });
 
-app.get('/LoginNew',function(req, res){
-    res.sendFile(path.join(__dirname , '/starterTest.html'));
+app.get('/',function(req, res){
+    res.sendFile(path.join(__dirname , '/loginNew.html'));
 });
+
+/*app.get('/LoginNew',function(req, res){
+    res.sendFile(path.join(__dirname , '/starterTest.html'));
+});*/
 
 app.use('/order', Orders);
 app.use('/inventory', Inventory);
@@ -68,4 +72,4 @@ app.use(function(err, req, res, next) {
 });
 
 
-app.listen(8000);
+app.listen(9000);

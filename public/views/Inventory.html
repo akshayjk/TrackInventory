@@ -64,6 +64,7 @@
                             <td>#</td>
                             <td>Name of Item</td>
                             <td>Units</td>
+                            <td></td>
                         </tr>
                         </thead>
                         <tbody>
@@ -124,7 +125,7 @@
                                                        ng-click="KitView==!KitView;viewKit($index)">View
                                     </button></span><span><button class="btn btn-danger btn-xs"
                                                                   style="margin-left:2%;"
-                                                                  ng-click="deleteKit($index)">Delete
+                                                                  ng-click="deleteKitConfirm($index)">Delete
                                     </button></span></div>
                                 </td>
                             </tr>
@@ -193,6 +194,7 @@
                                         <td>Item</td>
                                         <td>Category</td>
                                         <td>Units</td>
+                                        <td>Current Quantity</td>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -201,6 +203,7 @@
                                         <td>{{item.Name}}</td>
                                         <td>{{item.Category}}</td>
                                         <td>{{item.Units}}</td>
+                                        <td>{{item.Quantity}}</td>
                                         <td ng-show="EditKit">
                                             <button type="button" class="close" aria-label="Close"
                                                     ng-click="removeItemKitEdit($index)"><span

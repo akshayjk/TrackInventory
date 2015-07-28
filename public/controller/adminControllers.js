@@ -308,7 +308,28 @@
             })
         }*/
 
-
+        $scope.deleteKitConfirm = function(kitNo){
+            bootbox.dialog({
+                message: "Are you sure you want to delete the kit ?",
+                title: "Confirm Delete",
+                buttons: {
+                    danger: {
+                        label: "Delete",
+                        className: "btn-danger",
+                        callback: function() {
+                            $scope.deleteKit(kitNo)
+                        }
+                    },
+                    main: {
+                        label: "Cancel",
+                        className: "btn-default",
+                        callback: function() {
+                            console.log("Modal dismissed");
+                        }
+                    }
+                }
+            });
+        }
         $scope.deleteItemConfirm = function(Category,itemNo){
             bootbox.dialog({
                 message: "Are you sure ?",
