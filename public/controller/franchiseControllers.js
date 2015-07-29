@@ -30,8 +30,6 @@
 
     App.controller("LogOutCtrl", ["$scope", "$location", "$window", function ($scope, $location, $window) {
 
-
-
         $scope.FranchiseName = $scope.userDetails.FranchiseName;
         $scope.logOut = function () {
             console.log("Logging out");
@@ -41,16 +39,16 @@
         }
     }]);
 
-    App.controller("GeneralContent",["$scope", function($scope){
+    App.controller("GeneralContent", ["$scope", function ($scope) {
         $scope.userDetails = JSON.parse(sessionStorage.userDetails);
-        $scope.checkClick = function(id){
-            var MenuBar =['MenuOrd','MenuPre','MenuQry']
+        $scope.checkClick = function (id) {
+            var MenuBar = ['MenuOrd', 'MenuPre', 'MenuQry']
             console.log("Menu click");
-            MenuBar.forEach(function(eleId){
-                $('#'+eleId).removeClass('active');
+            MenuBar.forEach(function (eleId) {
+                $('#' + eleId).removeClass('active');
             })
-            $('#'+id).addClass('active');
-            var screenSizes ={
+            $('#' + id).addClass('active');
+            var screenSizes = {
                 xs: 480,
                 sm: 768,
                 md: 992,
@@ -65,9 +63,13 @@
     App.controller("OrderForm", ["$scope", "$location", "$modal", "PlaceOrder", function ($scope, $location, $modal, PlaceOrder) {
 
 
-
         $scope.userDetails = JSON.parse(sessionStorage.userDetails);
-        $scope.UniformCosts =[{UniformSize:2,UniformCost:10},{UniformSize:3,UniformCost:20},{UniformSize:5,UniformCost:30},{UniformSize:7,UniformCost:40}] //$scope.userDetails.FranchiseDetails.UniformCosts;
+        $scope.UniformCosts =[
+            {UniformSize: 2, UniformCost: 10},
+            {UniformSize: 3, UniformCost: 20},
+            {UniformSize: 5, UniformCost: 30},
+            {UniformSize: 7, UniformCost: 40}
+        ] //$scope.userDetails.FranchiseDetails.UniformCosts;
         $scope.KitCost = $scope.userDetails.FranchiseDetails.KitCost;
         $scope.formHide = false;
         $scope.formButtons = true;
@@ -86,12 +88,12 @@
             }
         };
         /*$scope.getUniformSize = function () {
-            if ($scope.StudentObject.UniformSize != undefined) {
-                return $scope.StudentObject.UniformSize
-            } else {
-                return $scope.UniformCosts[0];
-            }
-        };*/
+         if ($scope.StudentObject.UniformSize != undefined) {
+         return $scope.StudentObject.UniformSize
+         } else {
+         return $scope.UniformCosts[0];
+         }
+         };*/
         $scope.getStudentClass = function () {
             if ($scope.StudentObject.Class != undefined) {
                 return $scope.StudentObject.Class;
@@ -100,30 +102,35 @@
             }
         };
         /*$scope.setUniformSize = function () {
-            console.log("here " + JSON.stringify($scope.UniformSize))
-            $scope.StudentObject.UniformSize = $scope.UniformSize;
-            $scope.setTotalCost();
-            $scope.UniformArray.push($scope.UniformSize);
-            console.log("Uniform Size : " + $scope.StudentObject.UniformSize);
-        };
-        $scope.setUniformQty = function () {
-            if ($scope.StudentObject.UniformQty == undefined) {
-                $scope.StudentObject.UniformQty = 1;
-            }
-        };
-        $scope.setUniformQty();*/
-        $scope.setUniformSizeFinal = function (Numb,UniformSize) {
+         console.log("here " + JSON.stringify($scope.UniformSize))
+         $scope.StudentObject.UniformSize = $scope.UniformSize;
+         $scope.setTotalCost();
+         $scope.UniformArray.push($scope.UniformSize);
+         console.log("Uniform Size : " + $scope.StudentObject.UniformSize);
+         };
+         $scope.setUniformQty = function () {
+         if ($scope.StudentObject.UniformQty == undefined) {
+         $scope.StudentObject.UniformQty = 1;
+         }
+         };
+         $scope.setUniformQty();*/
+        $scope.setUniformSizeFinal = function (Numb, UniformSize) {
             $scope.Students[Numb].UniformSize = UniformSize;
         };
         $scope.ClassOptions = ["PlayGroup", "Nursery", "LKG", "UKG"];
         $scope.Class = $scope.ClassOptions[0];
+        $scope.PaymentOptions = [
+            {"Name": "Cash", "Code": 101},
+            {"Name": "Account Transfer", "Code": 102}
+        ];
+        $scope.Mode = $scope.PaymentOptions[0];
         $scope.CalculateHere = $scope.KitCost + $scope.UniformSize.UniformCost;
         $scope.TotalCost = $scope.KitCost + $scope.UniformSize.UniformCost;
         /*$scope.setTotalCost = function () {
-            console.log("kit cost " + $scope.KitCost + "  " + $scope.UniformSize + " " +  $scope.getUniformQty())
-            $scope.TotalCost = $scope.KitCost + $scope.UniformSize.UniformCost * $scope.getUniformQty();
-        };*/
-       // $scope.setTotalCost();
+         console.log("kit cost " + $scope.KitCost + "  " + $scope.UniformSize + " " +  $scope.getUniformQty())
+         $scope.TotalCost = $scope.KitCost + $scope.UniformSize.UniformCost * $scope.getUniformQty();
+         };*/
+        // $scope.setTotalCost();
         $scope.getFinalCost = function () {
 
             var FinalCost = 0;
@@ -135,7 +142,6 @@
             return FinalCost
         };
         $scope.setClass = function () {
-
             $scope.StudentObject.Class = $scope.Class;
             $scope.setTotalCost();
             console.log("Class name : " + $scope.StudentObject.Class);
@@ -159,10 +165,10 @@
         $scope.studentsTab = false;
         $scope.orderSummary = true;
         $scope.paymentTab = true;
-        $scope.addStudents = function (Class,UniformSize, UniformQuantity) {
-            var Total = $scope.KitCost + UniformSize.UniformCost*UniformQuantity;
-            console.log("Class " + Class + "size " + UniformSize + " Qty " + UniformQuantity + " Total " +Total)
-            $scope.StudentObject.Class=Class;
+        $scope.addStudents = function (Class, UniformSize, UniformQuantity) {
+            var Total = $scope.KitCost + UniformSize.UniformCost * UniformQuantity;
+            console.log("Class " + Class + "size " + UniformSize + " Qty " + UniformQuantity + " Total " + Total)
+            $scope.StudentObject.Class = Class;
             $scope.StudentObject.UniformSize = UniformSize;
             $scope.StudentObject.UniformQty = UniformQuantity;
             $scope.UniformArray.push(UniformSize);
@@ -195,7 +201,7 @@
                 $scope.formCancel = true;
             }
 
-            $scope.studentsTab =  false;
+            $scope.studentsTab = false;
             $scope.orderSummary = true;
             $('#StudentTab').attr('class', 'active');
             $('#OrderTab').attr('class', 'disabled disabledTab');
@@ -242,75 +248,99 @@
             $scope.StudentObject = {}
 
         };
-        $scope.placeOrder = function () {
+        $scope.findMode = function (Mode) {
+            if (Mode.toUpperCase() != "CASH") {
+                return true;
+            }
+            return false;
+        }
+        $scope.alertMsg = {view: 0};
+        $scope.clearAlert = function () {
+            $scope.alertMsg = {view: 0};
+        };
+        $scope.placeOrder = function (Mode) {
             $scope.OrderForm.Students = $scope.Students;
             $scope.OrderForm.FranchiseId = $scope.userDetails.FranchiseId;
             $scope.OrderForm.FranchiseName = $scope.userDetails.FranchiseName;
             $scope.OrderForm.TotalAmount = $scope.TotalAmount;
-            console.log(JSON.stringify($scope.OrderForm));
-            PlaceOrder.placeOrder($scope.OrderForm).success(function (poResponse, poStatus) {
-                console.log(" po response " + poResponse.Message);
-                $scope.OrderForm = {};
-                $scope.StudentObject = {};
-                $scope.Students = [];
-                $scope.TotalAmount = 0;
-                $scope.$broadcast('orderPlaced', [1, 2, 3]);
-                PlaceOrder.setModalMessage(poResponse.Message);
-                var modalInstance = $modal.open({
-                    templateUrl: 'Modal.html',
-                    controller: 'ModalInstanceCtrl'
+            $scope.OrderForm.ModeOfPayment = Mode.Code;
 
-                });
+            if (Mode.Code == 102) {
+                if ($scope.OrderForm.BankName == undefined || $scope.OrderForm.TransactionID == undefined) {
+                    $scope.alertMsg = {
+                        type: 'danger',
+                        Msg: "Bank Details are necessary for Account Transfer option.",
+                        view: 1
+                    }
+                }
+            } else {
 
-                modalInstance.result.then(function () {
-                    console.log("executed");
-                    $scope.formHide = false;
-                    $scope.formButtons = true;
-                    $scope.studentsTab =false;
-                    $scope.paymentTab = true;
-                }, function () {
-                    console.log('Modal dismissed at: ' + new Date());
-                });
+                console.log(JSON.stringify($scope.OrderForm));
+                PlaceOrder.placeOrder($scope.OrderForm).success(function (poResponse, poStatus) {
+                    console.log(" po response " + poResponse.Message);
+                    $scope.OrderForm = {};
+                    $scope.StudentObject = {};
+                    $scope.Students = [];
+                    $scope.TotalAmount = 0;
+                    $scope.$broadcast('orderPlaced', [1, 2, 3]);
+                    PlaceOrder.setModalMessage(poResponse.Message);
+                    var modalInstance = $modal.open({
+                        templateUrl: 'Modal.html',
+                        controller: 'ModalInstanceCtrl'
+
+                    });
+
+                    modalInstance.result.then(function () {
+                        console.log("executed");
+                        $scope.formHide = false;
+                        $scope.formButtons = true;
+                        $scope.studentsTab = false;
+                        $scope.paymentTab = true;
+                    }, function () {
+                        console.log('Modal dismissed at: ' + new Date());
+                    });
 
 
-            }).error(function (poErResponse, poResStatus) {
-                console.log("err po " + poErResponse);
-                PlaceOrder.setModalMessage(poErResponse.errorMessage);
-                PlaceOrder.setModalMessage("error in placing order");
-                var modalInstance = $modal.open({
-                    templateUrl: 'Modal.html',
-                    controller: 'ModalInstanceCtrl'
-                });
+                }).error(function (poErResponse, poResStatus) {
+                    console.log("err po " + poErResponse);
+                    PlaceOrder.setModalMessage(poErResponse.errorMessage);
+                    PlaceOrder.setModalMessage("error in placing order");
+                    var modalInstance = $modal.open({
+                        templateUrl: 'Modal.html',
+                        controller: 'ModalInstanceCtrl'
+                    });
 
-                modalInstance.result.then(function () {
-                    $scope.formHide = false;
-                    $scope.formButtons = true;
-                    console.log("executed")
-                }, function () {
-                    console.log('Modal dismissed at: ' + new Date());
-                });
-            })
+                    modalInstance.result.then(function () {
+                        $scope.formHide = false;
+                        $scope.formButtons = true;
+                        console.log("executed")
+                    }, function () {
+                        console.log('Modal dismissed at: ' + new Date());
+                    });
+                })
+
+            }
         };
-        $scope.getKitNumber = function(kitName){
-            var numb =0;
-            $scope.Students.forEach(function(stud){
-               if(stud.Class==kitName)
+        $scope.getKitNumber = function (kitName) {
+            var numb = 0;
+            $scope.Students.forEach(function (stud) {
+                if (stud.Class == kitName)
                     numb++;
             })
             return numb;
         }
-        $scope.getUniformNumber = function(name){
-            var numb =0;
-            $scope.Students.forEach(function(stud){
-                if(stud.UniformSize==name)
-                    numb+=stud.UniformQty;
+        $scope.getUniformNumber = function (name) {
+            var numb = 0;
+            $scope.Students.forEach(function (stud) {
+                if (stud.UniformSize == name)
+                    numb += stud.UniformQty;
             })
             return numb;
         };
 
         $scope.ready = function () {
-            $('#outerWrapper').height(function(){
-                var a = $('#studentForm').height()+ 750;
+            $('#outerWrapper').height(function () {
+                var a = $('#studentForm').height() + 750;
                 console.log("setting height " + a)
                 return a;
             })
@@ -357,9 +387,10 @@
             var str = new Date(Obj).toString();
             return str.substring(0, str.length - 30)
         };
-
-        $scope.listView = [false,false];
-        $scope.orderView = [true,true];
+        $scope.UniformCosts =$scope.userDetails.FranchiseDetails.UniformCosts;
+        $scope.KitCost = $scope.userDetails.FranchiseDetails.KitCost;
+        $scope.listView = [false, false];
+        $scope.orderView = [true, true];
 
         $scope.showOrder = function (No, index) {
             $scope.listView[No] = toggle($scope.listView[No]);
@@ -372,16 +403,14 @@
         function toggle(data) {
             if (data) {
                 return false;
-
             } else if (data == false) {
                 return true;
-
             }
         }
 
     }]);
 
-    App.controller("Messages",["$scope",function($scope){
+    App.controller("Messages", ["$scope", function ($scope) {
 
         $scope.Messages = {
             "FranchiseName": "Kolkata School",
@@ -443,8 +472,6 @@
             minutes = minutes < 10 ? '0' + minutes : minutes;
             return hours + ':' + minutes + ' ' + ampm + " " + dateStr + "/" + monthStr + '/' + yrStr;
         };
-
-
 
     }])
 }());

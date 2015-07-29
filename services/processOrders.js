@@ -25,7 +25,7 @@ ProcessOrder.prototype.getOrders = function (req, res, body) {
     var options = {
         collection: "orders",
         Query: query,
-        sortObject:{ModifiedOn:-1}
+        sortObject: {ModifiedOn: -1}
     };
     //todo put the date params for the recent order fetch
     var responseObject = {};
@@ -88,17 +88,17 @@ ProcessOrder.prototype.placeOrder = function (req, res, orderObject) {
             console.log("Students inserted for order Id " + orderObject.OrderId);
             var StudentArray = [];
             var Summary = {
-                Kits:{
-                    "PlayGroup":0,
-                    "Nursery":0,
-                    "UKG":0,
-                    "LKG":0
+                Kits: {
+                    "PlayGroup": 0,
+                    "Nursery": 0,
+                    "UKG": 0,
+                    "LKG": 0
                 },
-                Uniforms:{
-                    "2":0,
-                    "3":0,
-                    "5":0,
-                    "7":0
+                Uniforms: {
+                    "2": 0,
+                    "3": 0,
+                    "5": 0,
+                    "7": 0
                 }
             };
             for (var i = 0; i < Students.length; i++) {
@@ -151,42 +151,21 @@ ProcessOrder.prototype.placeOrder = function (req, res, orderObject) {
 };
 
 ProcessOrder.prototype.changeOrderStatus = function (req, res, body) {
-    var OrderId = req.query.OrderId;
     var Status = body.Status;
     console.log("body " + JSON.stringify(body))
     //todo order Id validation
     //todo order cycle validation
     if (Status.toLowerCase() == "completed" || Status.toLowerCase() == "dispatched") {
-            switch(status.toLowerCase()){
-                case "dispatched":
-                    var options ={
-                        collection:"orders",
-                        Query:{OrderId:OrderId}
-                    }
-                    new dataBase().get(options, function(err, order){
+        switch (status.toLowerCase()) {
+            case "dispatched":
+                dispatchOrder(req, res, body);
+                break;
+            case "completed":
+                completeOrder(req, res);
 
-                    })
-                    new dataBase().bulkInsert(options, function(bulkInsert){
-                        bulkInsert.find({"PACKAGE TRACKING NUMBER": packageTrackingNumber, "STATUS": {$ne: "DELIVERED"}}).upsert().updateOne(insertionData);
-                    })
-            }
-        
+        }
 
-        var orderCompleteOption = {
-            collection: define.ordersCollection,
-            Query: {OrderId: OrderId},
-            updateObject: {Status: Status.toUpperCase(), CourierName:body.CourierName, TrackingID:body.TrackingID}
-        };
-        new dataBase().update(orderCompleteOption, function (err, result) {
-            if (!err) {
-                console.log("Success in update");
-                var response = {};
-                response.success = true;
-                response.Status = Status;
-                res.setHeader("Content-Type", "application/json");
-                res.send(JSON.stringify(response));
-            }
-        })
+
     } else {
         res.setHeader("Content-Type", "application/json");
         res.send(JSON.stringify({"success": false, "Message": "Status not supported"}));
@@ -194,48 +173,83 @@ ProcessOrder.prototype.changeOrderStatus = function (req, res, body) {
 
 };
 
-function ReduceKitItems(kitId,kitNumbers, bulkInsert){
-    var options ={
-        collection:'INVENTORY',
-        Query:{KitId:kitId},
-        QuerySelect:{Kit:1}
+function completeOrder(req, res) {
+    var OrderId = req.query.OrderId;
+    var orderCompleteOption = {
+        collection: define.ordersCollection,
+        Query: {OrderId: OrderId},
+        updateObject: {Status: "COMPLETED"}
     };
-    var items=[];
+    new dataBase().update(orderCompleteOption, function (err, result) {
+        if (!err) {
+            console.log("Success in update");
+            var response = {};
+            response.success = true;
+            response.Status = "COMPLETED";
+            res.setHeader("Content-Type", "application/json");
+            res.send(JSON.stringify(response));
+        }
+    })
+}
 
-    new dataBase().get(options, function(err, data){
-        if(!err){
 
-            var mappedKitItems ={}
-            for(var i=0;i<data[0].Kit.length;i++){
+function dispatchOrder(req, res, body, OrderId) {
+    var OrderId = req.query.OrderId;
+    var options = {
+        collection: "orders",
+        Query: {OrderId: OrderId},
+        QuerySelect:{Summary:1}
+    }
+    new dataBase().get(options, function (err, order) {
+        //what kits need to be reduced
+    })
+    new dataBase().bulkInsert(options, function (bulkInsert) {
+        bulkInsert.find({"PACKAGE TRACKING NUMBER": packageTrackingNumber, "STATUS": {$ne: "DELIVERED"}}).upsert().updateOne(insertionData);
+    })
+}
+
+function ReduceKitItems(kitId, kitNumbers, bulkInsert) {
+    var options = {
+        collection: 'INVENTORY',
+        Query: {KitId: kitId},
+        QuerySelect: {Kit: 1}
+    };
+    var items = [];
+
+    new dataBase().get(options, function (err, data) {
+        if (!err) {
+
+            var mappedKitItems = {}
+            for (var i = 0; i < data[0].Kit.length; i++) {
                 var kitItem = data[0].Kit[i];
                 var kitItemId = kitItem.ItemId;
                 mappedKitItems[kitItemId] = kitItem;
             }
 
-            data.forEach(function(arrEle){
+            data.forEach(function (arrEle) {
                 items.push(arrEle.ItemId);
             })
 
-            var options ={
-                collection:'INVENTORY',
-                Query:{ItemId:{$in:items}},
-                QuerySelect:{ItemId:1, Quantity:1}
+            var options = {
+                collection: 'INVENTORY',
+                Query: {ItemId: {$in: items}},
+                QuerySelect: {ItemId: 1, Quantity: 1}
             }
 
-            new dataBase().get(options, function(err, itemData){
-                var mappedObj ={}
-                for(var i=0;i<itemData.length;i++){
+            new dataBase().get(options, function (err, itemData) {
+                var mappedObj = {}
+                for (var i = 0; i < itemData.length; i++) {
                     var item = itemData[i];
                     var ItemId = item.ItemId;
-                    mappedObj[ItemId]=item;
+                    mappedObj[ItemId] = item;
                 }
-                for(var j=0;j<itemData.length;j++){
-                    var modifiedQuantity = mappedObj[itemData[j].ItemId].Quantity - mappedKitItems[itemData[j].ItemId].Units*kitNumbers;
-                    bulkInsert.find({ItemId:itemData[j].ItemId}).upsert().updateOne({$set:{Quantity:modifiedQuantity}});
+                for (var j = 0; j < itemData.length; j++) {
+                    var modifiedQuantity = mappedObj[itemData[j].ItemId].Quantity - mappedKitItems[itemData[j].ItemId].Units * kitNumbers;
+                    bulkInsert.find({ItemId: itemData[j].ItemId}).upsert().updateOne({$set: {Quantity: modifiedQuantity}});
                 }
 
             })
-        }else{
+        } else {
 
         }
     })

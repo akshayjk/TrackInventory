@@ -22,7 +22,7 @@
                                 <div class="controls">
                                     <input id="childname" name="childname" type="text"
                                            placeholder="Enter full name of child"
-                                           class=" form-control medium"
+                                           class=" form-control "
                                            ng-model="StudentObject.NameOfStudent" autofocus
                                            req1234>
                                 </div>
@@ -34,11 +34,10 @@
 
                                 <div class="controls">
                                     <select id="selectClass" name="selectClass"
-                                            class="form-control small"
+                                            class="form-control mediumClass"
                                             ng-model="Class" ng-options="m for m in ClassOptions"
                                             >
                                     </select>
-                                    <p>Selected Class {{Class}}</p>
                                 </div>
                             </div>
                             <!-- Text input-->
@@ -47,7 +46,7 @@
 
                                 <div class="controls">
                                     <input id="classAge" name="classAge" type="number" placeholder="age"
-                                           class="form-control mini" ng-model="StudentObject.Age"
+                                           class="form-control mediumClass" ng-model="StudentObject.Age"
                                            req1234>
                                 </div>
                             </div>
@@ -59,7 +58,7 @@
                                 <div class="controls">
                                     <input id="parentName" name="parentName" type="text"
                                            placeholder="Mother's/Father's name"
-                                           class="form-control medium "
+                                           class="form-control  "
                                            ng-model="StudentObject.ParentName" req1234>
                                 </div>
                             </div>
@@ -71,7 +70,7 @@
                                 <div class="controls">
                                     <input id="parentsContact" name="parentsContact" type="tel"
                                            placeholder="Contact Number"
-                                           class="form-control medium "
+                                           class="form-control  "
                                            ng-model="StudentObject.ParentContact" req1234>
                                 </div>
                             </div>
@@ -84,7 +83,7 @@
                                 <div class="controls">
                                     <input id="parentEmail" name="parentEmail" type="email"
                                            placeholder="someone@example.com"
-                                           class="form-control medium"
+                                           class="form-control "
                                            ng-model="StudentObject.ParentEmail" req1234>
                                 </div>
                             </div>
@@ -98,12 +97,10 @@
 
                                 <div class="controls">
                                     <select id="uniformSize" name="uniformSize"
-                                            class="form-control mini"
+                                            class="form-control mediumClass"
                                             ng-model="UniformSize" ng-options="item.UniformSize for item in UniformOptions">
 
                                     </select>
-                                    <p>The Cost {{UniformSize}}</p>
-                                    <p>Calculated {{CalculateHere}}</p>
                                 </div>
                             </div>
                             <br/>
@@ -115,7 +112,7 @@
                                 <div class="controls">
                                     <input id="uniformQuant" name="uniformQuant" type="number"
                                            placeholder="Qty"
-                                           class="form-control mini"
+                                           class="form-control mediumClass"
                                            ng-model="Qty"
                                            req1234>
                                 </div>
@@ -127,7 +124,7 @@
 
                                 <div class="controls">
                                     <input id="Date" name="Date" type="DATE" placeholder="placeholder"
-                                           class=" form-control medium"
+                                           class=" form-control mediumClass"
                                            ng-model="StudentObject.DateOfAdmission" req1234>
                                 </div>
                             </div>
@@ -140,7 +137,7 @@
                                 <div class="controls">
                                     <input id="regNum" name="regNum" type="text"
                                            placeholder="Enter Child's Registration Number"
-                                           class=" form-control medium"
+                                           class=" form-control "
                                            ng-model="StudentObject.RegistrationNumber" req1234>
                                 </div>
                             </div>
@@ -152,7 +149,7 @@
                                 <div class="controls">
                                     <input id="receiptNo" name="receiptNo" type="text"
                                            placeholder="Enter Receipt Number"
-                                           class="form-control medium"
+                                           class="form-control "
                                            ng-model="StudentObject.ReceiptNumber" req1234>
                                 </div>
                             </div>
@@ -164,7 +161,7 @@
                                 <div class="controls input-group small">
                                     <span class="input-group-addon">Rs</span>
 
-                                    <h4 ng-model="TotalCost" class="form-control mini "
+                                    <h4 ng-model="TotalCost" class="form-control mediumClass"
                                         style="margin-top:0%;">
                                         {{KitCost}}</h4>
                                 </div>
@@ -177,7 +174,7 @@
                                     <span class="input-group-addon">Rs</span>
                                     <!-- <input id="kitCost" name="kitCost" type="number" placeholder="000.00" ng-model="TotalCost"
                                     class="col-xs-8 form-control mini"> -->
-                                    <h4 ng-model="TotalCost" class="form-control mini"
+                                    <h4 ng-model="TotalCost" class="form-control mediumClass"
                                         style="margin-top:0%;">
                                         {{KitCost + UniformSize.UniformCost*Qty}}</h4>
                                 </div>
@@ -268,12 +265,10 @@
                                                                          ng-model="UniformArray[$index]"
                                                                          ng-options="m.UniformSize for m in UniformOptions"
                                                                          ng-change="setUniformSizeFinal($index,UniformArray[$index])"></select>
-                                <p>{{UniformArray[$index]}}</p>
                             </td>
                             <td style="max-width: 10%; width:15%;"><input type="number" style="width:100%;"
                                                                           class="InvElementInput"
                                                                           ng-model="Students[$index].UniformQty">
-                            <p>{{Students[$index].UniformQty}}</p>
                             </td>
                             <td style="text-align: center">{{KitCost + UniformArray[$index].UniformCost*Students[$index].UniformQty}}
                             </td>
@@ -297,94 +292,104 @@
         <tab active="!paymentTab" disabled="paymentTab">
             <tab-heading><b>Payment Details</b></tab-heading>
             <div style="background-color: white;padding:2%;" class="col-md-12 col-xs-12">
-            <div class="col-md-6 col-xs-12">
-                <form ng-submit="placeOrder()">
-                <fieldset>
-                    <!-- Text input-->
-                    <div class="control-group col-xs-12">
-                        <label class="control-label col-xs-4">Total Amount Paid</label>
+                <div ng-show="alertMsg.view">
+                    <alert type="{{alertMsg.type}}" close="clearAlert()">{{alertMsg.Msg}}</alert>
+                </div>
+            <div class="col-md-8 col-xs-12">
+                <form ng-submit="placeOrder(Mode)">
+                    <fieldset>
+                        <!-- Text input-->
+                        <div class="control-group col-xs-12 padUp">
+                            <label class="control-label col-xs-4">Total Amount Paid</label>
 
-                        <div class="controls input-group small">
-                            <span class="input-group-addon">Rs</span>
+                            <div class="controls input-group small">
+                                <span class="input-group-addon">Rs</span>
 
-                            <div id="AmountTotal" class="col-xs-8 form-control mini"
-                                 ng-model="OrderForm.TotalAmount">
-                                {{getFinalCost()}}
+                                <div id="AmountTotal" class="col-xs-8 form-control mini"
+                                     ng-model="OrderForm.TotalAmount">
+                                    {{getFinalCost()}}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <br/>
-                    <!-- Text input-->
-                    <div class="control-group col-xs-12">
-                        <label class="control-label col-xs-4" for="modePayment">Mode of
-                            Payment</label>
+                        <br/>
+                        <!-- Text input-->
+                        <div class="control-group col-xs-12 padUp">
+                            <label class="control-label col-xs-4" for="modePayment">Mode of
+                                Payment</label>
 
-                        <div class="controls">
-                            <input id="modePayment" name="modePayment" type="text"
-                                   placeholder="Cash/Account Transfer"
-                                   class="col-xs-8 form-control medium"
-                                   ng-model="OrderForm.ModeOfPayment" req1234>
+                            <div class="controls">
+
+                                <select id="modePayment" name="selectClass"
+                                        class="form-control mediumClass"
+                                        ng-model="Mode" ng-options="Mode.Name for Mode in PaymentOptions"
+                                        >
+                                </select>
+                                <!--<input id="modePayment" name="modePayment" type="text"
+                                       placeholder="Cash/Account Transfer"
+                                       class="col-xs-8 form-control "
+                                       ng-model="OrderForm.ModeOfPayment" req1234>-->
+                            </div>
                         </div>
-                    </div>
-                    <br/>
-                    <!-- Text input-->
-                    <div class="control-group col-xs-12">
-                        <label class="control-label col-xs-4" for="bankName">Name of Bank</label>
+                        <br/>
 
-                        <div class="controls">
-                            <input id="BankName" name="bankTranID" type="text" placeholder=""
-                                   class="col-xs-8 form-control medium "
-                                   ng-model="OrderForm.BankName" req1234>
+
+
+                        <!-- Text input-->
+                        <div class="control-group col-xs-12 padUp" ng-show="Mode.Name!='Cash'?true:false">
+                            <label class="control-label col-xs-4" for="bankName">Name of Bank</label>
+
+                            <div class="controls">
+                                <input id="BankName" name="bankTranID" type="text" placeholder=""
+                                       class="col-xs-8 form-control  "
+                                       ng-model="OrderForm.BankName">
+                            </div>
                         </div>
-                    </div>
-                    <br/>
-
-                    <div class="control-group col-xs-12">
-                        <label class="control-label col-xs-4" for="bankTranID">Bank Transaction
-                            id </label>
-
-                        <div class="controls">
-                            <input id="bankTranID" name="bankTranID" type="text" placeholder=""
-                                   class="col-xs-8 form-control medium "
-                                   ng-model="OrderForm.TransactionID" req1234>
+                        <br/>
+                        <div class="control-group col-xs-12 padUp" ng-show="Mode.Name!='Cash'?true:false">
+                            <label class="control-label col-xs-4" for="bankTranID">Bank Transaction
+                                id </label>
+                            <div class="controls">
+                                <input id="bankTranID" name="bankTranID" type="text" placeholder=""
+                                       class="col-xs-8 form-control  "
+                                       ng-model="OrderForm.TransactionID">
+                            </div>
                         </div>
-                    </div>
-                    <br/>
-                    <!-- Text input-->
-                    <div class="control-group col-xs-12">
-                        <label class="control-label col-xs-4"  for="address">Address</label>
+                        <br/>
+                        <!-- Text input-->
+                        <div class="control-group col-xs-12 padUp">
+                            <label class="control-label col-xs-4"  for="address">Address</label>
 
-                        <div class="controls">
-                            <textarea id="address" name="address"
-                                   style="height:60px;"
-                                   placeholder="Enter Address for delivery" row="3"
-                                   class="col-xs-8 form-control medium "
-                                   ng-model="OrderForm.Address" req1234>
-                            </textarea>
+                            <div class="controls">
+                                <textarea id="address" name="address"
+                                          style="height:60px;"
+                                          placeholder="Enter Address for delivery" row="3"
+                                          class="col-xs-8 form-control  "
+                                          ng-model="OrderForm.Address" req1234>
+                                </textarea>
+                            </div>
                         </div>
-                    </div>
-                    <div class="control-group col-xs-12">
-                        <label class="control-label col-xs-4" row="3" for="address">Note</label>
+                        <div class="control-group col-xs-12 padUp">
+                            <label class="control-label col-xs-4" row="3" for="address">Note</label>
 
-                        <div class="controls">
-                            <input id="Note" name="address" placeholder="Additional Notes for order"
-                                   rows="3"
-                                   class="col-xs-8 form-control medium " ng-model="OrderForm.Note">
-                            </input>
+                            <div class="controls">
+                                <input id="Note" name="address" placeholder="Additional Notes for order"
+                                       rows="3"
+                                       class="col-xs-8 form-control  " ng-model="OrderForm.Note">
+                                </input>
+                            </div>
                         </div>
-                    </div>
-                    <div class="control-group col-xs-12">
-                        <div class="controls col-xs-12">
-                            <button id="placeOrder" name="placeOrder"
-                                    class="btn btn-primary"
-                                    type="submit" style="margin-top:2%; padding-right:10%;">Place
-                                Order
-                            </button>
+                        <div class="control-group padUp">
+                            <div class="controls col-xs-12">
+                                <button id="placeOrder" name="placeOrder"
+                                        class="btn btn-primary"
+                                        type="submit" style="margin-top:2%; padding-right:10%;">Place
+                                    Order
+                                </button>
 
+                            </div>
                         </div>
-                    </div>
-                </fieldset>
-            </form>
+                    </fieldset>
+                </form>
             </div>
             </div>
         </tab>

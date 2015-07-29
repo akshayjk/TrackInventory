@@ -26,11 +26,11 @@ new dataBase().connect();
 
 //Index Page Gateway
 app.get('/Login',function(req, res){
-       res.sendFile(path.join(__dirname , '/loginNew.html'));
+       res.sendFile(path.join(__dirname , '/LoginNew.html'));
 });
 
 app.get('/',function(req, res){
-    res.sendFile(path.join(__dirname , '/loginNew.html'));
+    res.sendFile(path.join(__dirname , '/LoginNew.html'));
 });
 
 /*app.get('/LoginNew',function(req, res){

@@ -114,3 +114,15 @@
     color:black;
 }
 
+.smallClass{
+    width:20%;
+}
+
+.mediumClass{
+    width:50%;
+}
+
+.padUp{
+    padding-top:2%;
+}
+
