@@ -35,7 +35,7 @@
                                 <div class="controls">
                                     <select id="selectClass" name="selectClass"
                                             class="form-control mediumClass"
-                                            ng-model="Class" ng-options="m for m in ClassOptions"
+                                            ng-model="Class" ng-options="m.Name for m in ClassOptions"
                                             >
                                     </select>
                                 </div>
@@ -94,11 +94,10 @@
                         <div class="col-md-6 col-xs-12">
                             <div class="control-group">
                                 <label class="control-label" for="uniformSize">Uniform Size</label>
-
                                 <div class="controls">
                                     <select id="uniformSize" name="uniformSize"
                                             class="form-control mediumClass"
-                                            ng-model="UniformSize" ng-options="item.UniformSize for item in UniformOptions">
+                                            ng-model="UniformSize" ng-options="item.Name for item in UniformOptions">
 
                                     </select>
                                 </div>
@@ -176,7 +175,7 @@
                                     class="col-xs-8 form-control mini"> -->
                                     <h4 ng-model="TotalCost" class="form-control mediumClass"
                                         style="margin-top:0%;">
-                                        {{KitCost + UniformSize.UniformCost*Qty}}</h4>
+                                        {{KitCost + UniformSize.cost*Qty}}</h4>
                                 </div>
                             </div>
 
@@ -222,8 +221,8 @@
                     <h4>Kits </h4>
                     <table>
                         <tr ng-repeat="class in ClassOptions">
-                            <td><p>{{class}} &nbsp;</td>
-                            <td style="text-align: center">: &nbsp; &nbsp; {{getKitNumber(class)}}</td>
+                            <td>{{class.Name}} &nbsp;</td>
+                            <td style="text-align: center">: &nbsp; &nbsp; {{getKitNumber(class.KitId)}}</td>
                         </tr>
                     </table>
                     <!--<p style="margin-top:5px;"><b>Subtotal :</b>&nbsp; {{}}</p>-->
@@ -232,7 +231,7 @@
                     <h4>Uniforms</h4>
                     <table>
                         <tr ng-repeat="uniform in UniformOptions">
-                            <td>Size &nbsp; {{uniform.UniformSize}}&nbsp;</td>
+                            <td>{{uniform.Name}}&nbsp;</td>
                             <td>: &nbsp; &nbsp; {{getUniformNumber(uniform)}}</td>
                         </tr>
                     </table>
@@ -259,18 +258,18 @@
                         <tr ng-repeat="student in Students">
                             <th scope="row">{{$index + 1}}</th>
                             <td>{{student.NameOfStudent}}</td>
-                            <td>{{student.Class}}</td>
+                            <td>{{student.Class.Name}}</td>
                             <td style="max-width:20%;width:15%;"><select type="number" style="width:100%;"
-                                                                         class="InvElementInput"
-                                                                         ng-model="UniformArray[$index]"
-                                                                         ng-options="m.UniformSize for m in UniformOptions"
-                                                                         ng-change="setUniformSizeFinal($index,UniformArray[$index])"></select>
+                                 class="InvElementInput"
+                                 ng-model="UniformArray[$index]"
+                                 ng-options="item.Name for item in UniformOptions"
+                                 ng-change="setUniformSizeFinal($index,UniformArray[$index])"></select>
                             </td>
                             <td style="max-width: 10%; width:15%;"><input type="number" style="width:100%;"
                                                                           class="InvElementInput"
                                                                           ng-model="Students[$index].UniformQty">
                             </td>
-                            <td style="text-align: center">{{KitCost + UniformArray[$index].UniformCost*Students[$index].UniformQty}}
+                            <td style="text-align: center">{{KitCost + UniformArray[$index].cost*Students[$index].UniformQty}}
                             </td>
                         </tr>
 

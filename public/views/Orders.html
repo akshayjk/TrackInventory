@@ -311,19 +311,21 @@
                     <div class="col-md-4 col-xs-12">
                     <b>Kits</b>
                     <table>
-                        <tr ng-repeat="(kit,value) in dummyOrders[OrderNo[0]].Summary.Kits">
-                            <td>{{kit}} :</td>
-                            <td>&nbsp;&nbsp;{{value}}</td>
+                        <tr ng-repeat="kit in dummyOrders[OrderNo[0]].Summary.Kits">
+                            <td>{{kit.Name}} :</td>
+                            <td>&nbsp;&nbsp;{{kit.Quantity}}</td>
                         </tr>
                     </table>
                     </div>
                     <div class="col-md-4 col-xs-12">
 
                     <b>Uniforms</b>
+
                     <table>
-                        <tr ng-repeat="(uniform, value) in dummyOrders[OrderNo[0]].Summary.Uniforms">
-                            <td>Size {{uniform}} :</td>
-                            <td>&nbsp;&nbsp;{{value}}</td>
+                        <tr ng-repeat="uniform in dummyOrders[OrderNo[0]].Summary.UniformSize">
+                            {{uniform}}
+                            <td>{{uniform.Name}} :</td>
+                            <td>&nbsp;&nbsp;{{uniform.Quantity}}</td>
                         </tr>
                     </table>
                     </div>
@@ -349,10 +351,10 @@
                         <tr ng-repeat="student in dummyOrders[OrderNo[0]].Students">
                             <td>{{$index + 1}}</td>
                             <td>{{student.NameOfStudent}}</td>
-                            <td>{{student.Class}}</td>
-                            <td>{{student.UniformSize.UniformSize}}</td>
+                            <td>{{student.Class.Name}}</td>
+                            <td>{{student.UniformSize.Name}}</td>
                             <td>{{student.UniformQty}}</td>
-                            <td>{{UniformCosts[student.UniformSize.UniformSize]*student.UniformQty +
+                            <td>{{student.UniformSize.cost*student.UniformQty +
                                 KitCost}}
                             </td>
                         </tr>

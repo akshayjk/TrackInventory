@@ -62,6 +62,11 @@
                 var url = urlInit + "?OrderId=" + orderId;
                 var changeOrderStatusReq = {method: 'PUT', url: url, data:data};
                 return $http(changeOrderStatusReq);
+            },
+            getVisibleKits:function(){
+                 var url = "/inventory/visibleKits";
+                var visibleKits = {method: 'GET', url: url};
+                return $http(visibleKits)
             }
         }
     }]);

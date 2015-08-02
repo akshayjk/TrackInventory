@@ -60,6 +60,12 @@ router.delete('/kit', function(req, res){
     })
 });
 
+router.get('/visibleKits', function(req, res){
+    new requestData().getReqBody(req, res, function(body){
+        new InventoryServices().getVisibleKits(req, res, body);
+    })
+});
+
 
 module.exports = router;
 

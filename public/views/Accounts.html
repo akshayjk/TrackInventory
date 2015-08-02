@@ -17,7 +17,8 @@
                         </select>
                     </div>-->
                     <div class="input-group col-xs-12 col-md-6">
-                        <input type="text" name="q" class="form-control" ng-model="accountSearch" placeholder="Search..."/>
+                        <input type="text" name="q" class="form-control" ng-model="accountSearch"
+                               placeholder="Search..."/>
                     <span class="input-group-addon">
                         <i class="fa fa-search"></i>
                     </span>
@@ -48,20 +49,20 @@
                             <p><b>Created On :</b>&nbsp;{{getDate(AccountNumber.CreatedOn)}}</p>
                         </div>
                         <div class="col-md-6 col-xs-12" ng-show="AccountNumber.Role=='FRANCHISE'">
-                            <p><b>Kit Cost :</b>&nbsp;Rs  {{AccountNumber.FranchiseDetails.KitCost}}</p>
+                            <p><b>Kit Cost :</b>&nbsp;Rs {{AccountNumber.FranchiseDetails.KitCost}}</p>
 
                             <p><b>Uniform Costs :</b>&nbsp;
                             <table>
-                                <tr ng-repeat="(key, value) in AccountNumber.FranchiseDetails.UniformCosts">
-                                    <td style="padding-right:10px;">Size {{key}}</td>
-                                    <td>:&nbsp;Rs {{value}}</td>
+                                <tr ng-repeat="uniform in AccountNumber.FranchiseDetails.UniformCosts">
+                                    <td style="padding-right:10px;">{{uniform.Name}}</td>
+                                    <td>:&nbsp;Rs {{uniform.cost}}</td>
                                 </tr>
                             </table>
                             </p>
                         </div>
                         <div class="col-md-12 col-xs-12">
                             <button class="btn btn-primary btn-sm" ng-click="AccountView = !AccountView">Back</button>
-                            <button class="btn btn-danger btn-sm" 
+                            <button class="btn btn-danger btn-sm"
                                     ng-click="deleteConfirm(AccountNumber)">Delete
                             </button>
                         </div>
@@ -72,25 +73,25 @@
                         <alert type="{{alertMsg.type}}" close="clearAlert()">{{alertMsg.Msg}}</alert>
                     </div>
                     <form class="col-xs-12" ng-submit="createAccount()">
-                        <div class="col-xs-12">
-                            <div class="form-group medium">
+                        <div class="col-xs-6">
+                            <div class="form-group">
                                 <label for="FranchiseAccEmail">Franchise Email</label>
                                 <input type="email" class="form-control" id="FranchiseAccEmail"
                                        ng-focus="clearAlert()"
                                        ng-model="AccountDet.FranchiseId" placeholder="someone@example.com"
                                        autofocus required>
                             </div>
-                            <div class="form-group medium">
+                            <div class="form-group">
                                 <label for="FranchiseAccName">Franchise Name</label>
                                 <input type="text" class="form-control" id="FranchiseAccName"
                                        ng-model="AccountDet.FranchiseName" placeholder="LE Kolkata" required>
                             </div>
-                            <div class="form-group medium">
+                            <div class="form-group">
                                 <label for="exampleInputPassword1">Password</label>
                                 <input type="password" class="form-control" ng-model="AccountDet.Password"
                                        id="exampleInputPassword1" placeholder="Password" required>
                             </div>
-                            <div class="btn-group medium">
+                            <div class="btn-group">
                                 <label class="btn btn-sm btn-primary" ng-model="RoleRadioModel"
                                        btn-radio=0>Franchise</label>
                                 <label class="btn btn-sm btn-primary" ng-model="RoleRadioModel"
@@ -98,15 +99,30 @@
                             </div>
                             </br>
                             </br>
-                            <div class="input-group medium" ng-hide="RoleRadioModel">
-                                <span class="input-group-addon ">Set Kit Cost</span>
-                                <input type="text" class="form-control" placeholder="Rs" ng-model="KitCost">
-                            </div>
+
                             <div class="form-group" style="padding-top:2%;">
                                 <button class="btn btn-success" type="submit">Create</button>
                             </div>
                         </div>
+                        <div class="col-xs-6" ng-hide="RoleRadioModel">
+                            <b>Set Costs</b>
+                            </br>
+                            <b>Kit</b>
 
+                            <div class="input-group" style="padding-top:2%;padding-bottom:2%;">
+                                <span class="input-group-addon ">Set Kit Cost</span>
+                                <input type="text" class="form-control" placeholder="Rs" ng-model="KitCost">
+                            </div>
+
+                            <b>Set Uniform Costs</b>
+                            <div ng-repeat="uniform in UniformSize">
+                            <div class="input-group" style="padding-top:2%;padding-bottom:2%;">
+                                    <span class="input-group-addon ">{{uniform.Name}}</span>
+                                    <input type="text" class="form-control" placeholder="Rs" ng-model="uniform.cost">
+                                </div>
+                            </div>
+                        </div>
+                           All Values : {{UniformSize}}
 
                     </form>
                 </div>

@@ -21,10 +21,9 @@ Authentication.prototype.login = function (req, res, body) {
             QuerySelect: {CreatedOn: 0, Password: 0, ModifiedOn: 0}
         };
         new dataBase().get(options, function (err, data) {
-            console.log("Login data " + JSON.stringify(data));
+
             if (!err) {
                 if (data.length > 0) {
-
                     if (data[0].Role == "ADMIN") {
                         new responseHandler().sendResponse(req, res, "success", data[0], 200);
                     } else {
@@ -36,6 +35,15 @@ Authentication.prototype.login = function (req, res, body) {
                         };
                         new dataBase().get(options, function (err, FranchiseData) {
                             if (!err) {
+                                /*var kitOptions = {
+                                    collection:"INVENTORY",
+                                    Query:{Category:"KIT",Tags:"Visible"},
+                                    QuerySelect:{Name:1,KitId:1}
+                                }
+                                new dataBase().get(kitOptions,function(err, kitData){
+                                    FranchiseData[0].FranchiseDetails.Kits = kitData;
+                                    new responseHandler().sendResponse(req, res, "success", FranchiseData[0], 200);
+                                })*/
                                 new responseHandler().sendResponse(req, res, "success", FranchiseData[0], 200);
                             } else {
                                 new responseHandler().sendResponse(req, res, "error", "Error while fetching data " + JSON.stringify(err), 500);
@@ -56,7 +64,7 @@ Authentication.prototype.login = function (req, res, body) {
 
 };
 
-Authentication.prototype.logOut = function(req,res, body){
+Authentication.prototype.logOut = function (req, res, body) {
     //Expires the auth token and sends response
 };
 
@@ -137,32 +145,47 @@ Authentication.prototype.createAccount = function (req, res, body) {
 Authentication.prototype.getAccounts = function (req, res, body) {
     //gets most recent 20 Account details
     //todo from token get the Role -- This service is authorized only to admin
-    var options ={
-        collection:"USER",
-        Query:{},
-        QuerySelect:{Password:0}
+    var options = {
+        collection: "USER",
+        Query: {},
+        QuerySelect: {Password: 0}
     }
-    new dataBase().get(options, function(err, data){
-        if(!err){
-            new responseHandler().sendResponse(req, res, "success", data, 200);
-        }else{
+    new dataBase().get(options, function (err, data) {
+        if (!err) {
+            var uniformOptions ={
+                collection:"INVENTORY",
+                Query:{Category:"UNIFORMS",Tags:"Visible"},
+                QuerySelect :{Name:1, ItemId:1}
+            }
+            new dataBase().get(uniformOptions,function(err,UniformsData){
+                if(!err){
+                    var response ={}
+                    response.accounts = data;
+                    response.UniformsList = UniformsData;
+                    data[0].UniformsList = UniformsData;
+                    console.log("Login data " + JSON.stringify(data));
+                    new responseHandler().sendResponse(req, res, "success", response, 200);
+                }
+            })
+            //new responseHandler().sendResponse(req, res, "success", data, 200);
+        } else {
             new responseHandler().sendResponse(req, res, "error", "Error while inserting data +" + JSON.stringify(err), 500);
         }
 
     })
 };
 
-Authentication.prototype.getFranchiseNameList = function(req, res, body){
+Authentication.prototype.getFranchiseNameList = function (req, res, body) {
 
     var options = {
-        collection:"USER",
-        Query:{Role:"FRANCHISE"},
-        QuerySelect:{_id:0, FranchiseName:1, FranchiseId:1}
+        collection: "USER",
+        Query: {Role: "FRANCHISE"},
+        QuerySelect: {_id: 0, FranchiseName: 1, FranchiseId: 1}
     }
-    new dataBase().get(options, function(err, data){
-        if(!err){
+    new dataBase().get(options, function (err, data) {
+        if (!err) {
             new responseHandler().sendResponse(req, res, "success", data, 200);
-        }else{
+        } else {
             new responseHandler().sendResponse(req, res, "error", "Error while fetching from Database +" + JSON.stringify(err), 500)
         }
     })
@@ -171,30 +194,30 @@ Authentication.prototype.getFranchiseNameList = function(req, res, body){
 Authentication.prototype.updatePassword = function (req, res, body) {
     //Matches with previous password and updates to new One
     //todo This user has permission to only change the password of his own account
-    if(body.Password!=undefined){
+    if (body.Password != undefined) {
 
-        var options ={
-            collection:"AUTH",
-            Query:{FranchiseId:req.query.FranchiseId},
-            QuerySelect:{Password:1}
+        var options = {
+            collection: "AUTH",
+            Query: {FranchiseId: req.query.FranchiseId},
+            QuerySelect: {Password: 1}
         }
 
-        new dataBase().get(options, function(err, data){
-            if(!err){
-                if(data[0].Password==body.OldPassword){
-                    options.updateObject = {Password:body.Password}
-                    new dataBase().update(options, function(err, updateResult){
+        new dataBase().get(options, function (err, data) {
+            if (!err) {
+                if (data[0].Password == body.OldPassword) {
+                    options.updateObject = {Password: body.Password}
+                    new dataBase().update(options, function (err, updateResult) {
                         console.log("update result " + updateResult);
-                        var response={
-                            success:true,
-                            Message:"Password Successfully updated."
+                        var response = {
+                            success: true,
+                            Message: "Password Successfully updated."
                         };
                         new responseHandler().sendResponse(req, res, "success", response, 200);
                     })
-                }else{
+                } else {
                     new responseHandler().sendResponse(req, res, "error", "Old password doesn't match", 403)
                 }
-            }else{
+            } else {
                 new responseHandler().sendResponse(req, res, "error", "Error while fetching data +" + JSON.stringify(err), 500);
             }
 
@@ -203,7 +226,7 @@ Authentication.prototype.updatePassword = function (req, res, body) {
 
 };
 
-Authentication.prototype.updateAccount = function(req, res, body){
+Authentication.prototype.updateAccount = function (req, res, body) {
     //For updating the costs of goods
     //todo check with the token -- this service is only accessible to admin
 
@@ -212,33 +235,33 @@ Authentication.prototype.updateAccount = function(req, res, body){
 Authentication.prototype.deleteAccount = function (req, res, body) {
     //Deletes the account
     //todo from token get the Role -- This service is authorized only to admin
-    if(req.query.FranchiseId!=undefined){
+    if (req.query.FranchiseId != undefined) {
 
-        var options={
-            collection:"AUTH",
-            Query:{FranchiseId:req.query.FranchiseId}
+        var options = {
+            collection: "AUTH",
+            Query: {FranchiseId: req.query.FranchiseId}
         }
-        new dataBase().delete(options, function(err, result){
-            if(!err){
-                options.collection="USER";
-                new dataBase().delete(options, function(err, delResult){
-                    if(!err){
+        new dataBase().delete(options, function (err, result) {
+            if (!err) {
+                options.collection = "USER";
+                new dataBase().delete(options, function (err, delResult) {
+                    if (!err) {
                         console.log("Account deleted successfully.");
-                        var response ={
-                            success:true,
-                            Message:"Account deleted Successfully."
+                        var response = {
+                            success: true,
+                            Message: "Account deleted Successfully."
                         };
-                        new responseHandler().sendResponse(req, res, "success",response, 200);
-                    }else{
+                        new responseHandler().sendResponse(req, res, "success", response, 200);
+                    } else {
                         new responseHandler().sendResponse(req, res, "error", "Error while deleting data " + JSON.stringify(err), 500);
                     }
                 })
-            }else{
+            } else {
                 new responseHandler().sendResponse(req, res, "error", "Error while deleting data " + JSON.stringify(err), 500);
             }
         })
 
-    }else{
+    } else {
         new responseHandler().sendResponse(req, res, "error", "Franchise Id can't be empty", 403);
     }
 

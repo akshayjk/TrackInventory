@@ -268,15 +268,18 @@
             })
         }*/
 
-        $scope.addMore = function (Category) {
+        $scope.addMore = function (Category, Tags) {
             if (!$scope.addItem.Name || !$scope.addItem.Quantity) {
             } else {
                 var tempAddItem = {};
                 tempAddItem[Category] = $scope.addItem;
                 $scope.addItem.Category = Category;
+                console.log("Has got the Tags " + Tags)
+                if(Tags!=undefined){
+                    $scope.addItem.Tags = Tags;
+                }
                 $scope.loading = true;
                 console.log("add Item " + JSON.stringify($scope.addItem));
-                setTimeout(function(){
                     Inventory.addItem($scope.addItem).success(function (addRes, addStat) {
                         $scope.InventoryData[Category].push(addRes.Item[0]);
                         $scope.ItemOptions.push(addRes.Item[0]);
@@ -293,7 +296,7 @@
                     }).error(function (addErrRes, addErrStat) {
                         console.log(JSON.stringify(addErrRes))
                     })
-                },2000)
+
 
             }
 
@@ -467,7 +470,7 @@
                 var KitData = {};
                 KitData.Name = name;
                 KitData.Kit = $scope.builtKit;
-                KitData.Visibility = kitVisibility;
+                KitData.Tags = kitVisibility;
                 Inventory.addKit(KitData).success(function (addRes, addStat) {
                     console.log("res " + JSON.stringify(addRes));
                     $scope.builtKit = [];
@@ -476,12 +479,10 @@
                     $scope.successMessage = "Kit Added Successfully.";
                     $scope.buildKit = 0;
                     $('#responseModal').modal('show');
-
                 }).error(function (adKtErRes, adKtStat) {
                     console.log("err add Kit " + JSON.stringify(adKtErRes))
                 })
             }
-
         };
         $scope.addToKitButton = $scope.ItemSelected.selected != undefined ? true : false;
         $scope.removeItem = function (Numb) {
@@ -489,8 +490,8 @@
             console.log(JSON.stringify($scope.builtKit))
         };
 
-        $scope.KitVisibility =["Visible", "Hidden"];
-        $scope.kitOption = $scope.KitVisibility[0];
+        $scope.Tags =["Visible", "Hidden"];
+        $scope.kitOption = $scope.Tags[1];
 
     }]);
 
@@ -729,17 +730,14 @@
     App.controller("Accounts", ['$scope', 'Auth', function ($scope, Auth) {
 
         $scope.userDetails = JSON.parse(sessionStorage.userDetails);
-        $scope.UniformSize = {
-            "1": 10,
-            "2": 20,
-            "3": 30,
-            "4": 40
-        };
+        //$scope.UniformSize = $scope.userDetails.UniformsList;
+
         $scope.RoleRadioModel = 0;
         $scope.KitCost = 500;
         $scope.getAccounts = function () {
             Auth.getAccounts().success(function (AccRes) {
-                $scope.Accounts = AccRes;
+                $scope.Accounts = AccRes.accounts;
+                $scope.UniformSize = AccRes.UniformsList;
                 console.log(JSON.stringify(AccRes))
             }).error(function (errRes) {
                 console.log(errRes);

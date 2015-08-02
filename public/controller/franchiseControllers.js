@@ -62,14 +62,24 @@
 
     App.controller("OrderForm", ["$scope", "$location", "$modal", "PlaceOrder", function ($scope, $location, $modal, PlaceOrder) {
 
-
+        $scope.getVisibleKits =function(){
+            PlaceOrder.getVisibleKits().success(function(visibleKits, status){
+                console.log("Classoptions initiated")
+                $scope.ClassOptions = visibleKits;
+                $scope.Class = $scope.ClassOptions[0];
+            }).error(function(errKit,errStat){
+                console.log("err in getting response " + errKit)
+            });
+        };
+        $scope.getVisibleKits();
         $scope.userDetails = JSON.parse(sessionStorage.userDetails);
-        $scope.UniformCosts =[
+       /* $scope.UniformCosts =[
             {UniformSize: 2, UniformCost: 10},
             {UniformSize: 3, UniformCost: 20},
             {UniformSize: 5, UniformCost: 30},
             {UniformSize: 7, UniformCost: 40}
-        ] //$scope.userDetails.FranchiseDetails.UniformCosts;
+        ] */
+        $scope.UniformCosts = $scope.userDetails.FranchiseDetails.UniformCosts;
         $scope.KitCost = $scope.userDetails.FranchiseDetails.KitCost;
         $scope.formHide = false;
         $scope.formButtons = true;
@@ -117,8 +127,9 @@
         $scope.setUniformSizeFinal = function (Numb, UniformSize) {
             $scope.Students[Numb].UniformSize = UniformSize;
         };
-        $scope.ClassOptions = ["PlayGroup", "Nursery", "LKG", "UKG"];
-        $scope.Class = $scope.ClassOptions[0];
+        console.log("got the Classoptions " + JSON.stringify($scope.ClassOptions))
+        //$scope.ClassOptions = $scope.userDetails.FranchiseDetails.Kits//["PlayGroup", "Nursery", "LKG", "UKG"];
+
         $scope.PaymentOptions = [
             {"Name": "Cash", "Code": 101},
             {"Name": "Account Transfer", "Code": 102}
@@ -135,8 +146,8 @@
 
             var FinalCost = 0;
             $scope.Students.forEach(function (student) {
-                console.log("student " + $scope.UniformCosts[student.UniformSize] + "  " + $scope.UniformQty);
-                FinalCost += $scope.KitCost + student.UniformSize.UniformCost * student.UniformQty;
+                console.log("student Here the total cost place" + $scope.UniformSize + "  " + $scope.UniformQty);
+                FinalCost += $scope.KitCost + student.UniformSize.cost * student.UniformQty;
             });
             $scope.TotalAmount = FinalCost;
             return FinalCost
@@ -230,7 +241,6 @@
         };
         $scope.next = function () {
 
-
             if (Object.keys($scope.StudentObject).length > 0) {
                 if ($scope.StudentObject.Class == undefined) {
                     $scope.StudentObject.Class = $scope.ClassOptions[0];
@@ -263,7 +273,7 @@
             $scope.OrderForm.FranchiseId = $scope.userDetails.FranchiseId;
             $scope.OrderForm.FranchiseName = $scope.userDetails.FranchiseName;
             $scope.OrderForm.TotalAmount = $scope.TotalAmount;
-            $scope.OrderForm.ModeOfPayment = Mode.Code;
+            $scope.OrderForm.ModeOfPayment = Mode.Name;
 
             if (Mode.Code == 102) {
                 if ($scope.OrderForm.BankName == undefined || $scope.OrderForm.TransactionID == undefined) {
@@ -272,59 +282,61 @@
                         Msg: "Bank Details are necessary for Account Transfer option.",
                         view: 1
                     }
+                }else{
+                    $scope.makeOrder();
                 }
             } else {
-
-                console.log(JSON.stringify($scope.OrderForm));
-                PlaceOrder.placeOrder($scope.OrderForm).success(function (poResponse, poStatus) {
-                    console.log(" po response " + poResponse.Message);
-                    $scope.OrderForm = {};
-                    $scope.StudentObject = {};
-                    $scope.Students = [];
-                    $scope.TotalAmount = 0;
-                    $scope.$broadcast('orderPlaced', [1, 2, 3]);
-                    PlaceOrder.setModalMessage(poResponse.Message);
-                    var modalInstance = $modal.open({
-                        templateUrl: 'Modal.html',
-                        controller: 'ModalInstanceCtrl'
-
-                    });
-
-                    modalInstance.result.then(function () {
-                        console.log("executed");
-                        $scope.formHide = false;
-                        $scope.formButtons = true;
-                        $scope.studentsTab = false;
-                        $scope.paymentTab = true;
-                    }, function () {
-                        console.log('Modal dismissed at: ' + new Date());
-                    });
-
-
-                }).error(function (poErResponse, poResStatus) {
-                    console.log("err po " + poErResponse);
-                    PlaceOrder.setModalMessage(poErResponse.errorMessage);
-                    PlaceOrder.setModalMessage("error in placing order");
-                    var modalInstance = $modal.open({
-                        templateUrl: 'Modal.html',
-                        controller: 'ModalInstanceCtrl'
-                    });
-
-                    modalInstance.result.then(function () {
-                        $scope.formHide = false;
-                        $scope.formButtons = true;
-                        console.log("executed")
-                    }, function () {
-                        console.log('Modal dismissed at: ' + new Date());
-                    });
-                })
-
+                $scope.makeOrder();
             }
         };
-        $scope.getKitNumber = function (kitName) {
+
+        $scope.makeOrder = function(){
+            console.log("Order details are here " + JSON.stringify($scope.OrderForm));
+            PlaceOrder.placeOrder($scope.OrderForm).success(function (poResponse, poStatus) {
+                console.log(" po response " + poResponse.Message);
+                $scope.OrderForm = {};
+                $scope.StudentObject = {};
+                $scope.Students = [];
+                $scope.TotalAmount = 0;
+                $scope.$broadcast('orderPlaced', [1, 2, 3]);
+                PlaceOrder.setModalMessage(poResponse.Message);
+                var modalInstance = $modal.open({
+                    templateUrl: 'Modal.html',
+                    controller: 'ModalInstanceCtrl'
+                });
+
+                modalInstance.result.then(function () {
+                    console.log("executed");
+                    $scope.formHide = false;
+                    $scope.formButtons = true;
+                    $scope.studentsTab = false;
+                    $scope.paymentTab = true;
+                }, function () {
+                    console.log('Modal dismissed at: ' + new Date());
+                });
+
+
+            }).error(function (poErResponse, poResStatus) {
+                console.log("err po " + poErResponse);
+                PlaceOrder.setModalMessage(poErResponse.errorMessage);
+                PlaceOrder.setModalMessage("error in placing order");
+                var modalInstance = $modal.open({
+                    templateUrl: 'Modal.html',
+                    controller: 'ModalInstanceCtrl'
+                });
+                modalInstance.result.then(function () {
+                    $scope.formHide = false;
+                    $scope.formButtons = true;
+                    console.log("executed")
+                }, function () {
+                    console.log('Modal dismissed at: ' + new Date());
+                });
+            })
+        }
+        $scope.getKitNumber = function (kitId) {
             var numb = 0;
             $scope.Students.forEach(function (stud) {
-                if (stud.Class == kitName)
+                if (stud.Class.KitId == kitId)
                     numb++;
             })
             return numb;
@@ -391,7 +403,13 @@
         $scope.KitCost = $scope.userDetails.FranchiseDetails.KitCost;
         $scope.listView = [false, false];
         $scope.orderView = [true, true];
-
+        $scope.getTotalAmount = function(students){
+            var amount=0;
+            students.forEach(function(student){
+               amount = amount + student.UniformSize.cost*student.UniformQty + $scope.KitCost;
+            });
+            return amount;
+        }
         $scope.showOrder = function (No, index) {
             $scope.listView[No] = toggle($scope.listView[No]);
             $scope.orderView[No] = toggle($scope.orderView[No]);

@@ -63,11 +63,6 @@ ProcessOrder.prototype.placeOrder = function (req, res, orderObject) {
 
     console.log("In order function");
     console.log("Initial Check");
-    /*orderObject.Students.forEach(function(stud){
-     if((!stud.NameOfStudent || stud.NameOfStudent=="" || stud.NameOfStudent==null)||(!stud.Age || stud.Age=="" || stud.Age==null)||(!stud.Age || stud.Age=="" || stud.Age==null)){
-
-     }
-     })*/
 
     var orderId = generateOrderId(orderObject.FranchiseId);
     orderObject.OrderId = orderId;
@@ -88,19 +83,11 @@ ProcessOrder.prototype.placeOrder = function (req, res, orderObject) {
             console.log("Students inserted for order Id " + orderObject.OrderId);
             var StudentArray = [];
             var Summary = {
-                Kits: {
-                    "PlayGroup": 0,
-                    "Nursery": 0,
-                    "UKG": 0,
-                    "LKG": 0
-                },
-                Uniforms: {
-                    "2": 0,
-                    "3": 0,
-                    "5": 0,
-                    "7": 0
-                }
-            };
+                Kits: {},
+                UniformSize: {}
+            }
+
+
             for (var i = 0; i < Students.length; i++) {
                 var tempObj = {};
                 tempObj.NameOfStudent = Students[i].NameOfStudent;
@@ -108,13 +95,43 @@ ProcessOrder.prototype.placeOrder = function (req, res, orderObject) {
                 tempObj.UniformSize = Students[i].UniformSize;
                 tempObj.UniformQty = Students[i].UniformQty;
                 tempObj.Class = Students[i].Class;
-                Summary.Kits[Students[i].Class]++;
-                Summary.Uniforms[Students[i].UniformSize.UniformSize]++;
+                if (Summary.Kits[Students[i].Class.KitId] == undefined) {
+                    Summary.Kits[Students[i].Class.KitId] = Students[i].Class;
+                    Summary.Kits[Students[i].Class.KitId].Quantity = 1;
+                } else {
+                    Summary.Kits[Students[i].Class.KitId].Quantity++;
+                }
+
+                if (Summary.UniformSize[Students[i].UniformSize.ItemId] == undefined) {
+                    Summary.UniformSize[Students[i].UniformSize.ItemId] = Students[i].UniformSize;
+                    Summary.UniformSize[Students[i].UniformSize.ItemId].Quantity = 1;
+                } else {
+                    Summary.UniformSize[Students[i].UniformSize.ItemId].Quantity++;
+                }
+                /*Summary.Kits[Students[i].Class]++;
+                 Summary.Uniforms[Students[i].UniformSize.UniformSize]++;*/
                 StudentArray.push(tempObj);
             }
             orderObject.Students = StudentArray;
             orderObject.Status = "PENDING";
+            //orderObject.Summary = Summary;
+            var kitLength = Object.keys(Summary.Kits);
+            var tempArray = [];
+            kitLength.forEach(function (kit) {
+                tempArray.push(Summary.Kits[kit]);
+            });
+            Summary.Kits = tempArray;
+            tempArray = []
+            var UniformLength = Object.keys(Summary.UniformSize);
+            UniformLength.forEach(function (uniform) {
+                tempArray.push(Summary.UniformSize[uniform]);
+            })
+            Summary.UniformSize = tempArray;
+            tempArray = [];
+            console.log("Final Summary thing " + JSON.stringify(Summary));
             orderObject.Summary = Summary;
+
+
             console.log("Order Collection format " + JSON.stringify(orderObject));
 
             var OrderOptions = {
@@ -156,16 +173,14 @@ ProcessOrder.prototype.changeOrderStatus = function (req, res, body) {
     //todo order Id validation
     //todo order cycle validation
     if (Status.toLowerCase() == "completed" || Status.toLowerCase() == "dispatched") {
-        switch (status.toLowerCase()) {
+        switch (Status.toLowerCase()) {
             case "dispatched":
-                dispatchOrder(req, res, body);
+                new ProcessOrder().dispatchOrder(req, res, body);
                 break;
             case "completed":
                 completeOrder(req, res);
-
+                break;
         }
-
-
     } else {
         res.setHeader("Content-Type", "application/json");
         res.send(JSON.stringify({"success": false, "Message": "Status not supported"}));
@@ -193,66 +208,179 @@ function completeOrder(req, res) {
 }
 
 
-function dispatchOrder(req, res, body, OrderId) {
+ProcessOrder.prototype.dispatchOrder = function (req, res, body, OrderId) {
     var OrderId = req.query.OrderId;
     var options = {
         collection: "orders",
         Query: {OrderId: OrderId},
-        QuerySelect:{Summary:1}
+        QuerySelect: {Summary: 1}
     }
     new dataBase().get(options, function (err, order) {
-        //what kits need to be reduced
+        //what items need to be reduced
+        if(!err&&order.length>0){
+            console.log("the order to be changed " + JSON.stringify(order));
+            new dataBase().bulkInsert({collection: "INVENTORY"}, function (bulkInsert) {
+                reduceKitItems(req, res, 0, order[0].Summary, bulkInsert, function(req, res, Summary, bulkInsert){
+                    reduceUniforms(req, res, Summary, bulkInsert);
+                });
+            });
+        }else{
+            res.setHeader("Content-Type", "application/json");
+            res.send(JSON.stringify({"success": true, "Message": "No such order found"}));
+        }
     })
-    new dataBase().bulkInsert(options, function (bulkInsert) {
-        bulkInsert.find({"PACKAGE TRACKING NUMBER": packageTrackingNumber, "STATUS": {$ne: "DELIVERED"}}).upsert().updateOne(insertionData);
-    })
+
 }
 
-function ReduceKitItems(kitId, kitNumbers, bulkInsert) {
+function mapArrayToObject(Arr,objKey){
+    var mappedKitItems = {}
+    for (var i = 0; i < Arr.length; i++) {
+        var ArrEle = Arr[i];
+        var key = ArrEle[objKey];
+        //items.push(kitItem.ItemId)
+        mappedKitItems[key] = ArrEle;
+    }
+    return mappedKitItems;
+}
+
+function reduceKitItems(req, res, count, Summary, bulkInsert, callback) {
+    console.log(" count " + count +" here in the reduce Inventory Items " + JSON.stringify(Summary) )
+    if(count<Summary.Kits.length){
+        var options = {
+            collection: 'INVENTORY',
+            Query: {KitId: Summary.Kits[count].KitId,Category:"KIT"},
+            QuerySelect: {Kit: 1}
+        };
+        var items = [];
+        console.log("options for the Innvetory " + JSON.stringify(options))
+        new dataBase().get(options, function (err, data) {
+            if (!err) {
+                console.log("data here " + JSON.stringify(data) + "Another kit thinng ");
+
+                var mappedKitItems = {}
+                for (var i = 0; i < data[0].Kit.length; i++) {
+                    var kitItem = data[0].Kit[i];
+                    var kitItemId = kitItem.ItemId;
+                    console.log(kitItem.ItemId + " detect null "  + JSON.stringify(kitItem))
+                    items.push(kitItem.ItemId)
+                    mappedKitItems[kitItemId] = kitItem;
+                }
+                console.log("at the end " + JSON.stringify(items))
+
+                var options = {
+                    collection: 'INVENTORY',
+                    Query: {ItemId: {$in: items}},
+                    QuerySelect: {ItemId: 1, Quantity: 1}
+                }
+                console.log("option with items " + JSON.stringify(options))
+                new dataBase().get(options, function (err, itemData) {
+                    var mappedObj = {}
+                    for (var i = 0; i < itemData.length; i++) {
+                        var item = itemData[i];
+                        var ItemId = item.ItemId;
+                        mappedObj[ItemId] = item;
+                    }
+                    console.log("mapped obj " + JSON.stringify(mappedObj));
+                    console.log("mapped Kit Items " + JSON.stringify(mappedKitItems));
+                    console.log("the kit being operated " + JSON.stringify(Summary.Kits[count]));
+                    for (var j = 0; j < itemData.length; j++) {
+                     var modifiedQuantity = mappedObj[itemData[j].ItemId].Quantity - mappedKitItems[itemData[j].ItemId].Units * Summary.Kits[count].Quantity;
+                     bulkInsert.find({ItemId: itemData[j].ItemId}).upsert().updateOne({$set: {Quantity: modifiedQuantity}});
+                     }
+                    count++;
+                    reduceKitItems(req, res, count,Summary,bulkInsert);
+                })
+
+                /*res.setHeader("Content-Type", "application/json");
+                 res.send(JSON.stringify({"success": true, "Message": "Something happened"}));*/
+            } else {
+                res.setHeader("Content-Type", "application/json");
+                res.send(JSON.stringify({"success": true, "Message": "Something Not happened"}));
+            }
+        })
+
+    }else{
+        //Kits are ended
+        console.log("process compleye and ");
+        bulkInsert.execute(function (err, result) {
+            if (err) {
+                console.log("error while bulk Insert")
+            } else {
+                console.log("bulkInsert successful");
+                console.log("nInserted " + result.nInserted);
+                console.log("nUpserted " + result.nUpserted);
+                console.log("nMatched " + result.nMatched);
+                console.log("nModified " + result.nModified);
+
+                console.log("proceeding for the Uniforms reduction ")
+                new dataBase().bulkInsert({collection: "INVENTORY"}, function (bulkInsert) {
+                    reduceUniforms(req, res, Summary, bulkInsert);
+                });
+            }
+        });
+
+    }
+
+
+
+
+}
+
+function reduceUniforms(req, res, Summary, bulkInsert){
+
+    var items =[]
+    for(var i =0;i<Summary.UniformSize.length;i++){
+        items.push(Summary.UniformSize[i].ItemId);
+    }
+    var mappedOrderObj = mapArrayToObject(Summary.UniformSize,"ItemId")
     var options = {
         collection: 'INVENTORY',
-        Query: {KitId: kitId},
-        QuerySelect: {Kit: 1}
-    };
-    var items = [];
+        Query: {ItemId: {$in: items}},
+        QuerySelect: {ItemId: 1, Quantity: 1}
+    }
+    console.log("options in uniforms " + JSON.stringify(options))
+    new dataBase().get(options, function(err, data){
+        if(!err){
+            console.log("here the uniforms " + JSON.stringify(data))
+            var mappedDbObj = mapArrayToObject(data,"ItemId");
+            console.log("mapped req, order obj " + JSON.stringify(mappedOrderObj));
+            console.log("mapped db obj " + JSON.stringify(mappedDbObj))
 
-    new dataBase().get(options, function (err, data) {
-        if (!err) {
+            for (var j = 0; j < data.length; j++) {
+                if(j==data.length-1){
+                    var modifiedQuantity = mappedDbObj[data[j].ItemId].Quantity - mappedOrderObj[data[j].ItemId].Quantity;
+                    bulkInsert.find({ItemId: data[j].ItemId}).upsert().updateOne({$set: {Quantity: modifiedQuantity}});
+                    bulkInsert.execute(function (err, result) {
+                        if (err) {
+                            console.log("error while bulk Insert")
+                        } else {
+                            console.log("bulkInsert successful");
+                            console.log("nInserted " + result.nInserted);
+                            console.log("nUpserted " + result.nUpserted);
+                            console.log("nMatched " + result.nMatched);
+                            console.log("nModified " + result.nModified);
 
-            var mappedKitItems = {}
-            for (var i = 0; i < data[0].Kit.length; i++) {
-                var kitItem = data[0].Kit[i];
-                var kitItemId = kitItem.ItemId;
-                mappedKitItems[kitItemId] = kitItem;
-            }
-
-            data.forEach(function (arrEle) {
-                items.push(arrEle.ItemId);
-            })
-
-            var options = {
-                collection: 'INVENTORY',
-                Query: {ItemId: {$in: items}},
-                QuerySelect: {ItemId: 1, Quantity: 1}
-            }
-
-            new dataBase().get(options, function (err, itemData) {
-                var mappedObj = {}
-                for (var i = 0; i < itemData.length; i++) {
-                    var item = itemData[i];
-                    var ItemId = item.ItemId;
-                    mappedObj[ItemId] = item;
+                            console.log("proceeding for the Uniforms reduction ")
+                            res.setHeader("Content-Type", "application/json");
+                            res.send(JSON.stringify({"success": true, "Message": "done correctly"}));
+                        }
+                    });
+                }else{
+                    var theObj = mappedOrderObj[data[j].ItemId];
+                    console.log("the obj " + JSON.stringify(theObj) + Object.keys(theObj));
+                    console.log("here " +data[j].ItemId + " mapped orde " + JSON.stringify(mappedOrderObj[data[j].ItemId]) +" the quant "+ mappedOrderObj[data[j].ItemId].Quantity)
+                    console.log("before reducing " + mappedDbObj[data[j].ItemId].Quantity + " and " + mappedOrderObj[data[j].ItemId].Quantity);
+                    var modifiedQuantity = (mappedDbObj[data[j].ItemId].Quantity - mappedOrderObj[data[j].ItemId].Quantity);
+                    bulkInsert.find({ItemId: data[j].ItemId}).upsert().updateOne({$set: {Quantity: modifiedQuantity}});
                 }
-                for (var j = 0; j < itemData.length; j++) {
-                    var modifiedQuantity = mappedObj[itemData[j].ItemId].Quantity - mappedKitItems[itemData[j].ItemId].Units * kitNumbers;
-                    bulkInsert.find({ItemId: itemData[j].ItemId}).upsert().updateOne({$set: {Quantity: modifiedQuantity}});
-                }
 
-            })
-        } else {
+
+            }
 
         }
     })
+
+
 }
 
 function generateOrderId(franchiseID) {
