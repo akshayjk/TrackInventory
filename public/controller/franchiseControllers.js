@@ -403,13 +403,7 @@
         $scope.KitCost = $scope.userDetails.FranchiseDetails.KitCost;
         $scope.listView = [false, false];
         $scope.orderView = [true, true];
-        $scope.getTotalAmount = function(students){
-            var amount=0;
-            students.forEach(function(student){
-               amount = amount + student.UniformSize.cost*student.UniformQty + $scope.KitCost;
-            });
-            return amount;
-        }
+
         $scope.showOrder = function (No, index) {
             $scope.listView[No] = toggle($scope.listView[No]);
             $scope.orderView[No] = toggle($scope.orderView[No]);
@@ -424,6 +418,13 @@
             } else if (data == false) {
                 return true;
             }
+        }
+        $scope.getTotalAmount = function(students){
+            var amount=0;
+            students.forEach(function(student){
+                amount = amount + student.UniformSize.cost*student.UniformQty + $scope.KitCost;
+            });
+            return amount;
         }
 
     }]);

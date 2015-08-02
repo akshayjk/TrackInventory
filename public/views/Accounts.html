@@ -72,7 +72,7 @@
                     <div ng-show="alertMsg.view">
                         <alert type="{{alertMsg.type}}" close="clearAlert()">{{alertMsg.Msg}}</alert>
                     </div>
-                    <form class="col-xs-12" ng-submit="createAccount()">
+                    <form class="col-xs-12" ng-submit="createAccount(UniformSize)">
                         <div class="col-xs-6">
                             <div class="form-group">
                                 <label for="FranchiseAccEmail">Franchise Email</label>
@@ -122,8 +122,6 @@
                                 </div>
                             </div>
                         </div>
-                           All Values : {{UniformSize}}
-
                     </form>
                 </div>
             </div>

@@ -767,8 +767,8 @@
                 $scope.AccountDet.FranchiseDetails = {};
                 $scope.AccountDet.FranchiseDetails.UniformCosts = $scope.UniformSize;
                 $scope.AccountDet.FranchiseDetails.KitCost = $scope.KitCost;
-            }
-            ;
+                //if()
+            };
 
             Auth.createAccount($scope.AccountDet).success(function () {
                 $scope.alertMsg = {
