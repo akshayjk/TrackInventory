@@ -20,6 +20,9 @@
     "jwt-simple": "^0.3.0",
     "json2csv": "^2.2.1",
     "express":"^4.0.0",
-    "mongodb":"latest"
+    "mongodb":"latest",
+    "mandrill-api":"latest",
+    "mailgun-js":"latest",
+    "mailcomposer":"latest"
   }
 }

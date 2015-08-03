@@ -62,23 +62,23 @@
 
     App.controller("OrderForm", ["$scope", "$location", "$modal", "PlaceOrder", function ($scope, $location, $modal, PlaceOrder) {
 
-        $scope.getVisibleKits =function(){
-            PlaceOrder.getVisibleKits().success(function(visibleKits, status){
+        $scope.getVisibleKits = function () {
+            PlaceOrder.getVisibleKits().success(function (visibleKits, status) {
                 console.log("Classoptions initiated")
                 $scope.ClassOptions = visibleKits;
                 $scope.Class = $scope.ClassOptions[0];
-            }).error(function(errKit,errStat){
+            }).error(function (errKit, errStat) {
                 console.log("err in getting response " + errKit)
             });
         };
         $scope.getVisibleKits();
         $scope.userDetails = JSON.parse(sessionStorage.userDetails);
-       /* $scope.UniformCosts =[
-            {UniformSize: 2, UniformCost: 10},
-            {UniformSize: 3, UniformCost: 20},
-            {UniformSize: 5, UniformCost: 30},
-            {UniformSize: 7, UniformCost: 40}
-        ] */
+        /* $scope.UniformCosts =[
+         {UniformSize: 2, UniformCost: 10},
+         {UniformSize: 3, UniformCost: 20},
+         {UniformSize: 5, UniformCost: 30},
+         {UniformSize: 7, UniformCost: 40}
+         ] */
         $scope.UniformCosts = $scope.userDetails.FranchiseDetails.UniformCosts;
         $scope.KitCost = $scope.userDetails.FranchiseDetails.KitCost;
         $scope.formHide = false;
@@ -282,7 +282,7 @@
                         Msg: "Bank Details are necessary for Account Transfer option.",
                         view: 1
                     }
-                }else{
+                } else {
                     $scope.makeOrder();
                 }
             } else {
@@ -290,7 +290,7 @@
             }
         };
 
-        $scope.makeOrder = function(){
+        $scope.makeOrder = function () {
             console.log("Order details are here " + JSON.stringify($scope.OrderForm));
             PlaceOrder.placeOrder($scope.OrderForm).success(function (poResponse, poStatus) {
                 console.log(" po response " + poResponse.Message);
@@ -399,7 +399,7 @@
             var str = new Date(Obj).toString();
             return str.substring(0, str.length - 30)
         };
-        $scope.UniformCosts =$scope.userDetails.FranchiseDetails.UniformCosts;
+        $scope.UniformCosts = $scope.userDetails.FranchiseDetails.UniformCosts;
         $scope.KitCost = $scope.userDetails.FranchiseDetails.KitCost;
         $scope.listView = [false, false];
         $scope.orderView = [true, true];
@@ -419,11 +419,15 @@
                 return true;
             }
         }
-        $scope.getTotalAmount = function(students){
-            var amount=0;
-            students.forEach(function(student){
-                amount = amount + student.UniformSize.cost*student.UniformQty + $scope.KitCost;
-            });
+
+        $scope.getTotalAmount = function (students) {
+            var amount = 0;
+            if (students) {
+                students.forEach(function (student) {
+                    amount = amount + student.UniformSize.cost * student.UniformQty + $scope.KitCost;
+                });
+            }
+
             return amount;
         }
 

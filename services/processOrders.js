@@ -4,7 +4,8 @@
 
 var dataBase = require('./DbOperations.js');
 var define = require('./Define.js');
-var responseHandler = require('./ResponseHandler.js')
+var responseHandler = require('./ResponseHandler.js');
+var sendMail = require('./SendEmail.js');
 
 
 function ProcessOrder() {
@@ -221,7 +222,13 @@ ProcessOrder.prototype.dispatchOrder = function (req, res, body, OrderId) {
             console.log("the order to be changed " + JSON.stringify(order));
             new dataBase().bulkInsert({collection: "INVENTORY"}, function (bulkInsert) {
                 reduceKitItems(req, res, 0, order[0].Summary, bulkInsert, function(req, res, Summary, bulkInsert){
-                    reduceUniforms(req, res, Summary, bulkInsert);
+                    reduceUniforms(req, res, Summary, bulkInsert, function(){
+                        //Done correctly
+                        //Send confirmation emails
+                        sendConfirmationMails(OrderId);
+                        res.setHeader("Content-Type", "application/json");
+                        res.send(JSON.stringify({"success": true, "Message": "Order dispatched successfully"}));
+                    });
                 });
             });
         }else{
@@ -326,7 +333,7 @@ function reduceKitItems(req, res, count, Summary, bulkInsert, callback) {
 
 }
 
-function reduceUniforms(req, res, Summary, bulkInsert){
+function reduceUniforms(req, res, Summary, bulkInsert, callback){
 
     var items =[]
     for(var i =0;i<Summary.UniformSize.length;i++){
@@ -360,9 +367,10 @@ function reduceUniforms(req, res, Summary, bulkInsert){
                             console.log("nMatched " + result.nMatched);
                             console.log("nModified " + result.nModified);
 
-                            console.log("proceeding for the Uniforms reduction ")
-                            res.setHeader("Content-Type", "application/json");
-                            res.send(JSON.stringify({"success": true, "Message": "done correctly"}));
+                            console.log("proceeding for the Uniforms reduction ");
+                            callback();
+                            /*res.setHeader("Content-Type", "application/json");
+                            res.send(JSON.stringify({"success": true, "Message": "done correctly"}));*/
                         }
                     });
                 }else{
@@ -389,6 +397,16 @@ function generateOrderId(franchiseID) {
     var post = new Date().getTime().toString();
     return pre + post;
 }
+
+function sendConfirmationMails(OrderId){
+
+    var options ={
+        collection :"students",
+        Query :{OrderId :OrderId},
+        QuerySelect :{}
+    }
+}
+
 
 
 module.exports = ProcessOrder;
