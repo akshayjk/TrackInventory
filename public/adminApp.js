@@ -16,7 +16,8 @@
         "ui.bootstrap",
         "ui.select",
         "ngSanitize",
-        "angular-ladda"
+        "angular-ladda",
+        "angularFileUpload"
     ]);
 
     App.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {

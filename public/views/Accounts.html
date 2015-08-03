@@ -7,7 +7,8 @@
                 </b></a></li>
                 <li class="" id="AddAccountTab"><a data-target="#AddAccount" class="onHoverClass"
                                                    data-toggle="tab"><b>Add Account</b></a></li>
-
+                <li class="" id="AddBulkTab"><a data-target="#AddBulk" class="onHoverClass"
+                                                   data-toggle="tab"><b>Upload</b></a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="ViewAccounts" ng-show="AccountView">
@@ -86,11 +87,11 @@
                                 <input type="text" class="form-control" id="FranchiseAccName"
                                        ng-model="AccountDet.FranchiseName" placeholder="LE Kolkata" required>
                             </div>
-                            <div class="form-group">
+                            <!--<div class="form-group">
                                 <label for="exampleInputPassword1">Password</label>
                                 <input type="password" class="form-control" ng-model="AccountDet.Password"
                                        id="exampleInputPassword1" placeholder="Password" required>
-                            </div>
+                            </div>-->
                             <div class="btn-group">
                                 <label class="btn btn-sm btn-primary" ng-model="RoleRadioModel"
                                        btn-radio=0>Franchise</label>
@@ -123,6 +124,12 @@
                             </div>
                         </div>
                     </form>
+                </div>
+                <div class="tab-pane" id="AddBulk" style="background-color:white;padding-bottom: 10px;">
+                    <p>Upload an excel file with account details.</p>
+
+
+                        <button class="btn btn-primary" type="submit" ng-click="openAddFiles()">upload</button>
                 </div>
             </div>
         </div>

@@ -5,12 +5,12 @@
     <title>Little Einstein - Log in</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.4 -->
-    <link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <!-- Font Awesome Icons -->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css"/>
     <!-- Theme style -->
-    <link href="../../dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
-
+    <link href="../../dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css"/>
 
 
     <!-- LIBRARIES -->
@@ -30,37 +30,93 @@
     <div class="login-logo">
         <img src="Images/LE_LogoMed.png" style="width:40%;">
         <a href="../../index2.html"><h2>Little Einstein Preschool</h2></a>
+
         <p style="font-size:22px;">Inventory</p>
-    </div><!-- /.login-logo -->
+    </div>
+    <!-- /.login-logo -->
     <div class="login-box-body" style="background-color: #F2F3F4;box-shadow: 1px 1px 2px 1px #c4c4c4;">
         <p class="login-box-msg">Sign in to start your session</p>
-        <p style="color:red;text-align: center">{{loginError}} </p>
-        <div>
-            <form ng-submit="login()">
-            <div class="form-group has-feedback">
-                <input type="text" class="form-control" ng-model="loginForm.username" autofocus placeholder="Username"/>
-                <span class="glyphicon glyphicon-envelope form-control-feedback" ></span>
-                <p ng-model="loginForm.username"></p>
-            </div>
-            <div class="form-group has-feedback">
-                <input type="password" class="form-control" ng-model="loginForm.password" placeholder="Password"/>
-                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-            </div>
-            <div class="row">
-                <div class="col-xs-8">
-                    <div class="checkbox icheck">
 
+        <p style="color:red;text-align: center">{{loginError}} </p>
+
+        <div>
+            <form ng-submit="login()" ng-show="signIn">
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" ng-model="loginForm.username" autofocus
+                           placeholder="Email"/>
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input type="password" class="form-control" ng-model="loginForm.password" placeholder="Password"/>
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 pull-left">
+                        <button type="button" class="btn btn-success btn-block btn-flat" ng-click="verification()">
+                            Register
+                        </button>
                     </div>
-                </div><!-- /.col -->
-                <div class="col-xs-4">
-                    <button type=""  class="btn btn-primary btn-block btn-flat">Sign In</button>
-                </div><!-- /.col -->
-            </div>
+                    <div class="col-xs-4 pull-right">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                    </div>
+                    <!-- /.col -->
+
+                </div>
             </form>
+            <form ng-show="verifyEmailId">
+                <b>Note :</b> You will be registered only if you exist in our database.<br>
+                Please enter your email id.
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" ng-model="register.emailId" autofocus
+                           placeholder="Email Id"/>
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 pull-left">
+                        <button type="button" class="btn btn-success btn-block btn-flat"
+                                ng-click="verifyEmail(register.emailId);loginError=''">Verify
+                        </button>
+                    </div>
+                    <div class="col-xs-4 pull-right">
+                        <button type="button" class="btn btn-primary btn-block btn-flat"
+                                ng-click="verifyEmailId=false;signIn=true;loginError=''">Back
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+            <form ng-show="regPass">
+                <b>Note :</b> <br>
+                1. Use only characters and numbers to create password. Do not user Special characters.<br>
+                2. Password length should not be more than 10 characters.<br>
+                Please enter password :<br>
+
+                <div class="form-group has-feedback">
+                    <input type="password" class="form-control" ng-model="pass" autofocus
+                           placeholder="password"/>
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+
+                </div>
+                <div class="row">
+                <div class="col-xs-4 pull-left">
+                    <button type="button" class="btn btn-success btn-block btn-flat" ng-click="registerMember(pass)">
+                        Create
+                    </button>
+                </div>
+                <div class="col-xs-4 pull-right">
+                    <button type="button" class="btn btn-primary btn-block btn-flat"
+                            ng-click="regPass=false;signIn=true;loginError=''">Back
+                    </button>
+                </div>
+                </div>
+            </form>
+
         </div>
 
-    </div><!-- /.login-box-body -->
-</div><!-- /.login-box -->
+    </div>
+    <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
 
 <!-- jQuery 2.1.4 -->
 <script src="bootstrap/js/jquery-2.1.4.min.js"></script>

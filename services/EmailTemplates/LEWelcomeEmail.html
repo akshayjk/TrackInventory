@@ -1,110 +1,109 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-    <style>
-        @media screen and (max-width: 700px) {
-            .mailBox{
-                position: absolute;
-                top:10%;
-                left:1%;
-                right:1%;
-                width: 90%;
-            }
-        }
-        .mailBox{
-            position: absolute;
-            top:10%;
-            left:25%;
-            right:25%;
-            width: 50%;
-            max-width: 500px;
-        }
-        .mailHeader{
-            background-color: #4F96D5;
-            min-height: 5%;
-            padding:2%;
-            border-radius: 5px 5px 0px 0px;
-        }
-        .mailContent {
-            background-color: white;
-            padding:2%;
-            border:1px solid #ddd;
-        }
-        h2{
-            font-family: 'proxima_novathin', Helvetica;
-            font-weight: normal;
-            color: white;
-            font-size: x-large;            
-        }
-        p{
-            font-family: 'proxima_novathin', Helvetica;
-            font-weight: normal;
-            color: black;
-            font-size: medium;
-            padding-left:2%;
-            padding-right:2%;
-            color: #4c4c4c;
-        }
-        .headerContent{
-            display: inline-block;
-        }
-        img{
-            width:25%;
-            display: inline-block;
-            padding-right: 2%;
-        }
-        .addressDetails{
-            font-family: 'proxima_novathin', Helvetica;
-            font-weight: normal;
-            font-size: medium;
-            color: #4c4c4c;
-            padding-bottom: 2%;
-            padding-left:2%;
-        }
-        .footerPart{
-            min-height: 30px;
-            padding-top:2%;
-            padding-bottom: 2%;
-            color: #939393;
-        }
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+<head>
+<meta name="viewport" content="width=device-width" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Alerts e.g. approaching your limit</title>
 
-    </style>
+
+<style type="text/css">
+img {
+max-width: 100%;
+}
+body {
+-webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em;
+}
+body {
+background-color: #f6f6f6;
+}
+@media only screen and (max-width: 640px) {
+  body {
+    padding: 0 !important;
+  }
+  h1 {
+    font-weight: 800 !important; margin: 20px 0 5px !important;
+  }
+  h2 {
+    font-weight: 800 !important; margin: 20px 0 5px !important;
+  }
+  h3 {
+    font-weight: 800 !important; margin: 20px 0 5px !important;
+  }
+  h4 {
+    font-weight: 800 !important; margin: 20px 0 5px !important;
+  }
+  h1 {
+    font-size: 22px !important;
+  }
+  h2 {
+    font-size: 18px !important;
+  }
+  h3 {
+    font-size: 16px !important;
+  }
+  .container {
+    padding: 0 !important; width: 100% !important;
+  }
+  .content {
+    padding: 0 !important;
+  }
+  .content-wrap {
+    padding: 10px !important;
+  }
+  .invoice {
+    width: 100% !important;
+  }
+}
+</style>
 </head>
-<body style="background-color: #f7f7f7">
-    <div class="mailBox">
-        <table class="mailHeader" style="background-color: #4F96D5;min-height: 5%;padding:2%;border-radius: 5px 5px 0px 0px;">
-            <tr>
-                <td style="width:10%;">
-                    <img editable="true" src="https://pbs.twimg.com/profile_images/519630342/LE_logo_TM.JPG" width="25%" alt="" border="0" style="float:left; margin:2%;" mc:edit="39">
-                    <div width="100%" height="auto" style="font-family: 'proxima_novathin', Helvetica; font-weight: normal; color:white; font-size:x-large; margin-top:10%; margin-right:20%;">Little Einsteins Preschool</div>
-                </td>
-            </tr>
 
-        </table>
-        <div class="mailContent" style="background-color: white;padding-left:2%;padding-right:2%;border:1px solid #ddd;">
-            <h2 style="color: #000000">Dear NameOfParent</h2>
-            <p>Welcome to the Little Einsteins Preschool. Teaching to the uniqueness of each mind we focus on the process of learning and value the exchange of ideas through collaborative work.</p>
-            <br>
-            <p>Since we understand that every child learns in many ways and each has his own interests and needs, we provide children with multiple access to a concept through their different intelligences. We also do our best not only to provide a holistic curriculum but also practice “differentiated teaching” inside our classrooms because we understand the differences in interests, needs, and learning styles among the learners.</p>
-            <br>
-            <p>While the welcome kit for your child has been dispatched from our end, we would love to hear from you on your experience with Little Einsteins so far. </p>
-            <br>
-            <p>It is always a pleasure to seek your support and suggestions on our endeavors to make Little Einsteins a comfortable place for your child.</p>
-            <br>
-            <p>We would like to thank you for sharing your child with us.</p>
-            <br>
-            <div class="addressDetails" style="font-family: 'proxima_novathin', Helvetica;font-weight: normal;font-size: medium;color: #4c4c4c;padding-bottom: 2%;padding-left:2%;">
-                <a href="mailto:kopal@littleeinsteins.co.in">Kopal Maheshwari</a><br>
-                Chairman<br>
-                Little Einsteins<br>
-                Phone : 09989058655<br>
-                Visit Us @ <a href="http://littleeinsteins.co.in">Little Einsteins</a>
-            </div>
-        </div>
-        <div class="footerPart">&copy; Little Einsteins</div>
-    </div>
+<body itemscope itemtype="http://schema.org/EmailMessage" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em; background-color: #f6f6f6; margin: 0;" bgcolor="#f6f6f6">
 
-</body>
+<table class="body-wrap" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #f6f6f6; margin: 0;" bgcolor="#f6f6f6"><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;" valign="top"></td>
+		<td class="container" width="600" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; display: block !important; max-width: 600px !important; clear: both !important; margin: 0 auto;" valign="top">
+			<div class="content" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: block; margin: 0 auto; padding: 20px;">
+				<table class="main" width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; background-color: #fff; margin: 0; border: 1px solid #e9e9e9;" bgcolor="#fff"><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="alert alert-warning" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; color: #fff; font-weight: 500; text-align: center; border-radius: 3px 3px 0 0; background-color: #348eda; margin: 0; padding: 20px;" align="center" bgcolor="#FF9F00" valign="top">
+							<img src="https://pbs.twimg.com/profile_images/519630342/LE_logo_TM.JPG" width="25%" style='float:left !important;'><div style="padding-top:10%;font-size:30px;">Little Einsteins Preschool</div>
+						</td>
+					</tr><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-wrap" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px;" valign="top">
+							<table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+										<strong style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">Dear Parent,</strong>
+									</td>
+								</tr><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+										Welcome to the Little Einsteins Preschool. Teaching to the uniqueness of each mind focus on the process of learning and value the exchange of ideas through collaborative work.
+									</td>
+								</tr>
+                <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+                    Since we understand that every child learns in many ways and each has his own interests and needs, we provide children with multiple access to a concept through their different intelligences. We also do our best not only to provide a holistic curriculum but also practice “differentiated teaching” inside our classrooms because we understand the differences in interests, needs, and learning styles among the learners.
+                  </td>
+                </tr>
+
+                <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+                    While the welcome kit for your child has been dispatched from our end, we would love to hear from you on your experience with Little Einsteins so far.
+                  </td>
+                </tr>
+
+                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+                    It is always a pleasure to seek your support and suggestions on our endeavours to make Little Einsteins a comfortable place for your child.
+                  </td>
+                </tr>
+                <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+                    We would like to thank you for sharing your child with
+                  </td>
+                </tr>
+                <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+                    <a href="mailto:kopal@littleeinsteins.co.in">Kopal Maheshwari</a><br>
+                  Chairman<br>
+                  Little Einsteins<br>
+                  Phone : 09989058655<br>
+                  Visit Us @ <a href="http://littleeinsteins.co.in">Little Einsteins</a>
+                  </td>
+                </tr>
+                </table></td>
+					</tr></table><div class="footer" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; clear: both; color: #999; margin: 0; padding: 20px;">
+					<table width="100%" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="aligncenter content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 12px; vertical-align: top; color: #999; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top"><a href="http://littleeinsteins.co.in" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 12px; color: #999; text-decoration: underline; margin: 0;">&copy; Little Einsteins</a> Preschool.</td>
+						</tr></table></div></div>
+		</td>
+		<td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;" valign="top"></td>
+	</tr></table></body>
 </html>

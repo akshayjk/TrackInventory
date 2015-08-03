@@ -331,6 +331,9 @@
         };
         $scope.KitCost = 500;
 
+
+
+
         $scope.getOrders = function () {
             PlaceOrder.getOrders().success(function (getOrderResponse, getOrderStatus) {
 

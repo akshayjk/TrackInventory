@@ -8,6 +8,17 @@
 
     App.factory('Auth', ['$http', function ($http, $scope) {
         return {
+            verifyEmail:function(email){
+                console.log("email in service " + email)
+                var url = '/auth/verify?email='+email;
+                var VerifyReq = {method: 'GET', url: url};
+                return $http(VerifyReq);
+            },
+            registerAccount:function(password, token){
+                var url =  "/auth/registerAccount?token=" + token;
+              var regAcc = {method:'POST', url:url, data:{password:password}};
+                return $http(regAcc);
+            },
             login: function (data) {
                 var LoginReq = {method: 'POST', url: '/auth/login', data: data};
                 return $http(LoginReq);
@@ -36,6 +47,10 @@
     App.factory('PlaceOrder', ['$http', function ($http, $scope) {
         var ModalMessage ="";
         return {
+            inventoryHealth:function(){
+                var SendCodeReq = {method: 'GET', url: '/order/health'};
+                return $http(SendCodeReq);
+            },
             placeOrder: function (data) {
                 console.log("initiated the request");
                 var SendCodeReq = {method: 'POST', url: '/order/orders', data: data};

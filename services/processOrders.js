@@ -12,6 +12,22 @@ function ProcessOrder() {
 
 }
 
+ ProcessOrder.prototype.getInventoryHealth = function(req, res, body){
+
+    var options = {
+        collection :"INVENTORY",
+        Query :{Category:{$ne:"KIT"},Quantity:{$lte:20}},
+        QuerySelect:{Name:1,Quantity:1, Category:1}
+    }
+    new dataBase().get(options,function(err, data){
+        if(!err){
+            new responseHandler().sendResponse(req, res, "success", data, 200);
+        }else{
+            new responseHandler().sendResponse(req, res, "error", err, 500);
+        }
+    })
+}
+
 ProcessOrder.prototype.getOrders = function (req, res, body) {
     //Fetches Orders
     console.log("request for get Orders");
@@ -95,6 +111,7 @@ ProcessOrder.prototype.placeOrder = function (req, res, orderObject) {
                 tempObj.RegistrationNumber = Students[i].RegistrationNumber;
                 tempObj.UniformSize = Students[i].UniformSize;
                 tempObj.UniformQty = Students[i].UniformQty;
+                tempObj.StudentId = tempObj.NameOfStudent.substring(0,5).toUpperCase() + new Date().getTime().toString();
                 tempObj.Class = Students[i].Class;
                 if (Summary.Kits[Students[i].Class.KitId] == undefined) {
                     Summary.Kits[Students[i].Class.KitId] = Students[i].Class;
@@ -189,26 +206,6 @@ ProcessOrder.prototype.changeOrderStatus = function (req, res, body) {
 
 };
 
-function completeOrder(req, res) {
-    var OrderId = req.query.OrderId;
-    var orderCompleteOption = {
-        collection: define.ordersCollection,
-        Query: {OrderId: OrderId},
-        updateObject: {Status: "COMPLETED"}
-    };
-    new dataBase().update(orderCompleteOption, function (err, result) {
-        if (!err) {
-            console.log("Success in update");
-            var response = {};
-            response.success = true;
-            response.Status = "COMPLETED";
-            res.setHeader("Content-Type", "application/json");
-            res.send(JSON.stringify(response));
-        }
-    })
-}
-
-
 ProcessOrder.prototype.dispatchOrder = function (req, res, body, OrderId) {
     var OrderId = req.query.OrderId;
     var options = {
@@ -237,6 +234,29 @@ ProcessOrder.prototype.dispatchOrder = function (req, res, body, OrderId) {
         }
     })
 
+}
+
+ProcessOrder.prototype.uploadBulkOrders = function(req, res, fileJSON){
+
+}
+
+function completeOrder(req, res) {
+    var OrderId = req.query.OrderId;
+    var orderCompleteOption = {
+        collection: define.ordersCollection,
+        Query: {OrderId: OrderId},
+        updateObject: {Status: "COMPLETED"}
+    };
+    new dataBase().update(orderCompleteOption, function (err, result) {
+        if (!err) {
+            console.log("Success in update");
+            var response = {};
+            response.success = true;
+            response.Status = "COMPLETED";
+            res.setHeader("Content-Type", "application/json");
+            res.send(JSON.stringify(response));
+        }
+    })
 }
 
 function mapArrayToObject(Arr,objKey){
@@ -290,16 +310,28 @@ function reduceKitItems(req, res, count, Summary, bulkInsert, callback) {
                     console.log("mapped obj " + JSON.stringify(mappedObj));
                     console.log("mapped Kit Items " + JSON.stringify(mappedKitItems));
                     console.log("the kit being operated " + JSON.stringify(Summary.Kits[count]));
+                    var notEnoughItems = false;
                     for (var j = 0; j < itemData.length; j++) {
-                     var modifiedQuantity = mappedObj[itemData[j].ItemId].Quantity - mappedKitItems[itemData[j].ItemId].Units * Summary.Kits[count].Quantity;
-                     bulkInsert.find({ItemId: itemData[j].ItemId}).upsert().updateOne({$set: {Quantity: modifiedQuantity}});
-                     }
+                       var modifiedQuantity = mappedObj[itemData[j].ItemId].Quantity - mappedKitItems[itemData[j].ItemId].Units * Summary.Kits[count].Quantity;
+                       if(modifiedQuantity<0){
+                            notEnoughItems = true;
+                            break;
+                       }else{
+                        bulkInsert.find({ItemId: itemData[j].ItemId}).upsert().updateOne({$set: {Quantity: modifiedQuantity}});
+                        }
+
+                    }
+                if(notEnoughItems){
+                    new responseHandler().sendResponse(req, res, "error", "Not enough items in Inventory.", 403);
+                }else{
                     count++;
-                    reduceKitItems(req, res, count,Summary,bulkInsert);
-                })
+                reduceKitItems(req, res, count,Summary,bulkInsert);
+                }
+
+            })
 
                 /*res.setHeader("Content-Type", "application/json");
-                 res.send(JSON.stringify({"success": true, "Message": "Something happened"}));*/
+                res.send(JSON.stringify({"success": true, "Message": "Something happened"}));*/
             } else {
                 res.setHeader("Content-Type", "application/json");
                 res.send(JSON.stringify({"success": true, "Message": "Something Not happened"}));
@@ -379,12 +411,18 @@ function reduceUniforms(req, res, Summary, bulkInsert, callback){
                     console.log("here " +data[j].ItemId + " mapped orde " + JSON.stringify(mappedOrderObj[data[j].ItemId]) +" the quant "+ mappedOrderObj[data[j].ItemId].Quantity)
                     console.log("before reducing " + mappedDbObj[data[j].ItemId].Quantity + " and " + mappedOrderObj[data[j].ItemId].Quantity);
                     var modifiedQuantity = (mappedDbObj[data[j].ItemId].Quantity - mappedOrderObj[data[j].ItemId].Quantity);
+                    if(modifiedQuantity<0){
+                        new responseHandler().sendResponse(req, res, "error", "Not enough items in Inventory.", 403);
+                        break;
+                    }
                     bulkInsert.find({ItemId: data[j].ItemId}).upsert().updateOne({$set: {Quantity: modifiedQuantity}});
                 }
 
 
             }
 
+        }else{
+            new responseHandler().sendResponse(req, res, "error", err, 500);
         }
     })
 
@@ -400,11 +438,43 @@ function generateOrderId(franchiseID) {
 
 function sendConfirmationMails(OrderId){
 
+
+   /* new dataBase().bulkInsert({collection: "students"}, function (bulkInsert){
+        this.bulkInsert = bulkInsert;
+    })*/
+
     var options ={
         collection :"students",
         Query :{OrderId :OrderId},
-        QuerySelect :{}
+        QuerySelect :{ParentName:1,ParentEmail:1,StudentId:1}
     }
+
+    new dataBase().get(options, processStudentData)
+
+    function processStudentData(err, data){
+        if(!err){
+            data.forEach(function(student){
+                new sendMail({receiver:student.ParentEmail}).sendByMandrill(student.ParentName, function(err, success){
+                    var Time = new Date().toISOString();
+                    var studOptions = {
+                        collection:"students",
+                        Query:{StudentId:student.StudentId},
+                        updateObject:{EmailSentAt:Time}
+                    }
+                    new dataBase().update(studOptions, function(err, result){
+                        if(!err){
+                            console.log("Logged the thing")
+                        }else{
+                            console.log("error in the student Update")
+                        }
+                    })
+                })
+            })
+        }
+    }
+
+
+
 }
 
 

@@ -12,7 +12,59 @@
          $scope.valueFromService = UtilSrvc.helloWorld("User");*/
         console.log("here again")
         $scope.loginForm = {};
+        $scope.register ={};
         $scope.loginError = "";
+        $scope.signIn = true;
+        $scope.verifyEmailId = false;
+        $scope.regPass = false;
+        $scope.verification = function(){
+            $scope.signIn = false;
+            $scope.verifyEmailId = true;
+
+        }
+        $scope.verifyEmail = function(emailId){
+            console.log("email here " + emailId)
+            if(emailId!=undefined){
+                Auth.verifyEmail(emailId).success(function(res, stat){
+                    $scope.signIn=false;
+                    $scope.verifyEmailId = false;
+                    $scope.regPass= true;
+                    console.log("res "+ JSON.stringify(res))
+                    $scope.userToken = res.token;
+                }).error(function(res, status){
+                    if(typeof(res)=='string'){
+                        $scope.loginError = res;
+                    }else{
+                        $scope.loginError = res.errorMessage;
+                    }
+
+                })
+            }else{
+                $scope.loginError = "Email is required !";
+            }
+
+        }
+
+        $scope.registerMember=function(pass){
+            if(pass){
+                if(pass>10){
+                    $scope.loginError ="Password length is more than 10 characters."
+                }else{
+                    console.log("token here " + $scope.userToken)
+                    Auth.registerAccount(pass,$scope.userToken).success(function(res, stat){
+                        $scope.loginError = res.message;
+                        $scope.signIn=true;
+                        $scope.verifyEmailId = false;
+                        $scope.regPass= false;
+                    }).error(function(res, erStat){
+                        $scope.loginError = res;
+                    })
+                }
+            }else{
+            $scope.loginError = "Password is necessary !"
+            }
+        }
+
         $scope.login = function () {
             console.log($scope.loginForm);
             if($scope.loginForm.username!=undefined && $scope.loginForm.password!=undefined){

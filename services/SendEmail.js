@@ -21,20 +21,20 @@ function sendEmail(options){
     this.fromName = options.fromName || define.emailAppearanceName;
 }
 
-sendEmail.prototype.sendByMandrill = function(){
+sendEmail.prototype.sendByMandrill = function(parentName){
     var m = new mandrill.Mandrill(this.mandrillKey);
     var htmlEmail = fs.readFileSync(this.emailTemplate);
-    var parentName = "Satish Kumar"
-    htmlEmail = htmlEmail.toString();
+    //var parentName = "Satish Kumar"
+    /*htmlEmail = htmlEmail.toString();
     console.log("type is " + typeof(htmlEmail))
     console.log("search" +  htmlEmail.search('NameOfParent'))
-    htmlEmail = htmlEmail.replace('NameOfParent', parentName);
+    htmlEmail = htmlEmail.replace('NameOfParent', parentName);*/
 
     var params = {
         "message": {
             "from_email":this.sender,
             "from_name":this.fromName,
-            "to":[{"email":"akshayjkul10@yahoo.co.in"}],
+            "to":[{"email":this.receivers}],
             "subject": this.subject,
             "html": htmlEmail
         }
@@ -90,6 +90,79 @@ sendEmail.prototype.sendByMailgun = function(){
         });
     });
 }
+
+
+/*var mandrill = require('node-mandrill')('5N4xzHAOdPQZ_wYnih4sSA');
+
+ mandrill('/messages/send', {
+ message: {
+ to: [{email: 'akshayjk10@gmail.com', name: 'Akshay Kulkarni'}],
+ from_email: 'akshayjkul10@yahoo.co.in',
+ subject: "Hey, what's up?",
+ text: "Hello, I sent this message using mandrill in Node JS."
+ }
+ }, function(error, response)
+ {
+ //uh oh, there was an error
+ if (error) console.log( JSON.stringify(error) );
+
+ //everything's good, lets see what mandrill said
+ else console.log(response);
+ });*/
+
+
+// Create a function to log the response from the Mandrill API
+/*function log(obj) {
+ $('#response').text(JSON.stringify(obj));
+ }
+ */
+// create a new instance of the Mandrill class with your API key
+
+
+
+
+//var Mailgun = require('mailgun-js');
+//init express
+
+
+/*var api_key = 'key-fda05f03f2000743665533a688939127';
+
+
+ var domain = 'sandboxe37c4edf5e3f4df6beeb7bb39a591946.mailgun.org';
+
+
+ var from_who = 'postmaster@sandboxe37c4edf5e3f4df6beeb7bb39a591946.mailgun.org';
+
+
+ //We pass the api_key and domain to the wrapper, or it won't be able to identify + send emails
+ var mailgun = new Mailgun({apiKey: api_key, domain: domain});
+
+ var data = {
+ //Specify email data
+ from: from_who,
+ //The email to contact
+ to: "akshayjk10@gmail.com",
+ //Subject and text data
+ subject: 'Hello from Mailgun',
+ html: "<divstyle='width:70%; background-color:black; padding:10%'><divstyle='color:white;'>ThisisatestTemplate</div></div>"
+ }
+
+ //Invokes the method to send emails given the above data with the helper library
+ mailgun.messages().send(data, function (err, body) {
+ //If there is an error, render the error page
+ if (err) {
+
+ console.log("got an error: ", err);
+ }
+ //Else we can greet    and leave
+ else {
+ //Here "submitted.jade" is the view file for this landing page
+ //We pass the variable "email" from the url parameter in an object rendered by Jade
+
+ console.log(body);
+ }
+ });*/
+
 
 
 

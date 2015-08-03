@@ -19,10 +19,13 @@
   "dependencies": {
     "jwt-simple": "^0.3.0",
     "json2csv": "^2.2.1",
-    "express":"^4.0.0",
-    "mongodb":"latest",
-    "mandrill-api":"latest",
-    "mailgun-js":"latest",
-    "mailcomposer":"latest"
+    "express": "^4.0.0",
+    "mongodb": "latest",
+    "mandrill-api": "latest",
+    "mailgun-js": "latest",
+    "mailcomposer": "latest",
+    "connect-busboy": "latest",
+    "xls-to-json": "latest",
+    "multer": "^1.0.1"
   }
 }

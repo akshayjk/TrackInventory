@@ -1,314 +1,330 @@
 <div ng-controller="AdminController">
-    <section class="content-header">
-        <div class="nav-tabs-custom" ng-show="!listView[0]&&!listView[1]&&!listView[2]">
-            <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-                <li class="active" id="PendingTab"><a data-target="#Pending" class="onHoverClass"
-                                                      data-toggle="tab"><b>Pending
-                </b></a>
-                </li>
-                <li class="" id="DispatchedTab"><a data-target="#Dispatched" class="onHoverClass"
-                                                   data-toggle="tab"><b>Dispatched</b></a></li>
-                <li class="" id="CompletedTab"><a data-target="#Completed" class="onHoverClass"
-                                                  data-toggle="tab"><b>Completed</b></a>
-                </li>
+
+<section class="content-header">
+<div class="box-header" style="background-color: white">
+    <h3 class="box-title">Notification Tray</h3>
+    <h3 class="box-title pull-right"><a ng-click="viewNot=!viewNot" class="pull-right" style="color:blue">Clear Notifications</a></h3>
+</div>
+<div class="box-body" style="background-color: white;margin-bottom: 2%;" ng-show="viewNot">
+    <ul class="todo-list">
+        <li ng-repeat="item in NotificationItems">
+            <span class="text">{{item.Name}}</span> in
+            <span class="text">{{item.Category}}</span>
+            are now only
+            <span class="text">{{item.Quantity}}</span>
+        </li>
+    </ul>
+</div>
+<div class="nav-tabs-custom" ng-show="!listView[0]&&!listView[1]&&!listView[2]" style="margin-top: 2%;">
+<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+    <li class="active" id="PendingTab"><a data-target="#Pending" class="onHoverClass"
+                                          data-toggle="tab"><b>Pending
+    </b></a>
+    </li>
+    <li class="" id="DispatchedTab"><a data-target="#Dispatched" class="onHoverClass"
+                                       data-toggle="tab"><b>Dispatched</b></a></li>
+    <li class="" id="CompletedTab"><a data-target="#Completed" class="onHoverClass"
+                                      data-toggle="tab"><b>Completed</b></a>
+    </li>
+</ul>
+
+<div class="tab-content">
+
+<div class="tab-pane active" id="Pending">
+    <div class="col-xs-12 ">
+
+        <button class="btn btn-default btn-sm" ng-click="getOrders()"><i class="fa fa-refresh"></i></button>
+
+        <div class="box-tools pull-right">
+            <ul class="pagination pagination-sm inline">
+                <li><a href="#">&laquo;</a></li>
+
+                <li><a href="#">&raquo;</a></li>
             </ul>
+        </div>
+    </div>
+    <div class="box-body" ng-hide="listView[0]">
+        <div class="responsiveClass">
+            <div ng-show="dummyOrders.length==0">
+                <h3 class="emptyClass">Wohooo! No orders pending !!</h3>
+            </div>
+            <table class="table no-margin" ng-show="dummyOrders.length>0">
+                <thead>
+                <tr>
+                    <th>Placed By</th>
+                    <th>Order ID</th>
+                    <th>Status</th>
+                    <th>Date</th>
 
-            <div class="tab-content">
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="order in dummyOrders">
+                    <td>{{getName(order.FranchiseName)}}</td>
+                    <td><a href="" ng-click="showOrder($index,0)">{{order.OrderId}}</a></td>
+                    <td><span class="label pending">{{getStatus(order.Status)}}</span></td>
+                    <td>
+                        {{getDate(order.ModifiedOn)}}
+                    </td>
+                    <!-- <td>
+                        <button class="btn btn-primary btn-xs pull-right "
+                                ng-click="showOrder($index,0)">View
+                        </button>
+                    </td> -->
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- /.table-responsive -->
+        <!--Invoice Inclusion-->
 
-                <div class="tab-pane active" id="Pending">
-                    <div class="col-xs-12 ">
-
-                        <button class="btn btn-default btn-sm" ng-click="getOrders()"><i class="fa fa-refresh"></i></button>
-
-                        <div class="box-tools pull-right">
-                            <ul class="pagination pagination-sm inline">
-                                <li><a href="#">&laquo;</a></li>
-
-                                <li><a href="#">&raquo;</a></li>
-                            </ul>
-                        </div>
+        <!--Invoice Inclusion-->
+    </div>
+    <!-- DispatchConfirmation Modal-->
+    <script type="text/ng-template" id="dispatchConfirmationModal.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Dispatch Form</h3>
+        </div>
+        <div class="modal-body">
+            <form role="form" ng-submit="ok()">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="CourierName">Courier Name</label>
+                        <input type="text" class="form-control" id="CourierName"
+                               placeholder="Courier Name" ng-model="form.CourierName"
+                               required>
                     </div>
-                    <div class="box-body" ng-hide="listView[0]">
-                        <div class="responsiveClass">
-                            <div  ng-show="dummyOrders.length==0">
-                                <h3 class="emptyClass">Wohooo! No orders pending !!</h3>
-                            </div>
-                            <table class="table no-margin" ng-show="dummyOrders.length>0">
-                                <thead>
-                                <tr>
-                                    <th>Placed By</th>
-                                    <th>Order ID</th>
-                                    <th>Status</th>
-                                    <th>Date</th>
-
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="order in dummyOrders">
-                                    <td>{{getName(order.FranchiseName)}}</td>
-                                    <td><a href="" ng-click="showOrder($index,0)">{{order.OrderId}}</a></td>
-                                    <td><span class="label pending">{{getStatus(order.Status)}}</span></td>
-                                    <td>
-                                        {{getDate(order.ModifiedOn)}}
-                                    </td>
-                                    <!-- <td>
-                                        <button class="btn btn-primary btn-xs pull-right "
-                                                ng-click="showOrder($index,0)">View
-                                        </button>
-                                    </td> -->
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.table-responsive -->
-                        <!--Invoice Inclusion-->
-
-                        <!--Invoice Inclusion-->
+                    <div class="form-group">
+                        <label for="TrackingID">Package Tracking Number</label>
+                        <input type="text" class="form-control" id="TrackingID"
+                               placeholder="Package Tracking Number"
+                               ng-model="form.TrackingID" required>
                     </div>
-                    <!-- DispatchConfirmation Modal-->
-                    <script type="text/ng-template" id="dispatchConfirmationModal.html">
+                    <h4>Check List</h4>
+                    <h4>Summary</h4>
+                    <table>
+                        <tr ng-repeat="(kit, value) in summary.Kits">
+                            <td>{{kit}} :</td>
+                            <td>&nbsp;&nbsp;{{value}}</td>
+                        </tr>
+                    </table>
+                    <table>
+                        <tr ng-repeat="(uniform, value) in summary.Uniforms">
+                            <td>Size {{uniform}} :</td>
+                            <td>&nbsp;&nbsp;{{uniform.Qty}}</td>
+                        </tr>
+                    </table>
+
+                </div>
+                <!-- /.box-body -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            ng-click="cancel()">Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">Dispatch
+                    </button>
+                </div>
+            </form>
+        </div>
+        <!--<div class="modal-footer">
+            <button class="btn btn-success" ng-click="ok()">Dispatch</button>
+            <button class="btn btn-primary" ng-click="cancel()">Cancel</button>
+        </div>-->
+    </script>
+    <div class="modal fade" id="dispatchResponseModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="example-modal">
+            <div class="modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
                         <div class="modal-header">
-                            <h3 class="modal-title">Dispatch Form</h3>
+                            <button type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Dispatch Order</h4>
                         </div>
                         <div class="modal-body">
-                            <form role="form" ng-submit="ok()">
-                                <div class="box-body">
-                                    <div class="form-group">
-                                        <label for="CourierName">Courier Name</label>
-                                        <input type="text" class="form-control" id="CourierName"
-                                               placeholder="Courier Name" ng-model="form.CourierName"
-                                               required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="TrackingID">Package Tracking Number</label>
-                                        <input type="text" class="form-control" id="TrackingID"
-                                               placeholder="Package Tracking Number"
-                                               ng-model="form.TrackingID" required>
-                                    </div>
-                                    <h4>Check List</h4>
-                                    <h4>Summary</h4>
-                                    <table>
-                                        <tr ng-repeat="(kit, value) in summary.Kits">
-                                            <td>{{kit}} :</td>
-                                            <td>&nbsp;&nbsp;{{value}}</td>
-                                        </tr>
-                                    </table>
-                                    <table>
-                                        <tr ng-repeat="(uniform, value) in summary.Uniforms">
-                                            <td>Size {{uniform}}  :</td>
-                                            <td>&nbsp;&nbsp;{{uniform.Qty}}</td>
-                                        </tr>
-                                    </table>
-
-                                </div>
-                                <!-- /.box-body -->
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default"
-                                            ng-click="cancel()">Close
-                                    </button>
-                                    <button type="submit" class="btn btn-primary">Dispatch
-                                    </button>
-                                </div>
-                            </form>
+                            Order Has been dispatched.
                         </div>
-                        <!--<div class="modal-footer">
-                            <button class="btn btn-success" ng-click="ok()">Dispatch</button>
-                            <button class="btn btn-primary" ng-click="cancel()">Cancel</button>
-                        </div>-->
-                    </script>
-                    <div class="modal fade" id="dispatchResponseModal" tabindex="-1" role="dialog"
-                         aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="example-modal">
-                            <div class="modal">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close"><span
-                                                    aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title">Dispatch Order</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            Order Has been dispatched.
-                                        </div>
 
-                                    </div>
-                                    <!-- /.modal-content -->
-                                </div>
-                                <!-- /.modal-dialog -->
-                            </div>
-                            <!-- /.modal -->
-                        </div>
                     </div>
-
-                    <!-- response Conformation Modal-->
-
-                    <!-- response Conformation Modal-->
-
-                    <!-- Confirmation Modal-->
-
+                    <!-- /.modal-content -->
                 </div>
-                <div class="tab-pane" id="Dispatched">
-                    <div class="col-xs-12 ">
-
-                        <button class="btn btn-default btn-sm" ng-click="getOrders()"><i class="fa fa-refresh"></i></button>
-
-                        <div class="box-tools pull-right">
-                            <ul class="pagination pagination-sm inline">
-                                <li><a href="#">&laquo;</a></li>
-                                <li><a href="#">&raquo;</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="box-body" ng-hide="listView[1]">
-                        <div class="responsiveClass">
-                            <div ng-show="dispatched.length==0">
-                                <h2 class="emptyClass">No orders completed yet !</h2>
-                            </div>
-                            <table class="table no-margin" ng-show="dispatched.length>0">
-                                <thead>
-                                <tr>
-                                    <th>Placed By</th>
-                                    <th>Order ID</th>
-                                    <th>Status</th>
-                                    <th>Date</th>
-
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="order in dispatched">
-                                    <td>{{getName(order.FranchiseName)}}</td>
-                                    <td><a href="" ng-click="showOrder($index,1)">{{order.OrderId}}</a></td>
-                                    <td><span class="label label-success">{{getStatus(order.Status)}}</span>
-                                    </td>
-                                    <td>
-                                        {{getDate(order.ModifiedOn)}}
-                                    </td>
-                                    <!--<td>
-                                        <button class="btn btn-primary btn-xs pull-right "
-                                                ng-click="showOrder($index,1)">View
-                                        </button>
-                                    </td>-->
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.table-responsive -->
-                    </div>
-
-                </div>
-                <div class="tab-pane" id="Completed">
-                    <div class="col-xs-12 ">
-
-                        <button class="btn btn-default btn-sm" ng-click="getOrders()"><i class="fa fa-refresh"></i></button>
-
-                        <div class="box-tools pull-right">
-                            <ul class="pagination pagination-sm inline">
-                                <li><a href="#">&laquo;</a></li>
-                                <li><a href="#">&raquo;</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="box-body" ng-hide="listView[2]">
-                        <div class="responsiveClass">
-                            <div ng-show="completed.length==0">
-                                <h2 class="emptyClass">No orders completed yet !</h2>
-                            </div>
-                            <table class="table no-margin" ng-show="completed.length>0">
-                                <thead>
-                                <tr>
-                                    <th>Placed By</th>
-                                    <th>Order ID</th>
-                                    <th>Status</th>
-                                    <th>Date</th>
-
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="order in completed">
-                                    <td>{{getName(order.FranchiseName)}}</td>
-                                    <td><a href="" ng-click="showOrder($index,1)">{{order.OrderId}}</a></td>
-                                    <td><span class="label label-success">{{getStatus(order.Status)}}</span>
-                                    </td>
-                                    <td>
-                                        {{getDate(order.ModifiedOn)}}
-                                    </td>
-                                    <!--<td>
-                                        <button class="btn btn-primary btn-xs pull-right "
-                                                ng-click="showOrder($index,1)">View
-                                        </button>
-                                    </td>-->
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.table-responsive -->
-                    </div>
-
-                </div>
+                <!-- /.modal-dialog -->
             </div>
-
+            <!-- /.modal -->
         </div>
-    </section>
-    <div ng-show="listView[0]">
+    </div>
 
-        <!-- Main content -->
-        <section class="invoice">
-            <!-- title row -->
-            <div class="row no-print">
-                <div class="col-xs-12">
-                    <a href="invoice-print.html" target="_blank" class="btn btn-default"><i
-                            class="fa fa-print"></i> Print</a>
-                    <button class="btn btn-primary pull-right" ng-click="showOrder(0,0)"><i
-                            class="fa fa-arrow-left"></i> Back
-                    </button>
-                    <button class="btn btn-success pull-right" style="margin-right: 5px;"
-                            ng-click="dispatchModal()"><i
-                            class="fa fa-truck"></i> Dispatch
-                    </button>
-                </div>
+    <!-- response Conformation Modal-->
+
+    <!-- response Conformation Modal-->
+
+    <!-- Confirmation Modal-->
+
+</div>
+<div class="tab-pane" id="Dispatched">
+    <div class="col-xs-12 ">
+
+        <button class="btn btn-default btn-sm" ng-click="getOrders()"><i class="fa fa-refresh"></i></button>
+
+        <div class="box-tools pull-right">
+            <ul class="pagination pagination-sm inline">
+                <li><a href="#">&laquo;</a></li>
+                <li><a href="#">&raquo;</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="box-body" ng-hide="listView[1]">
+        <div class="responsiveClass">
+            <div ng-show="dispatched.length==0">
+                <h2 class="emptyClass">No orders completed yet !</h2>
             </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2 class="page-header">
-                        {{dummyOrders[OrderNo[0]].FranchiseName}}
-                        <small class="pull-right">Date:
-                            {{getDate(dummyOrders[OrderNo[0]].ModifiedOn)}}
-                        </small>
-                    </h2>
-                </div>
-                <!-- /.col -->
+            <table class="table no-margin" ng-show="dispatched.length>0">
+                <thead>
+                <tr>
+                    <th>Placed By</th>
+                    <th>Order ID</th>
+                    <th>Status</th>
+                    <th>Date</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="order in dispatched">
+                    <td>{{getName(order.FranchiseName)}}</td>
+                    <td><a href="" ng-click="showOrder($index,1)">{{order.OrderId}}</a></td>
+                    <td><span class="label label-success">{{getStatus(order.Status)}}</span>
+                    </td>
+                    <td>
+                        {{getDate(order.ModifiedOn)}}
+                    </td>
+                    <!--<td>
+                        <button class="btn btn-primary btn-xs pull-right "
+                                ng-click="showOrder($index,1)">View
+                        </button>
+                    </td>-->
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- /.table-responsive -->
+    </div>
+
+</div>
+<div class="tab-pane" id="Completed">
+    <div class="col-xs-12 ">
+
+        <button class="btn btn-default btn-sm" ng-click="getOrders()"><i class="fa fa-refresh"></i></button>
+
+        <div class="box-tools pull-right">
+            <ul class="pagination pagination-sm inline">
+                <li><a href="#">&laquo;</a></li>
+                <li><a href="#">&raquo;</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="box-body" ng-hide="listView[2]">
+        <div class="responsiveClass">
+            <div ng-show="completed.length==0">
+                <h2 class="emptyClass">No orders completed yet !</h2>
             </div>
-            <!-- info row -->
-            <div class="row invoice-info">
-                <div class="col-sm-4 invoice-col">
-                    <address>
-                        <strong>{{dummyOrders[OrderNo[0]].FranchiseName}}</strong><br>
-                        {{dummyOrders[OrderNo[0]].Address}}</br>
-                        Email: {{dummyOrders[OrderNo[0]].FranchiseId}}
-                    </address>
+            <table class="table no-margin" ng-show="completed.length>0">
+                <thead>
+                <tr>
+                    <th>Placed By</th>
+                    <th>Order ID</th>
+                    <th>Status</th>
+                    <th>Date</th>
 
-                </div>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="order in completed">
+                    <td>{{getName(order.FranchiseName)}}</td>
+                    <td><a href="" ng-click="showOrder($index,1)">{{order.OrderId}}</a></td>
+                    <td><span class="label label-success">{{getStatus(order.Status)}}</span>
+                    </td>
+                    <td>
+                        {{getDate(order.ModifiedOn)}}
+                    </td>
+                    <!--<td>
+                        <button class="btn btn-primary btn-xs pull-right "
+                                ng-click="showOrder($index,1)">View
+                        </button>
+                    </td>-->
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- /.table-responsive -->
+    </div>
 
-                <div class="col-sm-4 invoice-col">
-                    <p class="displayOrder"><b>Order Id : </b>{{dummyOrders[OrderNo[0]].OrderId}}
-                    </p>
+</div>
+</div>
 
-                    <p class="displayOrder"><b>Bank : </b>{{dummyOrders[OrderNo[0]].BankName}}
-                    </p>
+</div>
+</section>
+<div ng-show="listView[0]">
 
-                    <p class="displayOrder"><b>Transaction Id : </b>{{dummyOrders[OrderNo[0]].TransactionID}}
-                    </p>
+    <!-- Main content -->
+    <section class="invoice">
+        <!-- title row -->
+        <div class="row no-print">
+            <div class="col-xs-12">
+                <a href="invoice-print.html" target="_blank" class="btn btn-default"><i
+                        class="fa fa-print"></i> Print</a>
+                <button class="btn btn-primary pull-right" ng-click="showOrder(0,0)"><i
+                        class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success pull-right" style="margin-right: 5px;"
+                        ng-click="dispatchModal()"><i
+                        class="fa fa-truck"></i> Dispatch
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2 class="page-header">
+                    {{dummyOrders[OrderNo[0]].FranchiseName}}
+                    <small class="pull-right">Date:
+                        {{getDate(dummyOrders[OrderNo[0]].ModifiedOn)}}
+                    </small>
+                </h2>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- info row -->
+        <div class="row invoice-info">
+            <div class="col-sm-4 invoice-col">
+                <address>
+                    <strong>{{dummyOrders[OrderNo[0]].FranchiseName}}</strong><br>
+                    {{dummyOrders[OrderNo[0]].Address}}</br>
+                    Email: {{dummyOrders[OrderNo[0]].FranchiseId}}
+                </address>
 
-                    <p class="displayOrder"><b>Amount Paid : </b>{{dummyOrders[OrderNo[0]].TotalAmount}}
-                        <small> through {{dummyOrders[OrderNo[0]].ModeOfPayment}}</small>
-                    </p>
+            </div>
 
-                </div>
-                <div class="col-sm-12 col-xs-12 invoice-col">
+            <div class="col-sm-4 invoice-col">
+                <p class="displayOrder"><b>Order Id : </b>{{dummyOrders[OrderNo[0]].OrderId}}
+                </p>
 
-                    <h4>Summary</h4>
-                    <div class="col-md-4 col-xs-12">
+                <p class="displayOrder"><b>Bank : </b>{{dummyOrders[OrderNo[0]].BankName}}
+                </p>
+
+                <p class="displayOrder"><b>Transaction Id : </b>{{dummyOrders[OrderNo[0]].TransactionID}}
+                </p>
+
+                <p class="displayOrder"><b>Amount Paid : </b>{{dummyOrders[OrderNo[0]].TotalAmount}}
+                    <small> through {{dummyOrders[OrderNo[0]].ModeOfPayment}}</small>
+                </p>
+
+            </div>
+            <div class="col-sm-12 col-xs-12 invoice-col">
+
+                <h4>Summary</h4>
+
+                <div class="col-md-4 col-xs-12">
                     <b>Kits</b>
                     <table>
                         <tr ng-repeat="kit in dummyOrders[OrderNo[0]].Summary.Kits">
@@ -316,8 +332,8 @@
                             <td>&nbsp;&nbsp;{{kit.Quantity}}</td>
                         </tr>
                     </table>
-                    </div>
-                    <div class="col-md-4 col-xs-12">
+                </div>
+                <div class="col-md-4 col-xs-12">
 
                     <b>Uniforms</b>
 
@@ -328,277 +344,278 @@
                             <td>&nbsp;&nbsp;{{uniform.Quantity}}</td>
                         </tr>
                     </table>
-                    </div>
                 </div>
             </div>
-            <!-- /.row -->
+        </div>
+        <!-- /.row -->
 
-            <!-- Table row -->
-            <div class="row" style="margin-top:2%;">
-                <div class="col-xs-12 table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th>Class</th>
-                            <th>Uniform Size</th>
-                            <th>Uniform Qty</th>
-                            <th>Cost</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="student in dummyOrders[OrderNo[0]].Students">
-                            <td>{{$index + 1}}</td>
-                            <td>{{student.NameOfStudent}}</td>
-                            <td>{{student.Class.Name}}</td>
-                            <td>{{student.UniformSize.Name}}</td>
-                            <td>{{student.UniformQty}}</td>
-                            <td>{{student.UniformSize.cost*student.UniformQty +
-                                KitCost}}
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.col -->
+        <!-- Table row -->
+        <div class="row" style="margin-top:2%;">
+            <div class="col-xs-12 table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>Uniform Size</th>
+                        <th>Uniform Qty</th>
+                        <th>Cost</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="student in dummyOrders[OrderNo[0]].Students">
+                        <td>{{$index + 1}}</td>
+                        <td>{{student.NameOfStudent}}</td>
+                        <td>{{student.Class.Name}}</td>
+                        <td>{{student.UniformSize.Name}}</td>
+                        <td>{{student.UniformQty}}</td>
+                        <td>{{student.UniformSize.cost*student.UniformQty +
+                            KitCost}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-            <!-- /.row -->
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
 
-            <!-- /.row -->
+        <!-- /.row -->
 
-            <!-- this row will not appear when printing -->
+        <!-- this row will not appear when printing -->
 
-        </section>
-        <!-- /.content -->
-        <div class="clearfix"></div>
-    </div>
-    <div ng-show="listView[1]">
+    </section>
+    <!-- /.content -->
+    <div class="clearfix"></div>
+</div>
+<div ng-show="listView[1]">
 
-        <!-- Main content -->
-        <section class="invoice">
-            <!-- title row -->
-            <div class="row no-print">
-                <div class="col-xs-12">
-                    <a href="invoice-print.html" target="_blank" class="btn btn-default"><i
-                            class="fa fa-print"></i> Print</a>
-                    <button class="btn btn-primary pull-right" ng-click="showOrder(0,1)"><i
-                            class="fa fa-arrow-left"></i> Back
-                    </button>
-                </div>
+    <!-- Main content -->
+    <section class="invoice">
+        <!-- title row -->
+        <div class="row no-print">
+            <div class="col-xs-12">
+                <a href="invoice-print.html" target="_blank" class="btn btn-default"><i
+                        class="fa fa-print"></i> Print</a>
+                <button class="btn btn-primary pull-right" ng-click="showOrder(0,1)"><i
+                        class="fa fa-arrow-left"></i> Back
+                </button>
             </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2 class="page-header">
-                        {{dispatched[OrderNo[1]].FranchiseName}}
-                        <small class="pull-right">Date:
-                            {{getDate(dispatched[OrderNo[1]].ModifiedOn)}}
-                        </small>
-                    </h2>
-                </div>
-                <!-- /.col -->
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2 class="page-header">
+                    {{dispatched[OrderNo[1]].FranchiseName}}
+                    <small class="pull-right">Date:
+                        {{getDate(dispatched[OrderNo[1]].ModifiedOn)}}
+                    </small>
+                </h2>
             </div>
-            <!-- info row -->
-            <div class="row invoice-info">
-                <div class="col-sm-4 invoice-col">
+            <!-- /.col -->
+        </div>
+        <!-- info row -->
+        <div class="row invoice-info">
+            <div class="col-sm-4 invoice-col">
 
-                    <address>
-                        <strong>{{dispatched[OrderNo[1]].FranchiseName}}</strong><br>
-                        {{dispatched[OrderNo[1]].Address}}</br>
-                        Email: {{dispatched[OrderNo[1]].FranchiseId}}
-                    </address>
-                    <p class="displayOrder"><b>Courier Name : </b>{{dispatched[OrderNo[1]].CourierName}}
-                    </p>
-                    <p class="displayOrder"><b>Package Tracking Number : </b>{{dispatched[OrderNo[1]].TrackingID}}
-                    </p>
+                <address>
+                    <strong>{{dispatched[OrderNo[1]].FranchiseName}}</strong><br>
+                    {{dispatched[OrderNo[1]].Address}}</br>
+                    Email: {{dispatched[OrderNo[1]].FranchiseId}}
+                </address>
+                <p class="displayOrder"><b>Courier Name : </b>{{dispatched[OrderNo[1]].CourierName}}
+                </p>
 
-                </div>
-
-                <div class="col-sm-4 invoice-col">
-                    <p class="displayOrder"><b>Order Id : </b>{{dispatched[OrderNo[1]].OrderId}}
-                    </p>
-
-                    <p class="displayOrder"><b>Bank : </b>{{dispatched[OrderNo[1]].BankName}}
-                    </p>
-
-                    <p class="displayOrder"><b>Transaction Id : </b>{{dispatched[OrderNo[1]].TransactionID}}
-                    </p>
-
-                    <p class="displayOrder"><b>Amount Paid : </b>{{dispatched[OrderNo[1]].TotalAmount}}
-                        <small> through {{dispatched[OrderNo[1]].ModeOfPayment}}</small>
-                    </p>
-
-                </div>
-                <div class="col-sm-4 invoice-col">
-                    <h4>Summary</h4>
-                    <table>
-                        <tr ng-repeat="kit in dispatched[OrderNo[1]].Summary.Kits">
-                            <td>{{kit.KitName}}</td>
-                            <td>{{kit.Qty}}</td>
-                        </tr>
-                    </table>
-                    <table>
-                        <tr ng-repeat="uniform in dispatched[OrderNo[1]].Summary.Uniforms">
-                            <td>{{uniform.UniformName}}</td>
-                            <td>{{uniform.Qty}}</td>
-                        </tr>
-                    </table>
-
-                </div>
+                <p class="displayOrder"><b>Package Tracking Number : </b>{{dispatched[OrderNo[1]].TrackingID}}
+                </p>
 
             </div>
-            <!-- /.row -->
 
-            <!-- Table row -->
-            <div class="row" style="margin-top:2%;">
-                <div class="col-xs-12 table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th>Class</th>
-                            <th>Uniform Size</th>
-                            <th>Uniform Qty</th>
-                            <th>Cost</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="student in dispatched[OrderNo[1]].Students">
-                            <td>{{$index + 1}}</td>
-                            <td>{{student.NameOfStudent}}</td>
-                            <td>{{student.Class}}</td>
-                            <td>{{student.UniformSize}}</td>
-                            <td>{{student.UniformQty}}</td>
-                            <td>{{UniformCosts[student.UniformSize]*student.UniformQty +
-                                KitCost}}
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
+            <div class="col-sm-4 invoice-col">
+                <p class="displayOrder"><b>Order Id : </b>{{dispatched[OrderNo[1]].OrderId}}
+                </p>
 
-            <!-- /.row -->
+                <p class="displayOrder"><b>Bank : </b>{{dispatched[OrderNo[1]].BankName}}
+                </p>
 
-            <!-- this row will not appear when printing -->
+                <p class="displayOrder"><b>Transaction Id : </b>{{dispatched[OrderNo[1]].TransactionID}}
+                </p>
 
-        </section>
-        <!-- /.content -->
-        <div class="clearfix"></div>
-    </div>
-    <div ng-show="listView[2]">
-
-        <!-- Main content -->
-        <section class="invoice">
-            <!-- title row -->
-            <div class="row no-print">
-                <div class="col-xs-12">
-                    <a href="invoice-print.html" target="_blank" class="btn btn-default"><i
-                            class="fa fa-print"></i> Print</a>
-                    <button class="btn btn-primary pull-right" ng-click="showOrder(0,2)"><i
-                            class="fa fa-arrow-left"></i> Back
-                    </button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2 class="page-header">
-                        {{completed[OrderNo[2]].FranchiseName}}
-                        <small class="pull-right">Date:
-                            {{getDate(completed[OrderNo[2]].ModifiedOn)}}
-                        </small>
-                    </h2>
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- info row -->
-            <div class="row invoice-info">
-                <div class="col-sm-4 invoice-col">
-
-                    <address>
-                        <strong>{{completed[OrderNo[2]].FranchiseName}}</strong><br>
-                        {{completed[OrderNo[2]].Address}}</br>
-                        Email: {{completed[OrderNo[2]].FranchiseId}}
-                    </address>
-
-                </div>
-
-                <div class="col-sm-4 invoice-col">
-                    <p class="displayOrder"><b>Order Id : </b>{{completed[OrderNo[2]].OrderId}}
-                    </p>
-
-                    <p class="displayOrder"><b>Bank : </b>{{completed[OrderNo[2]].BankName}}
-                    </p>
-
-                    <p class="displayOrder"><b>Transaction Id : </b>{{completed[OrderNo[2]].TransactionID}}
-                    </p>
-
-                    <p class="displayOrder"><b>Amount Paid : </b>{{completed[OrderNo[2]].TotalAmount}}
-                        <small> through {{completed[OrderNo[2]].ModeOfPayment}}</small>
-                    </p>
-
-                </div>
-                <div class="col-sm-4 invoice-col">
-                    <h4>Summary</h4>
-                    <table>
-                        <tr ng-repeat="kit in completed[OrderNo[2]].Summary.Kits">
-                            <td>{{kit.KitName}}</td>
-                            <td>{{kit.Qty}}</td>
-                        </tr>
-                    </table>
-                    <table>
-                        <tr ng-repeat="uniform in completed[OrderNo[2]].Summary.Uniforms">
-                            <td>{{uniform.UniformName}}</td>
-                            <td>{{uniform.Qty}}</td>
-                        </tr>
-                    </table>
-
-                </div>
+                <p class="displayOrder"><b>Amount Paid : </b>{{dispatched[OrderNo[1]].TotalAmount}}
+                    <small> through {{dispatched[OrderNo[1]].ModeOfPayment}}</small>
+                </p>
 
             </div>
-            <!-- /.row -->
+            <div class="col-sm-4 invoice-col">
+                <h4>Summary</h4>
+                <table>
+                    <tr ng-repeat="kit in dispatched[OrderNo[1]].Summary.Kits">
+                        <td>{{kit.KitName}}</td>
+                        <td>{{kit.Qty}}</td>
+                    </tr>
+                </table>
+                <table>
+                    <tr ng-repeat="uniform in dispatched[OrderNo[1]].Summary.Uniforms">
+                        <td>{{uniform.UniformName}}</td>
+                        <td>{{uniform.Qty}}</td>
+                    </tr>
+                </table>
 
-            <!-- Table row -->
-            <div class="row" style="margin-top:2%;">
-                <div class="col-xs-12 table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th>Class</th>
-                            <th>Uniform Size</th>
-                            <th>Uniform Qty</th>
-                            <th>Cost</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="student in completed[OrderNo[2]].Students">
-                            <td>{{$index + 1}}</td>
-                            <td>{{student.NameOfStudent}}</td>
-                            <td>{{student.Class}}</td>
-                            <td>{{student.UniformSize}}</td>
-                            <td>{{student.UniformQty}}</td>
-                            <td>{{UniformCosts[student.UniformSize]*student.UniformQty +
-                                KitCost}}
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.col -->
             </div>
-            <!-- /.row -->
 
-            <!-- /.row -->
+        </div>
+        <!-- /.row -->
 
-            <!-- this row will not appear when printing -->
+        <!-- Table row -->
+        <div class="row" style="margin-top:2%;">
+            <div class="col-xs-12 table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>Uniform Size</th>
+                        <th>Uniform Qty</th>
+                        <th>Cost</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="student in dispatched[OrderNo[1]].Students">
+                        <td>{{$index + 1}}</td>
+                        <td>{{student.NameOfStudent}}</td>
+                        <td>{{student.Class}}</td>
+                        <td>{{student.UniformSize}}</td>
+                        <td>{{student.UniformQty}}</td>
+                        <td>{{UniformCosts[student.UniformSize]*student.UniformQty +
+                            KitCost}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
 
-        </section>
-        <!-- /.content -->
-        <div class="clearfix"></div>
-    </div>
+        <!-- /.row -->
+
+        <!-- this row will not appear when printing -->
+
+    </section>
+    <!-- /.content -->
+    <div class="clearfix"></div>
+</div>
+<div ng-show="listView[2]">
+
+    <!-- Main content -->
+    <section class="invoice">
+        <!-- title row -->
+        <div class="row no-print">
+            <div class="col-xs-12">
+                <a href="invoice-print.html" target="_blank" class="btn btn-default"><i
+                        class="fa fa-print"></i> Print</a>
+                <button class="btn btn-primary pull-right" ng-click="showOrder(0,2)"><i
+                        class="fa fa-arrow-left"></i> Back
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2 class="page-header">
+                    {{completed[OrderNo[2]].FranchiseName}}
+                    <small class="pull-right">Date:
+                        {{getDate(completed[OrderNo[2]].ModifiedOn)}}
+                    </small>
+                </h2>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- info row -->
+        <div class="row invoice-info">
+            <div class="col-sm-4 invoice-col">
+
+                <address>
+                    <strong>{{completed[OrderNo[2]].FranchiseName}}</strong><br>
+                    {{completed[OrderNo[2]].Address}}</br>
+                    Email: {{completed[OrderNo[2]].FranchiseId}}
+                </address>
+
+            </div>
+
+            <div class="col-sm-4 invoice-col">
+                <p class="displayOrder"><b>Order Id : </b>{{completed[OrderNo[2]].OrderId}}
+                </p>
+
+                <p class="displayOrder"><b>Bank : </b>{{completed[OrderNo[2]].BankName}}
+                </p>
+
+                <p class="displayOrder"><b>Transaction Id : </b>{{completed[OrderNo[2]].TransactionID}}
+                </p>
+
+                <p class="displayOrder"><b>Amount Paid : </b>{{completed[OrderNo[2]].TotalAmount}}
+                    <small> through {{completed[OrderNo[2]].ModeOfPayment}}</small>
+                </p>
+
+            </div>
+            <div class="col-sm-4 invoice-col">
+                <h4>Summary</h4>
+                <table>
+                    <tr ng-repeat="kit in completed[OrderNo[2]].Summary.Kits">
+                        <td>{{kit.KitName}}</td>
+                        <td>{{kit.Qty}}</td>
+                    </tr>
+                </table>
+                <table>
+                    <tr ng-repeat="uniform in completed[OrderNo[2]].Summary.Uniforms">
+                        <td>{{uniform.UniformName}}</td>
+                        <td>{{uniform.Qty}}</td>
+                    </tr>
+                </table>
+
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+        <!-- Table row -->
+        <div class="row" style="margin-top:2%;">
+            <div class="col-xs-12 table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>Uniform Size</th>
+                        <th>Uniform Qty</th>
+                        <th>Cost</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="student in completed[OrderNo[2]].Students">
+                        <td>{{$index + 1}}</td>
+                        <td>{{student.NameOfStudent}}</td>
+                        <td>{{student.Class}}</td>
+                        <td>{{student.UniformSize}}</td>
+                        <td>{{student.UniformQty}}</td>
+                        <td>{{UniformCosts[student.UniformSize]*student.UniformQty +
+                            KitCost}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+        <!-- /.row -->
+
+        <!-- this row will not appear when printing -->
+
+    </section>
+    <!-- /.content -->
+    <div class="clearfix"></div>
+</div>
 </div>

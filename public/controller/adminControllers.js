@@ -28,6 +28,16 @@
             "4": 40,
             "5": 50
         };
+
+        $scope.getNotificationItems = function(){
+            PlaceOrder.inventoryHealth().success(function(res, stat){
+                $scope.NotificationItems = res;
+            }).error(function(errRes, Stat){
+                console.log("Problem in the notifications")
+            })
+        }
+        $scope.getNotificationItems();
+        $scope.viewNot = true;
         $scope.checkClick = function(id){
             var MenuBar =['MenuInv','MenuAcc','MenuOrder','MenuMsg', 'MenuDwn']
             console.log("Menu click");
@@ -727,7 +737,17 @@
         }
     }]);
 
-    App.controller("Accounts", ['$scope', 'Auth', function ($scope, Auth) {
+    App.controller("Accounts", ['$scope', 'Auth', 'FileUploader', function ($scope, Auth, FileUploader) {
+
+        $scope.openAddFiles = function(){
+            window.open("/uploadAccounts");
+        }
+
+        //*****************************************************************************************
+
+
+
+
 
         $scope.userDetails = JSON.parse(sessionStorage.userDetails);
         //$scope.UniformSize = $scope.userDetails.UniformsList;

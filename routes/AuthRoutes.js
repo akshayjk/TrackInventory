@@ -41,5 +41,17 @@ router.delete('/account', function(req, res){
     })
 });
 
+router.get('/verify', function(req, res){
+    new requestData().getReqBody(req, res, function(body){
+        new AuthenticationServices().verify(req, res, body);
+    })
+});
+
+router.post('/registerAccount', function(req, res){
+    new requestData().getReqBody(req, res, function(body){
+        new AuthenticationServices().register(req, res, body);
+    })
+});
+
 module.exports = router;
 
