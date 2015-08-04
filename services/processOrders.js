@@ -222,9 +222,23 @@ ProcessOrder.prototype.dispatchOrder = function (req, res, body, OrderId) {
                     reduceUniforms(req, res, Summary, bulkInsert, function(){
                         //Done correctly
                         //Send confirmation emails
-                        sendConfirmationMails(OrderId);
-                        res.setHeader("Content-Type", "application/json");
-                        res.send(JSON.stringify({"success": true, "Message": "Order dispatched successfully"}));
+                        var updateOrderStatus={
+                            collection:"orders",
+                            Query:{OrderId:OrderId},
+                            updateObject:{Status:"DISPATCHED"}
+                        }
+                        new dataBase().update(updateOrderStatus, function(err, result){
+                            if(!err){
+                                sendConfirmationMails(OrderId);
+                                res.setHeader("Content-Type", "application/json");
+                                res.send(JSON.stringify({"success": true, "Message": "Order dispatched successfully"}));
+                            }else{
+                                new responseHandler().sendResponse(req,res, "error","Error while changing the order status.",500);
+                            }
+
+                        })
+
+
                     });
                 });
             });
@@ -325,7 +339,7 @@ function reduceKitItems(req, res, count, Summary, bulkInsert, callback) {
                     new responseHandler().sendResponse(req, res, "error", "Not enough items in Inventory.", 403);
                 }else{
                     count++;
-                reduceKitItems(req, res, count,Summary,bulkInsert);
+                reduceKitItems(req, res, count,Summary,bulkInsert,callback);
                 }
 
             })
@@ -353,7 +367,7 @@ function reduceKitItems(req, res, count, Summary, bulkInsert, callback) {
 
                 console.log("proceeding for the Uniforms reduction ")
                 new dataBase().bulkInsert({collection: "INVENTORY"}, function (bulkInsert) {
-                    reduceUniforms(req, res, Summary, bulkInsert);
+                    callback(req, res, Summary, bulkInsert);
                 });
             }
         });
@@ -366,7 +380,7 @@ function reduceKitItems(req, res, count, Summary, bulkInsert, callback) {
 }
 
 function reduceUniforms(req, res, Summary, bulkInsert, callback){
-
+  console.log("callback " + callback)
     var items =[]
     for(var i =0;i<Summary.UniformSize.length;i++){
         items.push(Summary.UniformSize[i].ItemId);
@@ -384,42 +398,47 @@ function reduceUniforms(req, res, Summary, bulkInsert, callback){
             var mappedDbObj = mapArrayToObject(data,"ItemId");
             console.log("mapped req, order obj " + JSON.stringify(mappedOrderObj));
             console.log("mapped db obj " + JSON.stringify(mappedDbObj))
+            if(data.length>0){
+                for (var j = 0; j < data.length; j++) {
+                    if(j==data.length-1){
+                        var modifiedQuantity = mappedDbObj[data[j].ItemId].Quantity - mappedOrderObj[data[j].ItemId].Quantity;
+                        bulkInsert.find({ItemId: data[j].ItemId}).upsert().updateOne({$set: {Quantity: modifiedQuantity}});
+                        bulkInsert.execute(function (err, result) {
+                            if (err) {
+                                console.log("error while bulk Insert")
+                            } else {
+                                console.log("bulkInsert successful");
+                                console.log("nInserted " + result.nInserted);
+                                console.log("nUpserted " + result.nUpserted);
+                                console.log("nMatched " + result.nMatched);
+                                console.log("nModified " + result.nModified);
 
-            for (var j = 0; j < data.length; j++) {
-                if(j==data.length-1){
-                    var modifiedQuantity = mappedDbObj[data[j].ItemId].Quantity - mappedOrderObj[data[j].ItemId].Quantity;
-                    bulkInsert.find({ItemId: data[j].ItemId}).upsert().updateOne({$set: {Quantity: modifiedQuantity}});
-                    bulkInsert.execute(function (err, result) {
-                        if (err) {
-                            console.log("error while bulk Insert")
-                        } else {
-                            console.log("bulkInsert successful");
-                            console.log("nInserted " + result.nInserted);
-                            console.log("nUpserted " + result.nUpserted);
-                            console.log("nMatched " + result.nMatched);
-                            console.log("nModified " + result.nModified);
-
-                            console.log("proceeding for the Uniforms reduction ");
-                            callback();
-                            /*res.setHeader("Content-Type", "application/json");
-                            res.send(JSON.stringify({"success": true, "Message": "done correctly"}));*/
+                                console.log("proceeding for the Uniforms reduction ");
+                                callback();
+                                /*res.setHeader("Content-Type", "application/json");
+                                 res.send(JSON.stringify({"success": true, "Message": "done correctly"}));*/
+                            }
+                        });
+                    }else{
+                        var theObj = mappedOrderObj[data[j].ItemId];
+                        console.log("the obj " + JSON.stringify(theObj) + Object.keys(theObj));
+                        console.log("here " +data[j].ItemId + " mapped orde " + JSON.stringify(mappedOrderObj[data[j].ItemId]) +" the quant "+ mappedOrderObj[data[j].ItemId].Quantity)
+                        console.log("before reducing " + mappedDbObj[data[j].ItemId].Quantity + " and " + mappedOrderObj[data[j].ItemId].Quantity);
+                        var modifiedQuantity = (mappedDbObj[data[j].ItemId].Quantity - mappedOrderObj[data[j].ItemId].Quantity);
+                        if(modifiedQuantity<0){
+                            new responseHandler().sendResponse(req, res, "error", "Not enough items in Inventory.", 403);
+                            break;
                         }
-                    });
-                }else{
-                    var theObj = mappedOrderObj[data[j].ItemId];
-                    console.log("the obj " + JSON.stringify(theObj) + Object.keys(theObj));
-                    console.log("here " +data[j].ItemId + " mapped orde " + JSON.stringify(mappedOrderObj[data[j].ItemId]) +" the quant "+ mappedOrderObj[data[j].ItemId].Quantity)
-                    console.log("before reducing " + mappedDbObj[data[j].ItemId].Quantity + " and " + mappedOrderObj[data[j].ItemId].Quantity);
-                    var modifiedQuantity = (mappedDbObj[data[j].ItemId].Quantity - mappedOrderObj[data[j].ItemId].Quantity);
-                    if(modifiedQuantity<0){
-                        new responseHandler().sendResponse(req, res, "error", "Not enough items in Inventory.", 403);
-                        break;
+                        bulkInsert.find({ItemId: data[j].ItemId}).upsert().updateOne({$set: {Quantity: modifiedQuantity}});
                     }
-                    bulkInsert.find({ItemId: data[j].ItemId}).upsert().updateOne({$set: {Quantity: modifiedQuantity}});
+
+
                 }
-
-
             }
+            else{
+                callback();
+            }
+
 
         }else{
             new responseHandler().sendResponse(req, res, "error", err, 500);
@@ -454,7 +473,7 @@ function sendConfirmationMails(OrderId){
     function processStudentData(err, data){
         if(!err){
             data.forEach(function(student){
-                new sendMail({receiver:student.ParentEmail}).sendByMandrill(student.ParentName, function(err, success){
+                new sendMail({receivers:student.ParentEmail}).sendByMandrill(student.ParentName, function(err, success){
                     var Time = new Date().toISOString();
                     var studOptions = {
                         collection:"students",

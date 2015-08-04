@@ -11,7 +11,7 @@ var mandrill_key = 'iIpOPFN7FFPbGaWYCg74tQ';
 var mailgun_key = "key-f324d24ba6a517c85ad77a726615904c";
 var emailSender = "admin@littleeinsteins.co.in";
 var emailAppearanceName = "Little Einsteins";
-var WelcomeTemplate = './EmailTemplates/LEWelcomeEmail.html';
+var WelcomeTemplate = '/EmailTemplates/LEWelcomeEmail.html';
 var mailgun_domain = "inventory.littleeinsteins.co.in"
 
 
