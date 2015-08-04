@@ -737,7 +737,7 @@
         }
     }]);
 
-    App.controller("Accounts", ['$scope', 'Auth', 'FileUploader', function ($scope, Auth, FileUploader) {
+    App.controller("Accounts", ['$scope', 'Auth', function ($scope, Auth) {
 
         $scope.openAddFiles = function(){
             window.open("/uploadAccounts");
