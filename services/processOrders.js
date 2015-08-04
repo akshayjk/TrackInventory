@@ -206,48 +206,55 @@ ProcessOrder.prototype.changeOrderStatus = function (req, res, body) {
 
 };
 
-ProcessOrder.prototype.dispatchOrder = function (req, res, body, OrderId) {
+ProcessOrder.prototype.dispatchOrder = function (req, res, body) {
     var OrderId = req.query.OrderId;
-    var options = {
-        collection: "orders",
-        Query: {OrderId: OrderId},
-        QuerySelect: {Summary: 1}
-    }
-    new dataBase().get(options, function (err, order) {
-        //what items need to be reduced
-        if(!err&&order.length>0){
-            console.log("the order to be changed " + JSON.stringify(order));
-            new dataBase().bulkInsert({collection: "INVENTORY"}, function (bulkInsert) {
-                reduceKitItems(req, res, 0, order[0].Summary, bulkInsert, function(req, res, Summary, bulkInsert){
-                    reduceUniforms(req, res, Summary, bulkInsert, function(){
-                        //Done correctly
-                        //Send confirmation emails
-                        var updateOrderStatus={
-                            collection:"orders",
-                            Query:{OrderId:OrderId},
-                            updateObject:{Status:"DISPATCHED"}
-                        }
-                        new dataBase().update(updateOrderStatus, function(err, result){
-                            if(!err){
-                                sendConfirmationMails(OrderId);
-                                res.setHeader("Content-Type", "application/json");
-                                res.send(JSON.stringify({"success": true, "Message": "Order dispatched successfully"}));
-                            }else{
-                                new responseHandler().sendResponse(req,res, "error","Error while changing the order status.",500);
+
+    if(OrderId!=undefined&&body.CourierName!=undefined&&body.TrackingID!=undefined){
+        console.log("things validated")
+        var OrderId = req.query.OrderId;
+        var options = {
+            collection: "orders",
+            Query: {OrderId: OrderId},
+            QuerySelect: {Summary: 1}
+        }
+        new dataBase().get(options, function (err, order) {
+            //what items need to be reduced
+            if(!err&&order.length>0){
+                console.log("the order to be changed " + JSON.stringify(order));
+                new dataBase().bulkInsert({collection: "INVENTORY"}, function (bulkInsert) {
+                    reduceKitItems(req, res, 0, order[0].Summary, bulkInsert, function(req, res, Summary, bulkInsert){
+                        reduceUniforms(req, res, Summary, bulkInsert, function(){
+                            //Done correctly
+                            //Send confirmation emails
+                            var updateOrderStatus={
+                                collection:"orders",
+                                Query:{OrderId:OrderId},
+                                updateObject:{Status:"DISPATCHED",CourierName:body.CourierName,TrackingID:body.TrackingID}
                             }
+                            new dataBase().update(updateOrderStatus, function(err, result){
+                                if(!err){
+                                    sendConfirmationMails(OrderId);
+                                    res.setHeader("Content-Type", "application/json");
+                                    res.send(JSON.stringify({"success": true, "Message": "Order dispatched successfully"}));
+                                }else{
+                                    new responseHandler().sendResponse(req,res, "error","Error while changing the order status.",500);
+                                }
 
-                        })
+                            })
 
 
+                        });
                     });
                 });
-            });
-        }else{
-            res.setHeader("Content-Type", "application/json");
-            res.send(JSON.stringify({"success": true, "Message": "No such order found"}));
-        }
-    })
-
+            }else{
+                res.setHeader("Content-Type", "application/json");
+                res.send(JSON.stringify({"success": true, "Message": "No such order found"}));
+            }
+        })
+    }
+    else{
+        new responseHandler().sendResponse(req,res, "error", "Missing parameters", 404);
+    }
 }
 
 ProcessOrder.prototype.uploadBulkOrders = function(req, res, fileJSON){
