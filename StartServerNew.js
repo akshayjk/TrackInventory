@@ -52,7 +52,7 @@ app.get('/uploadAccounts', function(req, res){
 })
 
 //for the file  uploads
-var type = upload.single('recfile');
+var type = upload.single('file');
 
 app.post('/upload', type, function (req,res) {
     console.log("post req received ")
@@ -62,7 +62,7 @@ app.post('/upload', type, function (req,res) {
 
     /** The original name of the uploaded file
      stored in the variable "originalname". **/
-    var target_path = 'uploads/' + req.file.originalname;
+    var target_path = __dirname + '/uploads/' + req.file.originalname;
     var filename = req.file.originalname;
     /** A better way to copy the uploaded file. **/
     var src = fs.createReadStream(tmp_path);
@@ -70,6 +70,7 @@ app.post('/upload', type, function (req,res) {
     src.pipe(dest);
     src.on('end', function() {
         if(getExtension(filename) == ".xls"){
+            console.log("converting to JSON")
             node_xj({
                 input: __dirname + '/uploads/' + filename,
                 output: __dirname + '/uploads/' + "output.json"
@@ -77,16 +78,21 @@ app.post('/upload', type, function (req,res) {
                 if (err) {
                     console.log("error", err);
                 } else {
+                    console.log("bulk operations")
                     new BulkOperations().findOperation(req, res, result)
                 }
             })
         }else{
-            res.send("File type not supported.")
+            console.log("sending the response for invalid file")
+            res.status(404);
+            res.setHeader("Content-Type", "application/json");
+            res.send(JSON.stringify({success:false,errorMessage:"File type not supported."}))
         }
 
 
         function getExtension(filename) {
             var i = filename.lastIndexOf('.');
+            console.log("extension here " + filename.substr(i))
             return (i < 0) ? '' : filename.substr(i);
         }
     });

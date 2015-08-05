@@ -12,10 +12,18 @@ ResponseHandler.prototype.sendResponse = function(req, res, type, resMsg, Status
 	res.setHeader("Content-Type", "application/json");
 
     if(type=="success"){
-        res.send(JSON.stringify(resMsg))
+        var response;
+        if(typeof(resMsg)=="object"){
+            response=JSON.stringify(resMsg)
+        }else{
+            var responseMessage ={}
+            responseMessage.success=true;
+            responseMessage.Message = resMsg;
+            response = JSON.stringify(responseMessage)
+        }
+        res.send(response)
     }else if(type=="error"){
-
-        if(typeof(resMsg)=="obejct")
+        if(typeof(resMsg)=="object")
             resMsg = JSON.stringify(resMsg);
         var response ={
             success:false,

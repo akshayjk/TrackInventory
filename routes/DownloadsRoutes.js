@@ -18,4 +18,8 @@ router.get('/downloadFile', function(req, res){
     })
 });
 
+router.get('/sampleAccounts', function(req, res){
+    res.sendFile(__dirname +'/Samples/Accounts.xls');
+});
+
 module.exports = router;

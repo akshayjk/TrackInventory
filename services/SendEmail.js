@@ -23,7 +23,7 @@ function sendEmail(options){
 
 sendEmail.prototype.sendByMandrill = function(parentName){
     var m = new mandrill.Mandrill(this.mandrillKey);
-    var htmlEmail = fs.readFileSync(__dirname + this.emailTemplate);
+    var htmlEmail = fs.readFileSync(__dirname + this.emailTemplate, {encoding: 'utf8'});
     //var parentName = "Satish Kumar"
     /*htmlEmail = htmlEmail.toString();
     console.log("type is " + typeof(htmlEmail))
@@ -39,7 +39,7 @@ sendEmail.prototype.sendByMandrill = function(parentName){
             "html": htmlEmail
         }
     };
-
+    console.log("Email params " + JSON.stringify(params))
     function sendTheMail() {
     // Send the email!
         m.messages.send(params, function(res) {

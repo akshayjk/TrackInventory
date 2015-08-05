@@ -14,7 +14,16 @@ BulkOperations.prototype.findOperation = function(req, res, fileJSON){
         new accounts().createBulkAccount(req, res, fileJSON)
     }else if(req.query.operation=="orders"){
         new orders().uploadBulkOrders(req, res, fileJSON);
+    }else{
+        res.status(404);
+        res.setHeader("Content-Type", "application/json");
+        var response={
+            success:false,
+            errorMessage:"Operation not supported."
+        }
+        res.send(JSON.stringify(response))
     }
+
 }
 
 

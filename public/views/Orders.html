@@ -194,7 +194,7 @@
                 <tr ng-repeat="order in dispatched">
                     <td>{{getName(order.FranchiseName)}}</td>
                     <td><a href="" ng-click="showOrder($index,1)">{{order.OrderId}}</a></td>
-                    <td><span class="label label-success">{{getStatus(order.Status)}}</span>
+                    <td><span class="label dispatched">{{getStatus(order.Status)}}</span>
                     </td>
                     <td>
                         {{getDate(order.ModifiedOn)}}
@@ -309,10 +309,10 @@
                 <p class="displayOrder"><b>Order Id : </b>{{dummyOrders[OrderNo[0]].OrderId}}
                 </p>
 
-                <p class="displayOrder"><b>Bank : </b>{{dummyOrders[OrderNo[0]].BankName}}
+                <p class="displayOrder" ng-show="dummyOrders[OrderNo[0]].BankName!=undefined"><b>Bank : </b>{{dummyOrders[OrderNo[0]].BankName}}
                 </p>
 
-                <p class="displayOrder"><b>Transaction Id : </b>{{dummyOrders[OrderNo[0]].TransactionID}}
+                <p class="displayOrder" ng-show="dummyOrders[OrderNo[0]].TransactionID!=undefined"><b>Transaction Id : </b>{{dummyOrders[OrderNo[0]].TransactionID}}
                 </p>
 
                 <p class="displayOrder"><b>Amount Paid : </b>{{dummyOrders[OrderNo[0]].TotalAmount}}
@@ -438,7 +438,7 @@
                 <p class="displayOrder" ng-show="dispatched[OrderNo[1]].BankName!=undefined"><b>Bank : </b>{{dispatched[OrderNo[1]].BankName}}
                 </p>
 
-                <p class="displayOrder"><b>Transaction Id : </b>{{dispatched[OrderNo[1]].TransactionID}}
+                <p class="displayOrder" ng-show="dispatched[OrderNo[1]].TransactionID!=undefined"><b>Transaction Id : </b>{{dispatched[OrderNo[1]].TransactionID}}
                 </p>
 
                 <p class="displayOrder"><b>Amount Paid : </b>{{dispatched[OrderNo[1]].TotalAmount}}
@@ -450,14 +450,14 @@
                 <h4>Summary</h4>
                 <table>
                     <tr ng-repeat="kit in dispatched[OrderNo[1]].Summary.Kits">
-                        <td>{{kit.KitName}}</td>
-                        <td>{{kit.Qty}}</td>
+                        <td>{{kit.Name}} :</td>
+                        <td>&nbsp; &nbsp;{{kit.Quantity}}</td>
                     </tr>
                 </table>
                 <table>
-                    <tr ng-repeat="uniform in dispatched[OrderNo[1]].Summary.Uniforms">
-                        <td>{{uniform.UniformName}}</td>
-                        <td>{{uniform.Qty}}</td>
+                    <tr ng-repeat="uniform in dispatched[OrderNo[1]].Summary.UniformSize">
+                        <td>{{uniform.Name}} :</td>
+                        <td>&nbsp; &nbsp;{{uniform.Quantity}}</td>
                     </tr>
                 </table>
 
@@ -484,7 +484,7 @@
                     <tr ng-repeat="student in dispatched[OrderNo[1]].Students">
                         <td>{{$index + 1}}</td>
                         <td>{{student.NameOfStudent}}</td>
-                        <td>{{student.Class.name}}</td>
+                        <td>{{student.Class.Name}}</td>
                         <td>{{student.UniformSize.cost}}</td>
                         <td>{{student.UniformQty}}</td>
                         <td>{{student.UniformSize.cost*student.UniformQty +

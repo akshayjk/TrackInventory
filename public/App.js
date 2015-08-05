@@ -9,7 +9,8 @@
         "App.filters",
         "ngRoute",
         "ngResource",
-        "ui.bootstrap"
+        "ui.bootstrap",
+        "angularFileUpload"
     ]);
 
     App.config(function ($routeProvider) {
@@ -22,6 +23,9 @@
             })
             .when('/PreviousOrders', {
                 templateUrl: '/views/PreOrders.html'
+            })
+            .when('/uploadOrders', {
+                templateUrl: '/views/UploadOrders.html'
             })
             .otherwise({redirectTo: '/Orders'});
     });

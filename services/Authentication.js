@@ -381,6 +381,8 @@ Authentication.prototype.deleteAccount = function (req, res, body) {
 }
 
 Authentication.prototype.createBulkAccount = function (req, res, fileJSON) {
+
+    console.log("creating new users")
     var options = {
         collection: "USER"
     };
