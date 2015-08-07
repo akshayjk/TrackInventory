@@ -111,8 +111,7 @@ ProcessOrder.prototype.placeOrder = function (req, res, orderObject) {
                 tempObj.RegistrationNumber = Students[i].RegistrationNumber;
                 tempObj.UniformSize = Students[i].UniformSize;
                 tempObj.UniformQty = Students[i].UniformQty;
-                tempObj.StudentId = tempObj.NameOfStudent.substring(0,5).toUpperCase() + new Date().getTime().toString();
-                tempObj.Class = Students[i].Class;
+                tempObj.StudentId = new Buffer(tempObj.NameOfStudent.substring(0,5).toUpperCase() + Students[i].RegistrationNumber).toString('base64');
                 if (Summary.Kits[Students[i].Class.KitId] == undefined) {
                     Summary.Kits[Students[i].Class.KitId] = Students[i].Class;
                     Summary.Kits[Students[i].Class.KitId].Quantity = 1;
@@ -258,8 +257,75 @@ ProcessOrder.prototype.dispatchOrder = function (req, res, body) {
 }
 
 ProcessOrder.prototype.uploadBulkOrders = function(req, res, fileJSON){
+    var TotalError = [];
+
+    for(var i=0;i<fileJSON.length;i++){
+        var errorArray =[];
+        var Validate = checkDefinedFields(fileJSON[i],errorArray,validateExcelFields);
+        if(Validate.validate){
+            fileJSON[i].StudentId = new Buffer(fileJSON[i].Name.substring(0,5).toUpperCase() + fileJSON[i]["Registration Number"]).toString('base64');
+
+        }else{
+            var errorObject ={};
+            errorObject.student = fileJSON[i]["Name"];
+            errorObject.foundErrors = Validate.Errors;
+            TotalError.push(errorObject);
+        }
+    }
+}
+
+
+function checkDefinedFields(StudentObject, errorArray, callback){
+    var Keys =  Object.keys(StudentObject);
+
+    for(var i =0; i< Keys.length;i++){
+
+        if(i==Keys.length-1){
+            if(StudentObject[Keys[i]]==undefined){
+
+                errorArray.push(Keys[i] + " field is not present.");
+                callback(StudentObject,errorArray);
+            }else{
+                callback(StudentObject,errorArray);
+            }
+        }else{
+            if(StudentObject[Keys[i]]==undefined){
+                errorArray.push(Keys[i] + " field is not present.");
+            }
+        }
+
+    }
+
 
 }
+
+function validateExcelFields(StudentObject, errorArray){
+    var validate ={};
+    if(errorArray.length>0){
+        console.log("fields are missing ");
+
+        validate.validate = false;
+        validate.Errors = errorArray;
+        return errorArray;
+    }else{
+        var date;
+        try{
+            date = new Date(StudentObject["Date of Admission"]);
+
+        }catch(e){
+            errorArray.push("Date of admission is not valid")
+        }
+
+        if(StudentObject["Parents Email"].search("@")==-1){
+            errorArray.push("Parents email is not valid.")
+        }
+        validate.validate = true;
+        validate.Errors = errorArray;
+        return errorArray;
+    }
+
+}
+
 
 function completeOrder(req, res) {
     var OrderId = req.query.OrderId;
@@ -502,7 +568,5 @@ function sendConfirmationMails(OrderId){
 
 
 }
-
-
 
 module.exports = ProcessOrder;

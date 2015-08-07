@@ -114,15 +114,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <li class="dropdown messages-menu">
                             <!-- Menu toggle button -->
                             <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-envelope-o"></i>
-                                <span class="label label-danger">4</span>
+                                <i class="fa fa-bell"></i>
+                                <span class="label label-danger" ng-show="NotificationItems.length>0">{{NotificationItems.length}}</span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="header">You have 4 messages</li>
+                                <li class="header">You have {{NotificationItems.length}} notifications</li>
                                 <li>
                                     <!-- inner menu: contains the messages -->
                                     <ul class="menu">
-                                        <li><!-- start message -->
+                                        <li ng-repeat="item in NotificationItems"><!-- start message -->
                                             <a href="">
                                                 <div class="pull-left">
                                                     <!-- User Image -->
@@ -131,18 +131,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 </div>
                                                 <!-- Message title and timestamp -->
                                                 <h4>
-                                                    Support Team
-                                                    <small><i class="fa fa-clock-o"></i> 5 mins</small>
+                                                    <b>{{item.Name}}</b> <span style="font-size: small">are now only</span>
+                                                    <label class="pull-right">{{item.Quantity}}</label>
                                                 </h4>
                                                 <!-- The message -->
-                                                <p>Why not buy a new awesome theme?</p>
+                                                <p>{{item.Category}}</p>
                                             </a>
                                         </li>
                                         <!-- end message -->
                                     </ul>
                                     <!-- /.menu -->
                                 </li>
-                                <li class="footer"><a href="">See All Messages</a></li>
+                                <!--<li class="footer"><a href="">See All Messages</a></li>-->
                             </ul>
                         </li>
 

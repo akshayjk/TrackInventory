@@ -19,7 +19,11 @@ router.get('/downloadFile', function(req, res){
 });
 
 router.get('/sampleAccounts', function(req, res){
-    res.sendFile(__dirname +'/Samples/Accounts.xls');
+    res.download(path.join(__dirname ,'../services/Samples/Accounts.xls'));
+});
+
+router.get('/sampleOrders', function(req, res){
+    res.download(path.join(__dirname ,'../services/Samples/OrdersProtected.xls'));
 });
 
 module.exports = router;

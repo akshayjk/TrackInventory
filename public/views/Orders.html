@@ -1,20 +1,7 @@
 <div ng-controller="AdminController">
 
 <section class="content-header">
-<div class="box-header" style="background-color: white">
-    <h3 class="box-title">Notification Tray</h3>
-    <h3 class="box-title pull-right"><a ng-click="viewNot=!viewNot" class="pull-right" style="color:blue">Clear Notifications</a></h3>
-</div>
-<div class="box-body" style="background-color: white;margin-bottom: 2%;" ng-show="viewNot">
-    <ul class="todo-list">
-        <li ng-repeat="item in NotificationItems">
-            <span class="text">{{item.Name}}</span> in
-            <span class="text">{{item.Category}}</span>
-            are now only
-            <span class="text">{{item.Quantity}}</span>
-        </li>
-    </ul>
-</div>
+
 <div class="nav-tabs-custom" ng-show="!listView[0]&&!listView[1]&&!listView[2]" style="margin-top: 2%;">
 <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
     <li class="active" id="PendingTab"><a data-target="#Pending" class="onHoverClass"
