@@ -12,17 +12,17 @@ function ProcessOrder() {
 
 }
 
- ProcessOrder.prototype.getInventoryHealth = function(req, res, body){
+ProcessOrder.prototype.getInventoryHealth = function (req, res, body) {
 
     var options = {
-        collection :"INVENTORY",
-        Query :{Category:{$ne:"KIT"},Quantity:{$lte:20}},
-        QuerySelect:{Name:1,Quantity:1, Category:1}
+        collection: "INVENTORY",
+        Query: {Category: {$ne: "KIT"}, Quantity: {$lte: 20}},
+        QuerySelect: {Name: 1, Quantity: 1, Category: 1}
     }
-    new dataBase().get(options,function(err, data){
-        if(!err){
+    new dataBase().get(options, function (err, data) {
+        if (!err) {
             new responseHandler().sendResponse(req, res, "success", data, 200);
-        }else{
+        } else {
             new responseHandler().sendResponse(req, res, "error", err, 500);
         }
     })
@@ -111,7 +111,7 @@ ProcessOrder.prototype.placeOrder = function (req, res, orderObject) {
                 tempObj.RegistrationNumber = Students[i].RegistrationNumber;
                 tempObj.UniformSize = Students[i].UniformSize;
                 tempObj.UniformQty = Students[i].UniformQty;
-                tempObj.StudentId = new Buffer(tempObj.NameOfStudent.substring(0,5).toUpperCase() + Students[i].RegistrationNumber).toString('base64');
+                tempObj.StudentId = new Buffer(tempObj.NameOfStudent.substring(0, 5).toUpperCase() + Students[i].RegistrationNumber).toString('base64');
                 if (Summary.Kits[Students[i].Class.KitId] == undefined) {
                     Summary.Kits[Students[i].Class.KitId] = Students[i].Class;
                     Summary.Kits[Students[i].Class.KitId].Quantity = 1;
@@ -208,9 +208,9 @@ ProcessOrder.prototype.changeOrderStatus = function (req, res, body) {
 ProcessOrder.prototype.dispatchOrder = function (req, res, body) {
     var OrderId = req.query.OrderId;
 
-    if(OrderId!=undefined&&body.CourierName!=undefined&&body.TrackingID!=undefined){
+    if (OrderId != undefined && body.CourierName != undefined && body.TrackingID != undefined) {
         console.log("things validated")
-        var OrderId = req.query.OrderId;
+        //var OrderId = req.query.OrderId;
         var options = {
             collection: "orders",
             Query: {OrderId: OrderId},
@@ -218,25 +218,25 @@ ProcessOrder.prototype.dispatchOrder = function (req, res, body) {
         }
         new dataBase().get(options, function (err, order) {
             //what items need to be reduced
-            if(!err&&order.length>0){
+            if (!err && order.length > 0) {
                 console.log("the order to be changed " + JSON.stringify(order));
                 new dataBase().bulkInsert({collection: "INVENTORY"}, function (bulkInsert) {
-                    reduceKitItems(req, res, 0, order[0].Summary, bulkInsert, function(req, res, Summary, bulkInsert){
-                        reduceUniforms(req, res, Summary, bulkInsert, function(){
+                    reduceKitItems(req, res, 0, order[0].Summary, bulkInsert, function (req, res, Summary, bulkInsert) {
+                        reduceUniforms(req, res, Summary, bulkInsert, function () {
                             //Done correctly
                             //Send confirmation emails
-                            var updateOrderStatus={
-                                collection:"orders",
-                                Query:{OrderId:OrderId},
-                                updateObject:{Status:"DISPATCHED",CourierName:body.CourierName,TrackingID:body.TrackingID}
+                            var updateOrderStatus = {
+                                collection: "orders",
+                                Query: {OrderId: OrderId},
+                                updateObject: {Status: "DISPATCHED", CourierName: body.CourierName, TrackingID: body.TrackingID}
                             }
-                            new dataBase().update(updateOrderStatus, function(err, result){
-                                if(!err){
+                            new dataBase().update(updateOrderStatus, function (err, result) {
+                                if (!err) {
                                     sendConfirmationMails(OrderId);
                                     res.setHeader("Content-Type", "application/json");
                                     res.send(JSON.stringify({"success": true, "Message": "Order dispatched successfully"}));
-                                }else{
-                                    new responseHandler().sendResponse(req,res, "error","Error while changing the order status.",500);
+                                } else {
+                                    new responseHandler().sendResponse(req, res, "error", "Error while changing the order status.", 500);
                                 }
 
                             })
@@ -245,51 +245,145 @@ ProcessOrder.prototype.dispatchOrder = function (req, res, body) {
                         });
                     });
                 });
-            }else{
+            } else {
                 res.setHeader("Content-Type", "application/json");
                 res.send(JSON.stringify({"success": true, "Message": "No such order found"}));
             }
         })
     }
-    else{
-        new responseHandler().sendResponse(req,res, "error", "Missing parameters", 404);
+    else {
+        new responseHandler().sendResponse(req, res, "error", "Missing parameters", 404);
     }
 }
 
-ProcessOrder.prototype.uploadBulkOrders = function(req, res, fileJSON){
+ProcessOrder.prototype.uploadBulkOrders = function (req, res, fileJSON, body) {
     var TotalError = [];
+    var TotalStudents = [];
+    console.log("bod " + JSON.stringify(req.body));
+    console.log('FranchiseDetails ' + req.query.FranchiseId + " " +req.query.FranchiseName);
+    new dataBase().bulkInsert({collection: "students"}, function (bulkInsert) {
+        for (var i = 0; i < fileJSON.length; i++) {
+            var errorArray = [];
+            checkDefinedFields(bulkUpdateStudentMapping(fileJSON[i],req.query.FranchiseId, req.query.FranchiseName), errorArray, function (student, errorArray) {
+                console.log("for a student the " + JSON.stringify(student));
+                console.log("error array " + JSON.stringify(errorArray));
+                validateExcelFields(student, errorArray, function (validate) {
+                    console.log("validate object " + JSON.stringify(validate))
+                    if (validate.validate) {
+                        student.StudentId = new Buffer(student.NameOfStudent.substring(0, 5).toUpperCase() + student["RegistrationNumber"]).toString('base64');
+                        bulkInsert.find({StudentId: student.StudentId}).upsert().updateOne({$set: student});
+                        TotalStudents.push(student);
 
-    for(var i=0;i<fileJSON.length;i++){
-        var errorArray =[];
-        var Validate = checkDefinedFields(fileJSON[i],errorArray,validateExcelFields);
-        if(Validate.validate){
-            fileJSON[i].StudentId = new Buffer(fileJSON[i].Name.substring(0,5).toUpperCase() + fileJSON[i]["Registration Number"]).toString('base64');
+                    } else {
+                        var errorObject = {};
+                        errorObject.student = student["NameOfStudent"];
+                        errorObject.foundErrors = validate.Errors;
+                        TotalError.push(errorObject);
+                    }
+                })
 
-        }else{
-            var errorObject ={};
-            errorObject.student = fileJSON[i]["Name"];
-            errorObject.foundErrors = Validate.Errors;
-            TotalError.push(errorObject);
+            });
+
+            if (i == fileJSON.length - 1) {
+                bulkInsert.execute(function (err, result) {
+                    if (err) {
+                        console.log("error while bulk Insert")
+                    } else {
+                        console.log("bulkInsert successful");
+                        console.log("nInserted " + result.nInserted);
+                        console.log("nUpserted " + result.nUpserted);
+                        console.log("nMatched " + result.nMatched);
+                        console.log("nModified " + result.nModified);
+
+                        console.log("proceeding for the Uniforms reduction ")
+                        new responseHandler().sendResponse(req, res, "success", TotalError, 200);
+                    }
+                });
+                console.log("end ")
+            }
+
         }
+
+    })
+
+
+    console.log("after completting.... " + JSON.stringify(TotalStudents));
+
+}
+
+function bulkUpdateStudentMapping(student, FranchiseId, FranchiseName) {
+    //console.log("Body in here " + JSON.stringify(body))
+    var DbStudentObject = {
+        "NameOfStudent": student["Name"],
+        "Age": student.Age,
+        "ParentName": student["Parent's Name"],
+        "ParentContact": student["Parents Contact"],
+        "ParentEmail": student["Parents Email"],
+        "DateOfAdmission": student["Date of Admission"],
+        "RegistrationNumber": student["Registration Number"],
+        "ReceiptNumber": student["Receipt Number"],
+        "UniformQty": student["Uniform Quantity"],
+        "FranchiseId": FranchiseId,
+        "FranchiseName": FranchiseName
     }
+
+    DbStudentObject.OrderId = generateOrderId(FranchiseId);
+    DbStudentObject.Class = getStudentClass(student.Class);
+    DbStudentObject.UniformSize = getStudentUniform(student["Uniform Size"]);
+
+    function getStudentClass(ClassName) {
+        var mappingObject = {
+            "PlayGroup": "KIT1438415770065",
+            "Nursery": "KIT1438426460989",
+            "LKG": "KIT1438428417951",
+            "UKG":"KIT1438428417951"
+        };
+        var ClassObject = {
+            "Name": ClassName,
+            "KitId": mappingObject[ClassName]
+        };
+        return ClassObject;
+    }
+
+    function getStudentUniform(UniformSize){
+
+        var UniformMapping = {
+            "small size": "UNIFORMS1438416511638",
+            "medium size": "UNIFORMS1438416563238",
+            "large size": "UNIFORMS1438418534704",
+            "extra-large size":"UNIFORMS1438418544390"
+        };
+
+        var Uniform = {
+            "Name": UniformSize,
+            "ItemId": UniformMapping[UniformSize]
+        }
+
+        return Uniform;
+    }
+
+    return DbStudentObject;
+
+
 }
 
 
-function checkDefinedFields(StudentObject, errorArray, callback){
-    var Keys =  Object.keys(StudentObject);
+function checkDefinedFields(StudentObject, errorArray, callback) {
+    var Keys = Object.keys(StudentObject);
 
-    for(var i =0; i< Keys.length;i++){
+    for (var i = 0; i < Keys.length; i++) {
 
-        if(i==Keys.length-1){
-            if(StudentObject[Keys[i]]==undefined){
+        if (i == Keys.length - 1) {
+            if (StudentObject[Keys[i]] == undefined || StudentObject[Keys[i]] == "") {
 
                 errorArray.push(Keys[i] + " field is not present.");
-                callback(StudentObject,errorArray);
-            }else{
-                callback(StudentObject,errorArray);
+                callback(StudentObject, errorArray);
+            } else {
+                callback(StudentObject, errorArray);
             }
-        }else{
-            if(StudentObject[Keys[i]]==undefined){
+        } else {
+            console.log(" value here " + StudentObject[Keys[i]])
+            if (StudentObject[Keys[i]] == undefined || StudentObject[Keys[i]] == "") {
                 errorArray.push(Keys[i] + " field is not present.");
             }
         }
@@ -299,29 +393,29 @@ function checkDefinedFields(StudentObject, errorArray, callback){
 
 }
 
-function validateExcelFields(StudentObject, errorArray){
-    var validate ={};
-    if(errorArray.length>0){
+function validateExcelFields(StudentObject, errorArray, callback) {
+    var validate = {};
+    if (errorArray.length > 0) {
         console.log("fields are missing ");
 
         validate.validate = false;
         validate.Errors = errorArray;
-        return errorArray;
-    }else{
+        callback(validate);
+    } else {
         var date;
-        try{
-            date = new Date(StudentObject["Date of Admission"]);
+        try {
+            date = new Date(StudentObject["DateOfAdmission"]);
 
-        }catch(e){
+        } catch (e) {
             errorArray.push("Date of admission is not valid")
         }
 
-        if(StudentObject["Parents Email"].search("@")==-1){
+        if (StudentObject["ParentEmail"].search("@") == -1) {
             errorArray.push("Parents email is not valid.")
         }
         validate.validate = true;
         validate.Errors = errorArray;
-        return errorArray;
+        callback(validate);
     }
 
 }
@@ -346,7 +440,7 @@ function completeOrder(req, res) {
     })
 }
 
-function mapArrayToObject(Arr,objKey){
+function mapArrayToObject(Arr, objKey) {
     var mappedKitItems = {}
     for (var i = 0; i < Arr.length; i++) {
         var ArrEle = Arr[i];
@@ -358,11 +452,11 @@ function mapArrayToObject(Arr,objKey){
 }
 
 function reduceKitItems(req, res, count, Summary, bulkInsert, callback) {
-    console.log(" count " + count +" here in the reduce Inventory Items " + JSON.stringify(Summary) )
-    if(count<Summary.Kits.length){
+    console.log(" count " + count + " here in the reduce Inventory Items " + JSON.stringify(Summary))
+    if (count < Summary.Kits.length) {
         var options = {
             collection: 'INVENTORY',
-            Query: {KitId: Summary.Kits[count].KitId,Category:"KIT"},
+            Query: {KitId: Summary.Kits[count].KitId, Category: "KIT"},
             QuerySelect: {Kit: 1}
         };
         var items = [];
@@ -375,7 +469,7 @@ function reduceKitItems(req, res, count, Summary, bulkInsert, callback) {
                 for (var i = 0; i < data[0].Kit.length; i++) {
                     var kitItem = data[0].Kit[i];
                     var kitItemId = kitItem.ItemId;
-                    console.log(kitItem.ItemId + " detect null "  + JSON.stringify(kitItem))
+                    console.log(kitItem.ItemId + " detect null " + JSON.stringify(kitItem))
                     items.push(kitItem.ItemId)
                     mappedKitItems[kitItemId] = kitItem;
                 }
@@ -399,33 +493,33 @@ function reduceKitItems(req, res, count, Summary, bulkInsert, callback) {
                     console.log("the kit being operated " + JSON.stringify(Summary.Kits[count]));
                     var notEnoughItems = false;
                     for (var j = 0; j < itemData.length; j++) {
-                       var modifiedQuantity = mappedObj[itemData[j].ItemId].Quantity - mappedKitItems[itemData[j].ItemId].Units * Summary.Kits[count].Quantity;
-                       if(modifiedQuantity<0){
+                        var modifiedQuantity = mappedObj[itemData[j].ItemId].Quantity - mappedKitItems[itemData[j].ItemId].Units * Summary.Kits[count].Quantity;
+                        if (modifiedQuantity < 0) {
                             notEnoughItems = true;
                             break;
-                       }else{
-                        bulkInsert.find({ItemId: itemData[j].ItemId}).upsert().updateOne({$set: {Quantity: modifiedQuantity}});
+                        } else {
+                            bulkInsert.find({ItemId: itemData[j].ItemId}).upsert().updateOne({$set: {Quantity: modifiedQuantity}});
                         }
 
                     }
-                if(notEnoughItems){
-                    new responseHandler().sendResponse(req, res, "error", "Not enough items in Inventory.", 403);
-                }else{
-                    count++;
-                reduceKitItems(req, res, count,Summary,bulkInsert,callback);
-                }
+                    if (notEnoughItems) {
+                        new responseHandler().sendResponse(req, res, "error", "Not enough items in Inventory.", 403);
+                    } else {
+                        count++;
+                        reduceKitItems(req, res, count, Summary, bulkInsert, callback);
+                    }
 
-            })
+                })
 
                 /*res.setHeader("Content-Type", "application/json");
-                res.send(JSON.stringify({"success": true, "Message": "Something happened"}));*/
+                 res.send(JSON.stringify({"success": true, "Message": "Something happened"}));*/
             } else {
                 res.setHeader("Content-Type", "application/json");
                 res.send(JSON.stringify({"success": true, "Message": "Something Not happened"}));
             }
         })
 
-    }else{
+    } else {
         //Kits are ended
         console.log("process compleye and ");
         bulkInsert.execute(function (err, result) {
@@ -448,32 +542,30 @@ function reduceKitItems(req, res, count, Summary, bulkInsert, callback) {
     }
 
 
-
-
 }
 
-function reduceUniforms(req, res, Summary, bulkInsert, callback){
-  console.log("callback " + callback)
-    var items =[]
-    for(var i =0;i<Summary.UniformSize.length;i++){
+function reduceUniforms(req, res, Summary, bulkInsert, callback) {
+    console.log("callback " + callback)
+    var items = []
+    for (var i = 0; i < Summary.UniformSize.length; i++) {
         items.push(Summary.UniformSize[i].ItemId);
     }
-    var mappedOrderObj = mapArrayToObject(Summary.UniformSize,"ItemId")
+    var mappedOrderObj = mapArrayToObject(Summary.UniformSize, "ItemId")
     var options = {
         collection: 'INVENTORY',
         Query: {ItemId: {$in: items}},
         QuerySelect: {ItemId: 1, Quantity: 1}
     }
     console.log("options in uniforms " + JSON.stringify(options))
-    new dataBase().get(options, function(err, data){
-        if(!err){
+    new dataBase().get(options, function (err, data) {
+        if (!err) {
             console.log("here the uniforms " + JSON.stringify(data))
-            var mappedDbObj = mapArrayToObject(data,"ItemId");
+            var mappedDbObj = mapArrayToObject(data, "ItemId");
             console.log("mapped req, order obj " + JSON.stringify(mappedOrderObj));
             console.log("mapped db obj " + JSON.stringify(mappedDbObj))
-            if(data.length>0){
+            if (data.length > 0) {
                 for (var j = 0; j < data.length; j++) {
-                    if(j==data.length-1){
+                    if (j == data.length - 1) {
                         var modifiedQuantity = mappedDbObj[data[j].ItemId].Quantity - mappedOrderObj[data[j].ItemId].Quantity;
                         bulkInsert.find({ItemId: data[j].ItemId}).upsert().updateOne({$set: {Quantity: modifiedQuantity}});
                         bulkInsert.execute(function (err, result) {
@@ -492,13 +584,13 @@ function reduceUniforms(req, res, Summary, bulkInsert, callback){
                                  res.send(JSON.stringify({"success": true, "Message": "done correctly"}));*/
                             }
                         });
-                    }else{
+                    } else {
                         var theObj = mappedOrderObj[data[j].ItemId];
                         console.log("the obj " + JSON.stringify(theObj) + Object.keys(theObj));
-                        console.log("here " +data[j].ItemId + " mapped orde " + JSON.stringify(mappedOrderObj[data[j].ItemId]) +" the quant "+ mappedOrderObj[data[j].ItemId].Quantity)
+                        console.log("here " + data[j].ItemId + " mapped orde " + JSON.stringify(mappedOrderObj[data[j].ItemId]) + " the quant " + mappedOrderObj[data[j].ItemId].Quantity)
                         console.log("before reducing " + mappedDbObj[data[j].ItemId].Quantity + " and " + mappedOrderObj[data[j].ItemId].Quantity);
                         var modifiedQuantity = (mappedDbObj[data[j].ItemId].Quantity - mappedOrderObj[data[j].ItemId].Quantity);
-                        if(modifiedQuantity<0){
+                        if (modifiedQuantity < 0) {
                             new responseHandler().sendResponse(req, res, "error", "Not enough items in Inventory.", 403);
                             break;
                         }
@@ -508,12 +600,12 @@ function reduceUniforms(req, res, Summary, bulkInsert, callback){
 
                 }
             }
-            else{
+            else {
                 callback();
             }
 
 
-        }else{
+        } else {
             new responseHandler().sendResponse(req, res, "error", err, 500);
         }
     })
@@ -528,35 +620,35 @@ function generateOrderId(franchiseID) {
     return pre + post;
 }
 
-function sendConfirmationMails(OrderId){
+function sendConfirmationMails(OrderId) {
 
 
-   /* new dataBase().bulkInsert({collection: "students"}, function (bulkInsert){
-        this.bulkInsert = bulkInsert;
-    })*/
+    /* new dataBase().bulkInsert({collection: "students"}, function (bulkInsert){
+     this.bulkInsert = bulkInsert;
+     })*/
 
-    var options ={
-        collection :"students",
-        Query :{OrderId :OrderId},
-        QuerySelect :{ParentName:1,ParentEmail:1,StudentId:1}
+    var options = {
+        collection: "students",
+        Query: {OrderId: OrderId},
+        QuerySelect: {ParentName: 1, ParentEmail: 1, StudentId: 1}
     }
 
     new dataBase().get(options, processStudentData)
 
-    function processStudentData(err, data){
-        if(!err){
-            data.forEach(function(student){
-                new sendMail({receivers:student.ParentEmail}).sendByMandrill(student.ParentName, function(err, success){
+    function processStudentData(err, data) {
+        if (!err) {
+            data.forEach(function (student) {
+                new sendMail({receivers: student.ParentEmail}).sendByMandrill(student.ParentName, function (err, success) {
                     var Time = new Date().toISOString();
                     var studOptions = {
-                        collection:"students",
-                        Query:{StudentId:student.StudentId},
-                        updateObject:{EmailSentAt:Time}
+                        collection: "students",
+                        Query: {StudentId: student.StudentId},
+                        updateObject: {EmailSentAt: Time}
                     }
-                    new dataBase().update(studOptions, function(err, result){
-                        if(!err){
+                    new dataBase().update(studOptions, function (err, result) {
+                        if (!err) {
                             console.log("Logged the thing")
-                        }else{
+                        } else {
                             console.log("error in the student Update")
                         }
                     })
@@ -564,7 +656,6 @@ function sendConfirmationMails(OrderId){
             })
         }
     }
-
 
 
 }

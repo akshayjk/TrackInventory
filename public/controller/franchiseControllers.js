@@ -500,6 +500,8 @@
 
     App.controller("uploadOrders", ["$scope", "FileUploader", function ($scope, FileUploader) {
 
+        $scope.userDetails = JSON.parse(sessionStorage.userDetails);
+
         $scope.radioModel = 'show';
         $scope.alertMsg = {view: 0};
         $scope.clearAlert = function () {
@@ -508,7 +510,8 @@
         //*****************************************************************************************
 
         var uploader = $scope.uploader = new FileUploader({
-            url: '/upload?operation=orders'
+            url: '/upload?operation=orders&FranchiseId='+$scope.userDetails.FranchiseId+'&FranchiseName='+$scope.userDetails.FranchiseName,
+            data:{FranchiseId:$scope.userDetails,FranchiseName:$scope.FranchiseName}
         });
 
         // FILTERS
