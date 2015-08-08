@@ -18,6 +18,7 @@ A clients in different locations can create account and start ordering specific 
       e. Can Download reports on Inventory, orders and other related data.<br>
 4. Transactional email integration.
 
-#API and Front End <br>
+##API and Front End <br>
 Built with Node, Express, MongoDB and Angular JS. 
+Can checkout the related info and documents <a href="https://github.com/akshayjk/LEWebSite/wiki">here</a>.
 
