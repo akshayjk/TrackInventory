@@ -143,22 +143,41 @@ Downloads.prototype.downloadFile = function (req, res, body) {
         var to = new Date(req.query.toDate);
         console.log("frm " + JSON.stringify(frm) + " to " + JSON.stringify(to));
         if (frm &&frm != "Invalid Date") {
-            Query.ModifiedOn = {
-                $gte: frm
-            }
+            Query.ModifiedOn['$gte'] =frm;
         } else if (to&&to != "Invalid Date") {
-            Query.ModifiedOn = {
-                $lte: to
-            }
+            Query.ModifiedOn['$lte'] =to;
         }
 
         if(req.query.FranchiseId!=undefined){
             Query.FranchiseId=req.query.FranchiseId;
+        }
+
+        if(req.query.type.toLowerCase()=="orders"&&req.query.status!=undefined){
+            Query.Status =req.query.status;
+        }
+        if(req.query.type.toLowerCase()=="students"&&req.query.KitId!=undefined){
+            Query["Class.KitId"]=req.query.KitId;
         }
         callback(Query);
     }
 
 
 };
+
+Downloads.prototype.getKits = function(req, res, body){
+    var options ={
+        collection:"INVENTORY",
+        Query:{Category:"KIT",Tags:"Visible"},
+        QuerySelect:{Name:1,KitId:1}
+    }
+
+    new dataBase().get(options, function(err,data){
+        if(!err){
+            new responseHandler().sendResponse(req, res, "success",data,200);
+        }else{
+            new responseHandler().sendResponse(req, res,"error","Error while getting Kits",500);
+        }
+    })
+}
 
 module.exports = Downloads;

@@ -46,7 +46,6 @@
         };
         $scope.getVisibleKits();
         $scope.userDetails = JSON.parse(sessionStorage.userDetails);
-
         $scope.UniformCosts = $scope.userDetails.FranchiseDetails.UniformCosts;
         $scope.KitCost = $scope.userDetails.FranchiseDetails.KitCost;
         $scope.formHide = false;

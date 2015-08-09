@@ -49,19 +49,17 @@ var type = upload.single('file');
 
 app.post('/upload', type, function (req,res) {
     console.log("post req received ")
-    /** When using the "single"
-     data come in "req.file" regardless of the attribute "name". **/
     var tmp_path = req.file.path;
-
-    /** The original name of the uploaded file
-     stored in the variable "originalname". **/
     var target_path = __dirname + '/uploads/' + req.file.originalname;
     var filename = req.file.originalname;
-    /** A better way to copy the uploaded file. **/
     var src = fs.createReadStream(tmp_path);
     var dest = fs.createWriteStream(target_path);
     src.pipe(dest);
     src.on('end', function() {
+        fs.unlink('./uploadTemp/'+req.file.filename,function(){
+            console.log("File has been deleted.")
+        })
+
         if(getExtension(filename) == ".xls"){
             console.log("converting to JSON")
             node_xj({

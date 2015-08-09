@@ -91,10 +91,13 @@
         return {
             downloadFile:function(data){
                 var downloadUrl = "/download/downloadFile";
-
                //downloadUrl = downloadUrl + "type="+data.type + frm + to + FranId;
                var downloadReq = {method : "GET", url:downloadUrl, params:data};
                return $http(downloadReq);
+            },
+            getKitOptions:function(){
+                var getKitsReq = {method : "GET", url:"/download/getKits"};
+                return $http(getKitsReq);
             }
         }
     }]);

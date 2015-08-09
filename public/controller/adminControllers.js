@@ -927,17 +927,29 @@
 
     }]);
 
-    App.controller("DownloadsController", ["$scope", "Auth", "Downloads", function ($scope, Auth, Downloads) {
+    App.controller("Downloads", ["$scope", "Auth", "Downloads", function ($scope, Auth, Downloads) {
 
-        $scope.ClassOptions = ["PlayGroup", "Nursery", "LKG", "UKG"];
+        //$scope.kitOptions = ["PlayGroup", "Nursery", "LKG", "UKG"];
+        $scope.StatusOptions = ["ALL","PENDING","DISPATCHED","COMPLETED"];
+        $scope.StatusOption =$scope.StatusOptions[0];
         $scope.FranchiseNameList = [];
-
+        $scope.FranchiseSelected = {};
+        $scope.getKitOptions = function(){
+            Downloads.getKitOptions().success(function(res, resStat){
+                $scope.kitOptions = res;
+                $scope.kitOption = $scope.kitOptions[0]
+            }).error(function(errRes, errStat){
+                $scope.kitOptions = ["PlayGroup", "Nursery", "LKG", "UKG"];
+                $scope.kitOption = $scope.kitOption[0]
+            })
+        }
+        $scope.getKitOptions();
 
         $scope.getFranchiseList = function () {
             Auth.getFranchiseList().success(function (AccRes) {
                 $scope.FranchiseNameList = AccRes;
-                $scope.FranchiseNameList.splice(0, 0, {"FranchiseId": null, "FranchiseName": "None"});
-                $scope.FranchiseName = $scope.FranchiseNameList[0];
+                //$scope.FranchiseNameList.splice(0, 0, {"FranchiseId": null, "FranchiseName": "None"});
+                //$scope.FranchiseName = $scope.FranchiseNameList[0];
             }).error(function (errRes) {
                 console.log("error while getting Accounts Info")
             });
@@ -952,6 +964,41 @@
             $scope.downloadObject.FranchiseId = this.FranchiseNameOb;
         }
         $scope.downloadType = ["Students", "Orders"];
+        $scope.downloadFiles = function(type, TypeObject,Franchise,Status,Class){
+            console.log("type is " + type)
+            console.log("order obbj " + JSON.stringify(TypeObject))
+            var queryString ='';
+            if(type=="order"){
+                queryString='/download/downloadFile?type=Orders&';
+            }else if(type=="student"){
+                queryString ='/download/downloadFile?type=Students&'
+            }
+            if(TypeObject.fromDate!=null && TypeObject.fromDate!=undefined){
+                queryString += "fromDate="+TypeObject.fromDate+"&"
+            }
+            if(TypeObject.toDate!=null && TypeObject.toDate!=undefined){
+                queryString += "toDate="+TypeObject.fromDate + "&"
+            }
+            if(Status!=null && Status!=undefined && Status!="ALL"){
+                console.log("Status " + Status)
+                queryString += "status="+Status + "&"
+            }
+            if(Class!=null&&Class!=undefined){
+                queryString +="KitId="+Class.KitId+'&';
+            }
+            if(Franchise!=undefined&&Franchise!=null){
+                queryString +="FranchiseId=" + Franchise.FranchiseId;
+            }
+            console.log("Total url " + queryString);
+            window.open(queryString);
+            /*Downloads.downloadFile(queryString).success(function(){
+                window.open(queryString);
+            }).error(function(errRes,errStat){
+                console.log("download failed")
+            })*/
+
+        }
+
         $scope.downloadFile = function () {
             $scope.downloadObject.type = this.type;
             Downloads.downloadFile($scope.downloadObject).success(function (downRes, downStatus) {

@@ -32,6 +32,9 @@
             .when('/Messages', {
                 templateUrl: '/views/Messages.html'
             })
+            .when('/Downloads', {
+                templateUrl: '/views/Downloads.html'
+            })
             .otherwise({redirectTo: '/Orders'});
         $locationProvider.html5Mode(false);
 

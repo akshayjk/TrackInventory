@@ -26,4 +26,10 @@ router.get('/sampleOrders', function(req, res){
     res.download(path.join(__dirname ,'../services/Samples/OrdersProtected.xls'));
 });
 
+router.get('/getKits', function(req, res){
+    new requestData().getReqBody(req, res, function(body){
+        new downloads().getKits(req, res, body);
+    })
+})
+
 module.exports = router;
