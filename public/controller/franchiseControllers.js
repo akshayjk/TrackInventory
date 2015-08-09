@@ -480,7 +480,7 @@
             console.info('onProgressAll', progress);
         };
         uploader.onSuccessItem = function(fileItem, response, status, headers) {
-            console.info('onSuccessItem', fileItem, response, status, headers);
+            //console.info('onSuccessItem', fileItem, response, status, headers);
             $scope.alertMsg = {
                 type: 'success',
                 Msg: response.Message,
@@ -489,7 +489,7 @@
             $scope.ErrorMessage = response.ErrorObject;
         };
         uploader.onErrorItem = function(fileItem, response, status, headers) {
-            console.info('onErrorItem', fileItem, response, status, headers);
+            //console.info('onErrorItem', fileItem, response, status, headers);
             var errorMessage="Error while uploading file.";
             if(response.errorMessage){
                 errorMessage = response.errorMessage;
@@ -511,7 +511,7 @@
             console.info('onCompleteAll');
         };
 
-        console.info('uploader', uploader);
+        //console.info('uploader', uploader);
 
         //*****************************************************************************************
 

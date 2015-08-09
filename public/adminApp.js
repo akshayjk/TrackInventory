@@ -9,8 +9,6 @@
     var App = angular.module("App", [
         "App.AdminControllers",
         "App.services",
-        "App.directives",
-        "App.filters",
         "ngRoute",
         "ngResource",
         "ui.bootstrap",

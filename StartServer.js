@@ -14,7 +14,7 @@ var upload = multer({ dest: 'uploadTemp/'})
 //App Modules
 var dataBase = require('./services/DbOperations.js');
 
-//App Roters
+//App Routers
 var Orders = require('./routes/OrderRoutes.js'),
     Inventory = require('./routes/InventoryRoutes.js'),
     Messages = require('./routes/MessagesRoutes.js'),
@@ -30,16 +30,12 @@ new dataBase().connect();
 
 //Index Page Gateway
 app.get('/Login', function (req, res) {
-    res.sendFile(path.join(__dirname, '/LoginNew.html'));
+    res.sendFile(path.join(__dirname, '/Login.html'));
 });
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, '/LoginNew.html'));
+    res.sendFile(path.join(__dirname, '/Login.html'));
 });
-
-/*app.get('/LoginNew',function(req, res){
- res.sendFile(path.join(__dirname , '/starterTest.html'));
- });*/
 
 app.use('/order', Orders);
 app.use('/inventory', Inventory);
@@ -47,9 +43,6 @@ app.use('/auth', Login);
 app.use('/download', Download);
 //app.use('/messages', Messages);
 
-app.get('/uploadAccounts', function(req, res){
-    res.sendFile(__dirname +'/index.html')
-})
 
 //for the file  uploads
 var type = upload.single('file');

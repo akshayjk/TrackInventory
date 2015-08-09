@@ -5,8 +5,6 @@
     var App = angular.module("App", [
         "App.FranchiseControllers",
         "App.services",
-        "App.directives",
-        "App.filters",
         "ngRoute",
         "ngResource",
         "ui.bootstrap",

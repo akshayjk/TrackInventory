@@ -4,13 +4,10 @@
 (function () {
 
     "use strict";
-    console.log("files being loaded")
     var App = angular.module("App.LoginControllers", []);
 
     App.controller("LoginController", ["$scope", '$location', '$window', 'Auth', function ($scope, $location, $window, Auth) {
-        /*$scope.aVariable = 'anExampleValueWithinScope';
-         $scope.valueFromService = UtilSrvc.helloWorld("User");*/
-        console.log("here again")
+
         $scope.loginForm = {};
         $scope.register ={};
         $scope.loginError = "";
@@ -23,13 +20,11 @@
 
         }
         $scope.verifyEmail = function(emailId){
-            console.log("email here " + emailId)
             if(emailId!=undefined){
                 Auth.verifyEmail(emailId).success(function(res, stat){
                     $scope.signIn=false;
                     $scope.verifyEmailId = false;
                     $scope.regPass= true;
-                    console.log("res "+ JSON.stringify(res))
                     $scope.userToken = res.token;
                 }).error(function(res, status){
                     if(typeof(res)=='string'){
@@ -50,7 +45,6 @@
                 if(pass>10){
                     $scope.loginError ="Password length is more than 10 characters."
                 }else{
-                    console.log("token here " + $scope.userToken)
                     Auth.registerAccount(pass,$scope.userToken).success(function(res, stat){
                         $scope.loginError = res.message;
                         $scope.signIn=true;
@@ -66,32 +60,26 @@
         }
 
         $scope.login = function () {
-            console.log($scope.loginForm);
             if($scope.loginForm.username!=undefined && $scope.loginForm.password!=undefined){
                 Auth.login(JSON.stringify($scope.loginForm)).success(function (LoginResponse, LoginStatus, LoginHeaders) {
-                    console.log("login response " + LoginResponse);
                     sessionStorage.userDetails = angular.toJson(LoginResponse);
-                    console.log("console " + JSON.stringify(LoginResponse))
                     $scope.loginError = "";
                     if (LoginResponse.Role == "ADMIN") {
-                        $window.location.href = '../views/starterTest.html';
-                        //$window.location.href = '../views/starterTest.html';
+                        $window.location.href = '../views/Admin.html';
+                        //$window.location.href = '../views/Admin.html';
                     } else if (LoginResponse.Role == "FRANCHISE") {
                         $window.location.href = '../views/Franchise.html';
                     }
                 }).error(function (LoginResponse, LoginStatus, LoginHeaders) {
-                    console.log(LoginResponse.errorMessage)
                     $scope.loginError = LoginResponse.errorMessage;
                 })
             }else{
-                console.log("error here ")
                 $scope.loginError = "Username and password are required !";
             }
 
 
         }
         $scope.loginNew = function(){
-            console.log(JSON.stringify($scope.loginForm))
         }
     }]);
 
