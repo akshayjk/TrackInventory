@@ -64,7 +64,7 @@
                 Auth.login(JSON.stringify($scope.loginForm)).success(function (LoginResponse, LoginStatus, LoginHeaders) {
                     sessionStorage.userDetails = angular.toJson(LoginResponse);
                     $scope.loginError = "";
-                    if (LoginResponse.Role == "ADMIN") {
+                    if (LoginResponse.Role == "ADMIN"||LoginResponse.Role == "OWNER") {
                         $window.location.href = '../views/Admin.html';
                         //$window.location.href = '../views/Admin.html';
                     } else if (LoginResponse.Role == "FRANCHISE") {

@@ -171,7 +171,7 @@ Authentication.prototype.createAccount = function (req, res, body) {
     //todo from token get the Role -- This service is authorized only to admin
     //Check for the Role and username :
     console.log("create Account request " + JSON.stringify(body));
-    if (body.FranchiseId == undefined || body.Role == undefined || body.FranchiseName == undefined || body.Password == undefined) {
+    if (body.FranchiseId == undefined || body.Role == undefined || body.FranchiseName == undefined) {
         new responseHandler().sendResponse(req, res, "error", "Franchise Id, Role, Password and Franchise Name are required !", 403);
     } else {
         if (body.Role.toUpperCase() == "ADMIN" || body.Role.toUpperCase() == "FRANCHISE") {
@@ -185,44 +185,26 @@ Authentication.prototype.createAccount = function (req, res, body) {
                     if (data.length == 0) {
                         //Username/FranchiseId is available
                         delete options.Query;
+                        options.collection ="USER"
                         //Adding to Auth Collection for login
                         var AuthInsertobject = {};
                         AuthInsertobject.FranchiseId = body.FranchiseId;
-                        AuthInsertobject.Password = body.Password;
                         AuthInsertobject.Role = body.Role;
                         AuthInsertobject.FranchiseName = body.FranchiseName;
+                        AuthInsertobject.FranchiseDetails = body.FranchiseDetails;
                         options.insertObject = AuthInsertobject;
-                        new dataBase().insert(options, function (err, authResult) {
+                        new dataBase().insert(options, function (err, result) {
                             if (!err) {
-                                delete body.Password;
-                                var userObject = {
-                                    collection: "USER"
+                                var response = {
+                                    success: true,
+                                    Message: "User added successfully."
                                 };
-                                if (body.Role.toUpperCase() == "ADMIN") {
-                                    userObject.insertObject = body;
-                                } else {
-                                    if (body.FranchiseDetails == undefined) {
-                                        body.FranchiseDetails = {"UniformCosts": {"1": 10, "2": 20, "3": 30, "4": 40, "5": 50}, "KitCost": 500};
-                                        userObject.insertObject = body;
-                                    } else {
-                                        userObject.insertObject = body;
-                                    }
-                                }
-                                new dataBase().insert(userObject, function (err, result) {
-                                    if (!err) {
-                                        var response = {
-                                            success: true,
-                                            Message: "User added successfully."
-                                        };
-                                        new responseHandler().sendResponse(req, res, "success", response, 200);
-                                    } else {
-                                        new responseHandler().sendResponse(req, res, "error", "Error while inserting data +" + JSON.stringify(err), 500)
-                                    }
-                                })
+                                new responseHandler().sendResponse(req, res, "success", response, 200);
                             } else {
-                                new responseHandler().sendResponse(req, res, "error", "Error while inserting data " + JSON.stringify(err), 500);
+                                new responseHandler().sendResponse(req, res, "error", "Error while inserting data +" + JSON.stringify(err), 500)
                             }
                         })
+
 
                     } else {
                         new responseHandler().sendResponse(req, res, "error", "Email already registered. Please try with different email address.", 500)

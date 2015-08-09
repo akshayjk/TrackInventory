@@ -824,7 +824,6 @@
             Auth.getAccounts().success(function (AccRes) {
                 $scope.Accounts = AccRes.accounts;
                 $scope.UniformSize = AccRes.UniformsList;
-                console.log(JSON.stringify(AccRes))
             }).error(function (errRes) {
                 console.log(errRes);
             })
