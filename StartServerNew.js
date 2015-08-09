@@ -86,7 +86,7 @@ app.post('/upload', type, function (req,res) {
             console.log("sending the response for invalid file")
             res.status(404);
             res.setHeader("Content-Type", "application/json");
-            res.send(JSON.stringify({success:false,errorMessage:"File type not supported."}))
+            res.send(JSON.stringify({success:false,errorMessage:"Only file with xls extension are supported. Please download a sample file from Instructions Tab and re-upload after filling the same."}))
         }
 
 

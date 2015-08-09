@@ -1,7 +1,7 @@
 {
-  "name": "Little Einsteins Inventory",
+  "name": "InventoryApp",
   "version": "1.0.0",
-  "description": "This is initial Express App",
+  "description": "An inventory management for Little Einsteins preschool.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,7 +14,7 @@
     "LE",
     "Website"
   ],
-  "author": "Akshay K, Saksham G",
+  "author": "Akshay K",
   "license": "MIT",
   "dependencies": {
     "jwt-simple": "^0.3.0",

@@ -259,59 +259,134 @@ ProcessOrder.prototype.dispatchOrder = function (req, res, body) {
 ProcessOrder.prototype.uploadBulkOrders = function (req, res, fileJSON, body) {
     var TotalError = [];
     var TotalStudents = [];
+    var OrderStudents =[];
     console.log("bod " + JSON.stringify(req.body));
     console.log('FranchiseDetails ' + req.query.FranchiseId + " " +req.query.FranchiseName);
-    new dataBase().bulkInsert({collection: "students"}, function (bulkInsert) {
-        for (var i = 0; i < fileJSON.length; i++) {
-            var errorArray = [];
-            checkDefinedFields(bulkUpdateStudentMapping(fileJSON[i],req.query.FranchiseId, req.query.FranchiseName), errorArray, function (student, errorArray) {
-                console.log("for a student the " + JSON.stringify(student));
-                console.log("error array " + JSON.stringify(errorArray));
-                validateExcelFields(student, errorArray, function (validate) {
-                    console.log("validate object " + JSON.stringify(validate))
-                    if (validate.validate) {
-                        student.StudentId = new Buffer(student.NameOfStudent.substring(0, 5).toUpperCase() + student["RegistrationNumber"]).toString('base64');
-                        bulkInsert.find({StudentId: student.StudentId}).upsert().updateOne({$set: student});
-                        TotalStudents.push(student);
+    if(req.query.FranchiseId!=undefined || req.query.FranchiseName!=undefined){
+        var OrderId = generateOrderId(req.query.FranchiseId);
+        new dataBase().bulkInsert({collection: "students"}, function (bulkInsert) {
+            for (var i = 0; i < fileJSON.length; i++) {
+                var errorArray = [];
+                checkDefinedFields(bulkUpdateStudentMapping(fileJSON[i],OrderId, req.query.FranchiseName), errorArray, function (student, errorArray) {
+                    console.log("for a student the " + JSON.stringify(student));
+                    console.log("error array " + JSON.stringify(errorArray));
+                    validateExcelFields(student, errorArray, function (validate) {
+                        console.log("validate object " + JSON.stringify(validate))
+                        if (validate.validate) {
+                            student.StudentId = new Buffer(student.NameOfStudent.substring(0, 5).toUpperCase() + student["RegistrationNumber"]).toString('base64');
+                            bulkInsert.find({StudentId: student.StudentId}).upsert().updateOne({$set: student});
+                            TotalStudents.push(student);
+                            var OrderStud ={
+                                "NameOfStudent": student.NameOfStudent,
+                                "RegistrationNumber": student.RegistrationNumber,
+                                "UniformSize": student.UniformSize,
+                                "UniformQty": student.UniformQty,
+                                "StudentId": student.StudentId,
+                                "Class": student.Class
+                            };
+                            OrderStudents.push(OrderStud);
 
-                    } else {
-                        var errorObject = {};
-                        errorObject.student = student["NameOfStudent"];
-                        errorObject.foundErrors = validate.Errors;
-                        TotalError.push(errorObject);
-                    }
-                })
+                        } else {
+                            var errorObject = {};
+                            errorObject.student = student["NameOfStudent"];
+                            errorObject.foundErrors = validate.Errors;
+                            TotalError.push(errorObject);
+                        }
+                    })
 
-            });
-
-            if (i == fileJSON.length - 1) {
-                bulkInsert.execute(function (err, result) {
-                    if (err) {
-                        console.log("error while bulk Insert")
-                    } else {
-                        console.log("bulkInsert successful");
-                        console.log("nInserted " + result.nInserted);
-                        console.log("nUpserted " + result.nUpserted);
-                        console.log("nMatched " + result.nMatched);
-                        console.log("nModified " + result.nModified);
-
-                        console.log("proceeding for the Uniforms reduction ")
-                        new responseHandler().sendResponse(req, res, "success", TotalError, 200);
-                    }
                 });
-                console.log("end ")
+
+                if (i == fileJSON.length - 1&&TotalStudents.length>0) {
+                    bulkInsert.execute(function (err, result) {
+                        if (err) {
+                            console.log("error while bulk Insert")
+                        } else {
+                            console.log("bulkInsert successful");
+                            console.log("nInserted " + result.nInserted);
+                            console.log("nUpserted " + result.nUpserted);
+                            console.log("nMatched " + result.nMatched);
+                            console.log("nModified " + result.nModified);
+
+                            console.log("proceeding for the Uniforms reduction ");
+                            //Save the order as well
+                            var Order ={};
+                            Order.FranchiseId = req.query.FranchiseId;
+                            Order.FranchiseName = req.query.FranchiseName;
+                            Order.Status = "DISPATCHED";
+                            Order.Students = OrderStudents;
+                            Order.OrderId = OrderId;
+                            var Summary = {
+                                Kits: {},
+                                UniformSize: {}
+                            }
+                            for(var i=0;i<OrderStudents.length;i++){
+                                if (Summary.Kits[OrderStudents[i].Class.KitId] == undefined) {
+                                    Summary.Kits[OrderStudents[i].Class.KitId] = OrderStudents[i].Class;
+                                    Summary.Kits[OrderStudents[i].Class.KitId].Quantity = 1;
+                                } else {
+                                    Summary.Kits[OrderStudents[i].Class.KitId].Quantity++;
+                                }
+
+                                if (Summary.UniformSize[OrderStudents[i].UniformSize.ItemId] == undefined) {
+                                    Summary.UniformSize[OrderStudents[i].UniformSize.ItemId] = OrderStudents[i].UniformSize;
+                                    Summary.UniformSize[OrderStudents[i].UniformSize.ItemId].Quantity = 1;
+                                } else {
+                                    Summary.UniformSize[OrderStudents[i].UniformSize.ItemId].Quantity++;
+                                }
+                            }
+                            var kitLength = Object.keys(Summary.Kits);
+                            var tempArray = [];
+                            kitLength.forEach(function (kit) {
+                                tempArray.push(Summary.Kits[kit]);
+                            });
+                            Summary.Kits = tempArray;
+                            tempArray = []
+                            var UniformLength = Object.keys(Summary.UniformSize);
+                            UniformLength.forEach(function (uniform) {
+                                tempArray.push(Summary.UniformSize[uniform]);
+                            })
+                            Summary.UniformSize = tempArray;
+                            tempArray = [];
+                            Order.Sumamry = Summary;
+                            var options ={
+                                collection:"orders",
+                                insertObject:Order
+                            };
+                            new dataBase().insert(options, function(err, result){
+                                if(!err){
+
+                                    var responseObject ={
+                                        success : true,
+                                        Message :"Order has been placed successfully.",
+                                        ErrorObject :TotalError
+
+                                    }
+                                    new responseHandler().sendResponse(req, res, "success",responseObject, 200);
+                                }else{
+                                    console.log("err while saving bulk order in DB")
+                                }
+                            });
+                        }
+                    });
+                    console.log("end ")
+                }else if(i == fileJSON.length - 1&&TotalStudents.length==0){
+                    var response={
+                        errorMessage:"Data format in uploaded file doesn't seem like what we recommend. Please download Order File from Instructions Tab and re-upload after filling the same.",
+                        ErrorObject :TotalError
+                    }
+                    new responseHandler().sendResponse(req, res, "error", response, 404);
+                }
+
             }
 
-        }
+        })
+        console.log("after completting.... " + JSON.stringify(TotalStudents));
+    }
 
-    })
-
-
-    console.log("after completting.... " + JSON.stringify(TotalStudents));
 
 }
 
-function bulkUpdateStudentMapping(student, FranchiseId, FranchiseName) {
+function bulkUpdateStudentMapping(student, OrderId, FranchiseName) {
     //console.log("Body in here " + JSON.stringify(body))
     var DbStudentObject = {
         "NameOfStudent": student["Name"],
@@ -323,11 +398,11 @@ function bulkUpdateStudentMapping(student, FranchiseId, FranchiseName) {
         "RegistrationNumber": student["Registration Number"],
         "ReceiptNumber": student["Receipt Number"],
         "UniformQty": student["Uniform Quantity"],
-        "FranchiseId": FranchiseId,
+        "FranchiseId": OrderId,
         "FranchiseName": FranchiseName
     }
 
-    DbStudentObject.OrderId = generateOrderId(FranchiseId);
+
     DbStudentObject.Class = getStudentClass(student.Class);
     DbStudentObject.UniformSize = getStudentUniform(student["Uniform Size"]);
 
@@ -338,11 +413,11 @@ function bulkUpdateStudentMapping(student, FranchiseId, FranchiseName) {
             "LKG": "KIT1438428417951",
             "UKG":"KIT1438428417951"
         };
-        var ClassObject = {
+        return {
             "Name": ClassName,
             "KitId": mappingObject[ClassName]
         };
-        return ClassObject;
+
     }
 
     function getStudentUniform(UniformSize){
@@ -363,8 +438,6 @@ function bulkUpdateStudentMapping(student, FranchiseId, FranchiseName) {
     }
 
     return DbStudentObject;
-
-
 }
 
 

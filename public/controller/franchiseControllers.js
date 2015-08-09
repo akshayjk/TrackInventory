@@ -4,35 +4,10 @@
 
     var App = angular.module("App.FranchiseControllers", []);
 
-    App.controller("LoginController", ["$scope", '$location', '$window', 'Auth', function ($scope, $location, $window, Auth) {
-        /*$scope.aVariable = 'anExampleValueWithinScope';
-         $scope.valueFromService = UtilSrvc.helloWorld("User");*/
-        $scope.loginForm = {};
-        $scope.loginError = "";
-        $scope.login = function () {
-            console.log($scope.loginForm);
-            Auth.login(JSON.stringify($scope.loginForm)).success(function (LoginResponse, LoginStatus, LoginHeaders) {
-                console.log("login response " + LoginResponse);
-                sessionStorage.userDetails = angular.toJson(LoginResponse);
-                $scope.loginError = "";
-                if (LoginResponse.Role == "ADMIN") {
-                    $window.location.href = '../views/AdminMain.html';
-                } else if (LoginResponse.Role == "FRANCHISE") {
-                    $window.location.href = '../views/FranchiseMain.html';
-                }
-            }).error(function (LoginResponse, LoginStatus, LoginHeaders) {
-                console.log(LoginResponse.errorMessage)
-                $scope.loginError = LoginResponse.errorMessage;
-            })
-
-        }
-    }]);
-
     App.controller("LogOutCtrl", ["$scope", "$location", "$window", function ($scope, $location, $window) {
 
         $scope.FranchiseName = $scope.userDetails.FranchiseName;
         $scope.logOut = function () {
-            console.log("Logging out");
             delete sessionStorage.userDetails;
             $window.location.href = '/Login';
             //$location.path('/Login')
@@ -43,7 +18,6 @@
         $scope.userDetails = JSON.parse(sessionStorage.userDetails);
         $scope.checkClick = function (id) {
             var MenuBar = ['MenuOrd', 'MenuPre', 'MenuQry', 'MenuUpload']
-            console.log("Menu click");
             MenuBar.forEach(function (eleId) {
                 $('#' + eleId).removeClass('active');
             })
@@ -64,21 +38,15 @@
 
         $scope.getVisibleKits = function () {
             PlaceOrder.getVisibleKits().success(function (visibleKits, status) {
-                console.log("Classoptions initiated")
                 $scope.ClassOptions = visibleKits;
                 $scope.Class = $scope.ClassOptions[0];
             }).error(function (errKit, errStat) {
-                console.log("err in getting response " + errKit)
+                console.log("err in getting Kits " + errKit)
             });
         };
         $scope.getVisibleKits();
         $scope.userDetails = JSON.parse(sessionStorage.userDetails);
-        /* $scope.UniformCosts =[
-         {UniformSize: 2, UniformCost: 10},
-         {UniformSize: 3, UniformCost: 20},
-         {UniformSize: 5, UniformCost: 30},
-         {UniformSize: 7, UniformCost: 40}
-         ] */
+
         $scope.UniformCosts = $scope.userDetails.FranchiseDetails.UniformCosts;
         $scope.KitCost = $scope.userDetails.FranchiseDetails.KitCost;
         $scope.formHide = false;
@@ -111,23 +79,10 @@
                 return "PlayGroup";
             }
         };
-        /*$scope.setUniformSize = function () {
-         console.log("here " + JSON.stringify($scope.UniformSize))
-         $scope.StudentObject.UniformSize = $scope.UniformSize;
-         $scope.setTotalCost();
-         $scope.UniformArray.push($scope.UniformSize);
-         console.log("Uniform Size : " + $scope.StudentObject.UniformSize);
-         };
-         $scope.setUniformQty = function () {
-         if ($scope.StudentObject.UniformQty == undefined) {
-         $scope.StudentObject.UniformQty = 1;
-         }
-         };
-         $scope.setUniformQty();*/
+
         $scope.setUniformSizeFinal = function (Numb, UniformSize) {
             $scope.Students[Numb].UniformSize = UniformSize;
         };
-        console.log("got the Classoptions " + JSON.stringify($scope.ClassOptions))
         //$scope.ClassOptions = $scope.userDetails.FranchiseDetails.Kits//["PlayGroup", "Nursery", "LKG", "UKG"];
 
         $scope.PaymentOptions = [
@@ -137,16 +92,11 @@
         $scope.Mode = $scope.PaymentOptions[0];
         $scope.CalculateHere = $scope.KitCost + $scope.UniformSize.UniformCost;
         $scope.TotalCost = $scope.KitCost + $scope.UniformSize.UniformCost;
-        /*$scope.setTotalCost = function () {
-         console.log("kit cost " + $scope.KitCost + "  " + $scope.UniformSize + " " +  $scope.getUniformQty())
-         $scope.TotalCost = $scope.KitCost + $scope.UniformSize.UniformCost * $scope.getUniformQty();
-         };*/
-        // $scope.setTotalCost();
+
         $scope.getFinalCost = function () {
 
             var FinalCost = 0;
             $scope.Students.forEach(function (student) {
-                console.log("student Here the total cost place" + $scope.UniformSize + "  " + $scope.UniformQty);
                 FinalCost += $scope.KitCost + student.UniformSize.cost * student.UniformQty;
             });
             $scope.TotalAmount = FinalCost;
@@ -155,7 +105,6 @@
         $scope.setClass = function () {
             $scope.StudentObject.Class = $scope.Class;
             $scope.setTotalCost();
-            console.log("Class name : " + $scope.StudentObject.Class);
         };
         $scope.getWelComeKitClass = function () {
             if ($scope.StudentObject.Class != undefined) {
@@ -178,7 +127,6 @@
         $scope.paymentTab = true;
         $scope.addStudents = function (Class, UniformSize, UniformQuantity) {
             var Total = $scope.KitCost + UniformSize.UniformCost * UniformQuantity;
-            console.log("Class " + Class + "size " + UniformSize + " Qty " + UniformQuantity + " Total " + Total)
             $scope.StudentObject.Class = Class;
             $scope.StudentObject.UniformSize = UniformSize;
             $scope.StudentObject.UniformQty = UniformQuantity;
@@ -200,13 +148,11 @@
             $('#red').hide();
 
             $scope.Students.push($scope.StudentObject);
-            console.log(JSON.stringify($scope.Students));
             $scope.StudentObject = {}
         };
         $scope.addMore = function () {
 
             if ($scope.Students.length > 0) {
-                console.log("setting cancel hide false")
                 $scope.formCancel = false;
             } else {
                 $scope.formCancel = true;
@@ -250,11 +196,9 @@
                     $scope.UniformArray.push($scope.UniformOptions[0]);
                 }
 
-                console.log("uniform added " + JSON.stringify($scope.UniformArray))
                 $scope.Students.push($scope.StudentObject);
             }
 
-            console.log(JSON.stringify($scope.Students));
             $scope.StudentObject = {}
 
         };
@@ -291,9 +235,7 @@
         };
 
         $scope.makeOrder = function () {
-            console.log("Order details are here " + JSON.stringify($scope.OrderForm));
             PlaceOrder.placeOrder($scope.OrderForm).success(function (poResponse, poStatus) {
-                console.log(" po response " + poResponse.Message);
                 $scope.OrderForm = {};
                 $scope.StudentObject = {};
                 $scope.Students = [];
@@ -306,18 +248,16 @@
                 });
 
                 modalInstance.result.then(function () {
-                    console.log("executed");
                     $scope.formHide = false;
                     $scope.formButtons = true;
                     $scope.studentsTab = false;
                     $scope.paymentTab = true;
                 }, function () {
-                    console.log('Modal dismissed at: ' + new Date());
+
                 });
 
 
             }).error(function (poErResponse, poResStatus) {
-                console.log("err po " + poErResponse);
                 PlaceOrder.setModalMessage(poErResponse.errorMessage);
                 PlaceOrder.setModalMessage("error in placing order");
                 var modalInstance = $modal.open({
@@ -327,9 +267,7 @@
                 modalInstance.result.then(function () {
                     $scope.formHide = false;
                     $scope.formButtons = true;
-                    console.log("executed")
                 }, function () {
-                    console.log('Modal dismissed at: ' + new Date());
                 });
             })
         }
@@ -353,7 +291,6 @@
         $scope.ready = function () {
             $('#outerWrapper').height(function () {
                 var a = $('#studentForm').height() + 750;
-                console.log("setting height " + a)
                 return a;
             })
         };
@@ -384,7 +321,6 @@
         $scope.userDetails = $scope.userDetails = JSON.parse(sessionStorage.userDetails);
         function getOrders() {
 
-            console.log("Getting previous orders")
             PlaceOrder.getOrders($scope.userDetails.FranchiseId).success(function (getOrderResponse, getOrderStatus) {
                 $scope.Orders = getOrderResponse.pending;
                 $scope.dispatched = getOrderResponse.dispatched;
@@ -501,11 +437,12 @@
     App.controller("uploadOrders", ["$scope", "FileUploader", function ($scope, FileUploader) {
 
         $scope.userDetails = JSON.parse(sessionStorage.userDetails);
-
+        $scope.ErrorMessage =[];
         $scope.radioModel = 'show';
         $scope.alertMsg = {view: 0};
         $scope.clearAlert = function () {
             $scope.alertMsg = {view: 0};
+            $scope.ErrorMessage =[];
         };
         //*****************************************************************************************
 
@@ -548,11 +485,11 @@
                 type: 'success',
                 Msg: response.Message,
                 view: 1
-            }
+            };
+            $scope.ErrorMessage = response.ErrorObject;
         };
         uploader.onErrorItem = function(fileItem, response, status, headers) {
             console.info('onErrorItem', fileItem, response, status, headers);
-            console.log("error while uplaoding ")
             var errorMessage="Error while uploading file.";
             if(response.errorMessage){
                 errorMessage = response.errorMessage;
@@ -561,7 +498,8 @@
                 type: 'danger',
                 Msg: errorMessage,
                 view: 1
-            }
+            };
+            $scope.ErrorMessage = response.ErrorObject;
         };
         uploader.onCancelItem = function(fileItem, response, status, headers) {
             console.info('onCancelItem', fileItem, response, status, headers);
