@@ -921,7 +921,7 @@
         $scope.showAccount = function(item){
             $scope.AccountNumber = item;
             $scope.AccountView = !$scope.AccountView;
-            $scope.AccountNumber.index = index;
+            //$scope.AccountNumber.index = index;
         }
 
     }]);
