@@ -206,10 +206,10 @@
                             <tr ng-repeat="student in dispatched[OrderNo].Students">
                                 <td>{{$index+1}}</td>
                                 <td>{{student.NameOfStudent}}</td>
-                                <td>{{student.Class}}</td>
-                                <td>{{student.UniformSize.UniformSize}}</td>
+                                <td>{{student.Class.Name}}</td>
+                                <td>{{student.UniformSize.cost}}</td>
                                 <td>{{student.UniformQty}}</td>
-                                <td>{{UniformCosts[student.UniformSize.UniformSize]*student.UniformQty + KitCost}}</td>
+                                <td>{{student.UniformSize.cost*student.UniformQty + KitCost}}</td>
                             </tr>
 
                             </tbody>
