@@ -146,8 +146,21 @@
                  $("#dispatchResponseModal a.btn").off("click");
                  });
                  //$('#dispatchResponseModal').modal('show');*/
-            }).error(function () {
+            }).error(function (errRes,errStat) {
                 console.log("Some error has occurred");
+                bootbox.dialog({
+                    message: errRes.errorMessage,
+                    title: "Failure !",
+                    buttons: {
+                        main: {
+                            label: "Cancel",
+                            className: "btn-default",
+                            callback: function() {
+                                console.log("Modal dismissed");
+                            }
+                        }
+                    }
+                });
             })
 
         }
