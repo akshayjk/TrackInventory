@@ -33,14 +33,12 @@
             PlaceOrder.inventoryHealth().success(function(res, stat){
                 $scope.NotificationItems = res;
             }).error(function(errRes, Stat){
-                console.log("Problem in the notifications")
             })
         }
         $scope.getNotificationItems();
         $scope.viewNot = true;
         $scope.checkClick = function(id){
             var MenuBar =['MenuInv','MenuAcc','MenuOrder','MenuMsg', 'MenuDwn']
-            console.log("Menu click");
             MenuBar.forEach(function(eleId){
                 $('#'+eleId).removeClass('active');
             })
@@ -69,7 +67,6 @@
                 $scope.dummyOrders = [];
                 $scope.dispatched = [];
                 $scope.completed = [];
-                console.log(getOrderErrResponse);
             });
         };
         $scope.getOrders();
@@ -81,7 +78,6 @@
             $scope.orderList = false;
             $scope.listView[viewIndex] = toggle($scope.listView[viewIndex]);
             $scope.orderView[viewIndex] = toggle($scope.orderView[viewIndex]);
-            console.log("clicked" + index + viewIndex + ' ' + JSON.stringify($scope.listView));
             if (index != undefined) {
                 $scope.OrderNo[viewIndex] = index;
             }
@@ -147,7 +143,6 @@
                  });
                  //$('#dispatchResponseModal').modal('show');*/
             }).error(function (errRes,errStat) {
-                console.log("Some error has occurred");
                 bootbox.dialog({
                     message: errRes.errorMessage,
                     title: "Failure !",
@@ -182,10 +177,8 @@
             modalInstance.result.then(function (form) {
                 $scope.CourierName = form.CourierName;
                 $scope.TrackingID = form.TrackingID;
-                console.log("data returned from modal " + JSON.stringify(form))
                 $scope.dispatchOrder($scope.OrderNo[0])
             }, function () {
-                console.log('Modal dismissed at: ' + new Date());
             });
         }
 
@@ -193,10 +186,8 @@
 
     App.controller("dispatchConfirmationModalCtrl",["$scope","$modalInstance",function($scope, $modalInstance, summary){
         $scope.summary = summary;
-        console.log("summary here " + JSON.stringify($scope.summary))
         $scope.form = {};
         $scope.ok = function () {
-            console.log("here the form " + JSON.stringify($scope.form))
             $modalInstance.close($scope.form);
         };
 
@@ -237,7 +228,6 @@
             Inventory.getKits().success(function (getKitRes, getKitStat) {
                 $scope.Kits = getKitRes;
             }).error(function (gtKtEr, gtKtErStat) {
-                console.log(JSON.stringify(gtKtEr))
             })
         };
         $scope.getKits();
@@ -249,7 +239,6 @@
             var tempUpdateObject = {};
             tempUpdateObject = JSON.parse(JSON.stringify($scope.InventoryData[Category][itemNo]));
             tempUpdateObject.Quantity = $scope["get" + Category + "Total"][itemNo];
-            console.log("Sending data " + JSON.stringify(tempUpdateObject));
             $scope.loadingSave = true;
             Inventory.updateItem(tempUpdateObject).success(function (updRes, updCode) {
                 $scope.InventoryData[Category][itemNo].Quantity = $scope["get" + Category + "Total"][itemNo];
@@ -258,16 +247,13 @@
                 $scope.loadingSave = false;
 
             }).error(function (updErrRes, updErrCode) {
-                console.log(JSON.stringify(updErrRes));
             })
         };
 
         $scope.saveButtonTest = function(){
             $scope.loading = true;
-            console.log("started")
             setTimeout(function(){
                 $scope.loading = false;
-                console.log("Endned")
             }, 2000)
         }
 
@@ -284,12 +270,7 @@
             minutes = minutes < 10 ? '0' + minutes : minutes;
             return hours + ':' + minutes + ' ' + ampm + " " + dateStr + "/" + monthStr + '/' + yrStr;
         };
-        /*function adjustInvTabHeight(EleId){
-            console.log("got Id " + EleId)
-            $('#InventoryTabWrapper').height(function(){
-                return $('#'+EleId).height()+ 50;
-            })
-        }*/
+
 
         $scope.addMore = function (Category, Tags) {
             if (!$scope.addItem.Name || !$scope.addItem.Quantity) {
@@ -297,27 +278,22 @@
                 var tempAddItem = {};
                 tempAddItem[Category] = $scope.addItem;
                 $scope.addItem.Category = Category;
-                console.log("Has got the Tags " + Tags)
                 if(Tags!=undefined){
                     $scope.addItem.Tags = Tags;
                 }
                 $scope.loading = true;
-                console.log("add Item " + JSON.stringify($scope.addItem));
                     Inventory.addItem($scope.addItem).success(function (addRes, addStat) {
                         $scope.InventoryData[Category].push(addRes.Item[0]);
                         $scope.ItemOptions.push(addRes.Item[0]);
                         $scope.addItem = {};
                         $scope.setVariables(Category, $scope.InventoryData[Category]);
                         $('#InventoryTabWrapper').height(function(){
-                            console.log( 'height ' + $('#'+Category).height())
                             var ht = $('#'+Category).height();
                             return ht + 150;
                         })
                         $scope.loading = false;
-                        console.log("Item options after addition " + JSON.stringify($scope.ItemOptions))
 
                     }).error(function (addErrRes, addErrStat) {
-                        console.log(JSON.stringify(addErrRes))
                     })
 
 
@@ -325,14 +301,7 @@
 
 
         }
-        /*$scope.setInvTabHeight = function(){
-            $('#InventoryTabWrapper').height(function(){
-                //var height = Math.max($('#Books').height(), $('#Uniforms').height(), $('#Common').height());
-                var height = Math.max($scope.InventoryData.Books.length, $scope.InventoryData.Uniforms.length, $scope.InventoryData.Common.length)
-                console.log("setting height " + height*30)
-                return height*60 + 100;
-            })
-        }*/
+
 
         $scope.deleteKitConfirm = function(kitNo){
             bootbox.dialog({
@@ -385,7 +354,6 @@
                 $scope.InventoryData[Category].splice(itemNo, 1);
                 $scope.setVariables(Category, $scope.InventoryData[Category]);
                 $('#InventoryTabWrapper').height(function(){
-                    console.log("Height " + $('#'+Category).height())
                     return $('#'+Category).height()+ 50;
                 })
             })
@@ -422,7 +390,6 @@
         $scope.ItemSelected = {};
         $scope.builtKit = [];
         $scope.builtKitShow = eval($scope.builtKit.length > 0);
-        console.log($scope.builtKitShow);
         $scope.addToKit = function () {
             var tempItem = JSON.parse(JSON.stringify($scope.ItemSelected.selected));
             delete tempItem.Quantity;
@@ -430,7 +397,6 @@
             delete tempItem.ModifiedOn;
             $scope.builtKit.push(tempItem);
             $scope.ItemSelected.selected.Units = undefined;
-            console.log("array " + JSON.stringify($scope.builtKit))
             $scope.ItemSelected = {};
 
         };
@@ -442,12 +408,10 @@
             $scope.currentKit.Kit.push($scope.ItemSelected.selected);
         };
         $scope.saveEditedKit = function () {
-            console.log(JSON.stringify($scope.currentKit));
             Inventory.updateKit($scope.currentKit).success(function (updtKitRes, updtKitStat) {
                 $scope.Kits = updtKitRes;
 
             }).error(function (errRes, errStat) {
-                console.log(JSON.stringify(errRes))
             })
 
         };
@@ -477,12 +441,10 @@
             var deleteKit = {};
             deleteKit.KitId = $scope.Kits[index].KitId;
             Inventory.deleteKit(deleteKit).success(function (delRes, delStat) {
-                console.log(JSON.stringify(delRes));
                 $scope.Kits.splice(index, 1);
                 $scope.successMessage = delRes.Message;
                 $('#responseModal').modal('show');
             }).error(function (delErRes, delErStat) {
-                console.log(JSON.stringify(delErRes));
             })
         }
         $scope.removeItemKitEdit = function (index) {
@@ -495,7 +457,6 @@
                 KitData.Kit = $scope.builtKit;
                 KitData.Tags = kitVisibility;
                 Inventory.addKit(KitData).success(function (addRes, addStat) {
-                    console.log("res " + JSON.stringify(addRes));
                     $scope.builtKit = [];
                     KitData = {};
                     $scope.Kits = addRes;
@@ -503,14 +464,12 @@
                     $scope.buildKit = 0;
                     $('#responseModal').modal('show');
                 }).error(function (adKtErRes, adKtStat) {
-                    console.log("err add Kit " + JSON.stringify(adKtErRes))
                 })
             }
         };
         $scope.addToKitButton = $scope.ItemSelected.selected != undefined ? true : false;
         $scope.removeItem = function (Numb) {
             $scope.builtKit.splice(Numb, 1);
-            console.log(JSON.stringify($scope.builtKit))
         };
 
         $scope.Tags =["Visible", "Hidden"];
@@ -798,7 +757,6 @@
         };
         uploader.onErrorItem = function(fileItem, response, status, headers) {
             console.info('onErrorItem', fileItem, response, status, headers);
-            console.log("error while uplaoding ")
             var errorMessage="Error while uploading file.";
             if(response.errorMessage){
                 errorMessage = response.errorMessage;
@@ -838,7 +796,6 @@
                 $scope.Accounts = AccRes.accounts;
                 $scope.UniformSize = AccRes.UniformsList;
             }).error(function (errRes) {
-                console.log(errRes);
             })
         };
         $scope.getAccounts();
@@ -923,7 +880,6 @@
                 $scope.AccountView = !$scope.AccountView;
                 $scope.getAccounts();
             }).error(function (errRes) {
-                console.log("err res " + errRes);
             })
         }
         $scope.getName = function(name){
@@ -963,7 +919,6 @@
                 //$scope.FranchiseNameList.splice(0, 0, {"FranchiseId": null, "FranchiseName": "None"});
                 //$scope.FranchiseName = $scope.FranchiseNameList[0];
             }).error(function (errRes) {
-                console.log("error while getting Accounts Info")
             });
 
 
@@ -977,8 +932,6 @@
         }
         $scope.downloadType = ["Students", "Orders"];
         $scope.downloadFiles = function(type, TypeObject,Franchise,Status,Class){
-            console.log("type is " + type)
-            console.log("order obbj " + JSON.stringify(TypeObject))
             var queryString ='';
             if(type=="order"){
                 queryString='/download/downloadFile?type=Orders&';
@@ -992,7 +945,6 @@
                 queryString += "toDate="+TypeObject.fromDate + "&"
             }
             if(Status!=null && Status!=undefined && Status!="ALL"){
-                console.log("Status " + Status)
                 queryString += "status="+Status + "&"
             }
             if(Class!=null&&Class!=undefined){
@@ -1001,13 +953,8 @@
             if(Franchise!=undefined&&Franchise!=null){
                 queryString +="FranchiseId=" + Franchise.FranchiseId;
             }
-            console.log("Total url " + queryString);
             window.open(queryString);
-            /*Downloads.downloadFile(queryString).success(function(){
-                window.open(queryString);
-            }).error(function(errRes,errStat){
-                console.log("download failed")
-            })*/
+
 
         }
 
@@ -1028,7 +975,6 @@
                 window.open(objectUrl);
                 //saveAs(blob, "SomeName.csv")
             }).error(function () {
-                console.log("error")
             })
         }
 
