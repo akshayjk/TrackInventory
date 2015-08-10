@@ -110,6 +110,7 @@ ProcessOrder.prototype.placeOrder = function (req, res, orderObject) {
                 tempObj.NameOfStudent = Students[i].NameOfStudent;
                 tempObj.RegistrationNumber = Students[i].RegistrationNumber;
                 tempObj.UniformSize = Students[i].UniformSize;
+                tempObj.Class=Students[i].Class;
                 tempObj.UniformQty = Students[i].UniformQty;
                 tempObj.StudentId = new Buffer(tempObj.NameOfStudent.substring(0, 5).toUpperCase() + Students[i].RegistrationNumber).toString('base64');
                 if (Summary.Kits[Students[i].Class.KitId] == undefined) {
