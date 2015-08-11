@@ -827,41 +827,29 @@
         $scope.AccountFilter = ['FRANCHISE', 'ADMIN'];
         $scope.AccFilterDef = $scope.AccountFilter[0];
         $scope.AccountDet = {};
-
+        $scope.Alright = false;
         $scope.createAccount = function () {
             $scope.AccountDet.Role = $scope.AccountFilter[$scope.RoleRadioModel];
-            if ($scope.RoleRadioModel) {
+            if ($scope.AccountDet.Role=="FRANCHISE") {
                 $scope.AccountDet.FranchiseDetails = {};
                 $scope.AccountDet.FranchiseDetails.UniformCosts = $scope.UniformSize;
                 $scope.AccountDet.FranchiseDetails.KitCost = $scope.KitCost;
-                for(var i =0;i<$scope.userDetails.FranchiseDetails.UniformCosts.length;i++){
-                    if($scope.userDetails.FranchiseDetails.UniformCosts[i]==undefined){
+                for(var i =0;i<$scope.UniformSize.length;i++){
+                    if($scope.AccountDet.FranchiseDetails.UniformCosts[i]==undefined ||$scope.AccountDet.FranchiseDetails.UniformCosts[i].cost==undefined){
+                        console.log("We got " + $scope.AccountDet.FranchiseDetails.UniformCosts[i].cost)
                         $scope.alertMsg = {
                             type: 'danger',
                             Msg: "Set Uniform Costs for this Franchise",
                             view: 1
                         }
                         break;
+                    }else{
+                        $scope.Alright = true;
                     }
                 }
-                Auth.createAccount($scope.AccountDet).success(function () {
-                    $scope.alertMsg = {
-                        type: 'success',
-                        Msg: "Account created Successfully.",
-                        view: 1
-                    };
-                    $scope.AccountDet = {};
-                    $scope.getAccounts();
 
-                }).error(function (errMsg) {
-
-                    $scope.alertMsg = {
-                        type: 'danger',
-                        Msg: errMsg.errorMessage,
-                        view: 1
-                    }
-                })
-            }else{
+            }
+            if($scope.Alright){
                 Auth.createAccount($scope.AccountDet).success(function () {
                     $scope.alertMsg = {
                         type: 'success',
