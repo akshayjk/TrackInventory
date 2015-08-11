@@ -6,7 +6,7 @@
 //Application Modules
 var responseHandler = require('./ResponseHandler.js');
 var dataBase = require('./DbOperations.js');
-var sendEmail = require('./sendEmail.js');
+var sendEmail = require('./SendEmail.js');
 function Authentication() {
 
 }
