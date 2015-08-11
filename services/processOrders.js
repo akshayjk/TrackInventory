@@ -90,6 +90,7 @@ ProcessOrder.prototype.placeOrder = function (req, res, orderObject) {
         kid.OrderId = orderId;
         kid.FranchiseId = orderObject.FranchiseId;
         kid.FranchiseName = orderObject.FranchiseName;
+        kid.StudentId = new Buffer(kid.NameOfStudent.substring(0, 5).toUpperCase() + kid.RegistrationNumber).toString('base64');
     })
     var studentOptions = {
         collection: define.studentsCollection,
@@ -112,7 +113,7 @@ ProcessOrder.prototype.placeOrder = function (req, res, orderObject) {
                 tempObj.UniformSize = Students[i].UniformSize;
                 tempObj.Class=Students[i].Class;
                 tempObj.UniformQty = Students[i].UniformQty;
-                tempObj.StudentId = new Buffer(tempObj.NameOfStudent.substring(0, 5).toUpperCase() + Students[i].RegistrationNumber).toString('base64');
+
                 if (Summary.Kits[Students[i].Class.KitId] == undefined) {
                     Summary.Kits[Students[i].Class.KitId] = Students[i].Class;
                     Summary.Kits[Students[i].Class.KitId].Quantity = 1;

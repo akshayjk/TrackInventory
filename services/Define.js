@@ -12,9 +12,15 @@ var mailgun_key = "key-f324d24ba6a517c85ad77a726615904c";
 var emailSender = "admin@littleeinsteins.co.in";
 var emailAppearanceName = "Little Einsteins";
 var WelcomeTemplate = '/EmailTemplates/LEWelcomeEmail.html';
-var Registration_PasswordReset = './EmailTemplates/recoverPassword.html';
+var Registration_PasswordReset = '/EmailTemplates/recoverPassword.html';
 var mailgun_domain = "inventory.littleeinsteins.co.in"
 var emailService = "mandrill";
+
+//Valid Data settings
+
+var validLogin={username:"string",password:"string"}
+
+
 
 exports.mongoUrl = mongoUrl;
 exports.studentsCollection = StudentCollection;
@@ -29,3 +35,6 @@ exports.WelcomeTemplate = WelcomeTemplate;
 exports.mailgun_domain = mailgun_domain;
 exports.emailService = emailService;
 exports.Registration_PasswordReset = Registration_PasswordReset;
+
+//Valid Objects
+exports.validLogin = validLogin;

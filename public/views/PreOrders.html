@@ -82,6 +82,21 @@
                         <div class="displayOrder" ng-show="Orders[OrderNo].TransactionID!=undefined"><b>Transaction Id : </b>{{Orders[OrderNo].TransactionID}}
                         </div>
                     </div>
+                    <div class="col-md-6 col-xs-12 invoice-col">
+                        <h4>Summary</h4>
+                        <table class="col-md-3 col-xs-12">
+                            <tr ng-repeat="kit in Orders[OrderNo].Summary.Kits">
+                                <td>{{kit.Name}} :</td>
+                                <td>&nbsp; &nbsp;{{kit.Quantity}}</td>
+                            </tr>
+                        </table>
+                        <table class="col-md-3 col-xs-12 pull-right">
+                            <tr ng-repeat="uniform in Orders[OrderNo].Summary.UniformSize">
+                                <td>{{uniform.Name}} :</td>
+                                <td>&nbsp; &nbsp;{{uniform.Quantity}}</td>
+                            </tr>
+                        </table>
+                    </div>
 
                 </div>
                 </br>
@@ -196,8 +211,24 @@
                     </div>
 
                 </div>
-                <div style="margin:2%;">
+                <div class="col-md-6 col-xs-12 invoice-col">
+                    <h4>Summary</h4>
+                    <table class="col-md-3 col-xs-12">
+                        <tr ng-repeat="kit in Orders[OrderNo].Summary.Kits">
+                            <td>{{kit.Name}} :</td>
+                            <td>&nbsp; &nbsp;{{kit.Quantity}}</td>
+                        </tr>
+                    </table>
+                    <table class="col-md-3 col-xs-12 pull-right">
+                        <tr ng-repeat="uniform in Orders[OrderNo].Summary.UniformSize">
+                            <td>{{uniform.Name}} :</td>
+                            <td>&nbsp; &nbsp;{{uniform.Quantity}}</td>
+                        </tr>
+                    </table>
+                </div><br><br>
 
+                <div style="margin:2% 2% 2% 0%;">
+                    <h4 class="pull-left col-md-12 col-xs-12" style="padding:0px;">Details</h4>
                     <div class="responsiveClass">
                         <table class="table no-margin table-striped table-condensed">
                             <thead>
