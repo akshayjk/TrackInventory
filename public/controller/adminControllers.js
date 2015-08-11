@@ -830,30 +830,58 @@
 
         $scope.createAccount = function () {
             $scope.AccountDet.Role = $scope.AccountFilter[$scope.RoleRadioModel];
-            if (!$scope.RoleRadioModel) {
+            if ($scope.RoleRadioModel) {
                 $scope.AccountDet.FranchiseDetails = {};
                 $scope.AccountDet.FranchiseDetails.UniformCosts = $scope.UniformSize;
                 $scope.AccountDet.FranchiseDetails.KitCost = $scope.KitCost;
-                //if()
-            };
-
-            Auth.createAccount($scope.AccountDet).success(function () {
-                $scope.alertMsg = {
-                    type: 'success',
-                    Msg: "Account created Successfully.",
-                    view: 1
-                };
-                $scope.AccountDet = {};
-                $scope.getAccounts();
-
-            }).error(function (errMsg) {
-
-                $scope.alertMsg = {
-                    type: 'danger',
-                    Msg: errMsg.errorMessage,
-                    view: 1
+                for(var i =0;i<$scope.userDetails.FranchiseDetails.UniformCosts.length;i++){
+                    if($scope.userDetails.FranchiseDetails.UniformCosts[i]==undefined){
+                        $scope.alertMsg = {
+                            type: 'danger',
+                            Msg: "Set Uniform Costs for this Franchise",
+                            view: 1
+                        }
+                        break;
+                    }
                 }
-            })
+                Auth.createAccount($scope.AccountDet).success(function () {
+                    $scope.alertMsg = {
+                        type: 'success',
+                        Msg: "Account created Successfully.",
+                        view: 1
+                    };
+                    $scope.AccountDet = {};
+                    $scope.getAccounts();
+
+                }).error(function (errMsg) {
+
+                    $scope.alertMsg = {
+                        type: 'danger',
+                        Msg: errMsg.errorMessage,
+                        view: 1
+                    }
+                })
+            }else{
+                Auth.createAccount($scope.AccountDet).success(function () {
+                    $scope.alertMsg = {
+                        type: 'success',
+                        Msg: "Account created Successfully.",
+                        view: 1
+                    };
+                    $scope.AccountDet = {};
+                    $scope.getAccounts();
+
+                }).error(function (errMsg) {
+
+                    $scope.alertMsg = {
+                        type: 'danger',
+                        Msg: errMsg.errorMessage,
+                        view: 1
+                    }
+                })
+            }
+
+
 
         };
         $scope.clearAlert = function () {
