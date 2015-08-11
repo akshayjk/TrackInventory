@@ -13,7 +13,11 @@
           type="text/css"/>
     <!-- Theme style -->
     <link href="../../lib/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css"/>
-
+    <style>
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+    </style>
 
     <!-- LIBRARIES -->
     <script src="lib/angularfiles/angular.min.js"></script>
@@ -28,6 +32,7 @@
 
 </head>
 <body class="login-page" ng-controller="LoginController" style="background: #fff;">
+<div ng-cloak>
 <div class="login-box">
     <div class="login-logo">
         <img src="Images/LE_LogoMed.png" style="width:40%;">
@@ -65,6 +70,7 @@
 
                 </div>
             </form>
+
             <form ng-show="verifyEmailId">
                 <b>Note :</b> You will be registered only if you exist in our database.<br>
                 Please enter your email id.
@@ -116,9 +122,10 @@
         </div>
 
     </div>
-    <!-- /.login-box-body -->
+    <!-- /.login-box-body --><a href="/forgotPassword" style="padding-top:2%;" class="pull-right">forgot password</a>
 </div>
-<!-- /.login-box -->
+</div>
+
 
 <!-- jQuery 2.1.4 -->
 <script src="lib/bootstrap/js/jquery-2.1.4.min.js"></script>

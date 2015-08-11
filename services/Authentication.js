@@ -6,7 +6,7 @@
 //Application Modules
 var responseHandler = require('./ResponseHandler.js');
 var dataBase = require('./DbOperations.js');
-
+var sendEmail = require('./sendEmail.js');
 function Authentication() {
 
 }
@@ -94,6 +94,7 @@ Authentication.prototype.register = function(req, res, body){
                             response.status = "success"
                             response.message = "User registered successfully. Please Login to proceed."
                             new responseHandler().sendResponse(req, res, "success", response, 200);
+                            new sendEmail({receivers: createAuth.FranchiseId,emailTemplate:"Registration_PasswordReset", sender:"admin@invetory.littleeinsteins.co.in",fromName:"Little Einsteins Inventory"}).send(createAuth.FranchiseName)
                         }
                     })
                 }else{

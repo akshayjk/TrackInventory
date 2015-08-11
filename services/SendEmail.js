@@ -10,9 +10,10 @@ var fs = require('fs');
 
 
 function sendEmail(options){
-    var options = options || {}
+    var options = options || {};
+    this.options = options;
     this.subject = options.subject || "Welcome to Little Einsteins";
-    this.emailTemplate = options.emailTemplate || define.WelcomeTemplate;
+    this.emailTemplate = options.emailTemplate!=undefined? define[options.emailTemplate]:define.WelcomeTemplate;
     this.receivers = options.receivers;
     this.sender = options.sender || define.emailSender;
     this.mandrillKey = define.mandrill_key;
@@ -21,14 +22,26 @@ function sendEmail(options){
     this.fromName = options.fromName || define.emailAppearanceName;
 }
 
-sendEmail.prototype.sendByMandrill = function(parentName){
+sendEmail.prototype.send = function(recieverName){
+    switch(define.emailService.toLowerCase()){
+        case "mandrill":
+            new sendEmail(this.options).sendByMandrill(recieverName);
+            break;
+        case "mailgun":
+            new sendEmail(this.options).sendByMailgun(recieverName);
+            break;
+    }
+
+}
+
+sendEmail.prototype.sendByMandrill = function(recieverName){
     var m = new mandrill.Mandrill(this.mandrillKey);
     var htmlEmail = fs.readFileSync(__dirname + this.emailTemplate, {encoding: 'utf8'});
     //var parentName = "Satish Kumar"
-    /*htmlEmail = htmlEmail.toString();
-    console.log("type is " + typeof(htmlEmail))
-    console.log("search" +  htmlEmail.search('NameOfParent'))
-    htmlEmail = htmlEmail.replace('NameOfParent', parentName);*/
+    //htmlEmail = htmlEmail.toString();
+    //console.log("type is " + typeof(htmlEmail))
+    //console.log("search" +  htmlEmail.search('NameOfParent'))
+    htmlEmail = htmlEmail.replace('{{receiverName}}', recieverName);
 
     var params = {
         "message": {
@@ -53,11 +66,11 @@ sendEmail.prototype.sendByMandrill = function(parentName){
 
 }
 
-sendEmail.prototype.sendByMailgun = function(){
+sendEmail.prototype.sendByMailgun = function(recieverName){
 
     var mailgun = mailgunJs({ apiKey: this.mailgunKey, domain: this.mailgunDomain });
     var htmlEmail = fs.readFileSync(this.emailTemplate);
-    var parentName = "Satish Kumar"
+    var parentName = recieverName;
     htmlEmail = htmlEmail.toString();
     console.log("type is " + typeof(htmlEmail))
     console.log("search" +  htmlEmail.search('NameOfParent'))
