@@ -60,9 +60,10 @@
             </div>
             <div ng-hide="orderView[0]" class="singleOrder" >
 
-                <button class="btn btn-success btn-sm" ng-click="showOrder(0)"><b>Order Id : </b>
+                <!--<button class="btn btn-success btn-sm" ng-click="showOrder(0)"><b>Order Id : </b>
                     {{Orders[OrderNo].OrderId}}
-                </button>
+                </button>-->
+                 <h4 class="col-xs-6 col-md-6">Order No : {{Orders[OrderNo].OrderId}}</h4>
                 <button class="btn btn-primary pull-right" ng-click="showOrder(0)">Back</button>
                 <div class="col-xs-12" style="padding:2%">
                     <div class="col-md-4 col-xs-12 pull-left">
@@ -78,13 +79,13 @@
                         <div class="displayOrder"><b>Amount Paid : </b>{{Orders[OrderNo].TotalAmount}}
                             <small> through {{Orders[OrderNo].ModeOfPayment}}</small>
                         </div>
-                        <div class="displayOrder"><b>Transaction Id : </b>{{Orders[OrderNo].TransactionID}}
+                        <div class="displayOrder" ng-show="Orders[OrderNo].TransactionID!=undefined"><b>Transaction Id : </b>{{Orders[OrderNo].TransactionID}}
                         </div>
                     </div>
 
                 </div>
                 </br>
-                <h4>Total Amount : {{getTotalAmount(Orders[OrderNo].Students)}}</h4>
+                <h4 class="pull-left">Total Amount : {{getTotalAmount(Orders[OrderNo].Students)}}</h4>
                 <div style="margin:2%;">
 
                     <div class="responsiveClass">
@@ -165,9 +166,11 @@
             </div>
             <div ng-hide="orderView[1]" class="singleOrder">
 
-                <button class="btn btn-primary btn-sm" ng-click="showOrder(1)"><b>Order Id : </b>
+               <!-- <button class="btn btn-primary btn-sm" ng-click="showOrder(1)"><b>Order Id : </b>
                     {{dispatched[OrderNo].OrderId}}
-                </button>
+                </button>-->
+                <h4 class="col-xs-6 col-md-6">Order No : {{dispatched[OrderNo].OrderId}}</h4>
+                <!--Order No : <h4> {{dispatched[OrderNo].OrderId}}</h4>-->
                 <button class="btn btn-primary pull-right" ng-click="showOrder(1)">Back</button>
                 <div class="col-xs-12" style="padding:2%">
                     <div class="col-md-4 col-xs-12 pull-left">
@@ -188,7 +191,7 @@
                         <div class="displayOrder"><b>Amount Paid : </b>{{dispatched[OrderNo].TotalAmount}}
                             <small> through {{dummyOrders[OrderNo].ModeOfPayment}}</small>
                         </div>
-                        <div class="displayOrder"><b>Transaction Id : </b>{{dispatched[OrderNo].TransactionID}}
+                        <div class="displayOrder" ng-show="dispatched[OrderNo].TransactionID!=undefined"><b>Transaction Id : </b>{{dispatched[OrderNo].TransactionID}}
                         </div>
                     </div>
 

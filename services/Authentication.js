@@ -113,14 +113,12 @@ Authentication.prototype.register = function(req, res, body){
 Authentication.prototype.login = function (req, res, body) {
     // Validates the credentials and responds back with necessary information
     if (body.username != undefined && body.password != undefined) {
-
         var options = {
             collection: "AUTH",
             Query: {FranchiseId: body.username, Password: body.password},
             QuerySelect: {CreatedOn: 0, Password: 0, ModifiedOn: 0}
         };
         new dataBase().get(options, function (err, data) {
-
             if (!err) {
                 if (data.length > 0) {
                     if (data[0].Role == "ADMIN") {

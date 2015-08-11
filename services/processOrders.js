@@ -40,7 +40,7 @@ ProcessOrder.prototype.getOrders = function (req, res, body) {
         query = {"FranchiseId": franchiseID, "Status": "PENDING"}
     }
     var options = {
-        collection: "orders",
+        collection: define.ordersCollection,
         Query: query,
         sortObject: {ModifiedOn: -1}
     };
@@ -213,7 +213,7 @@ ProcessOrder.prototype.dispatchOrder = function (req, res, body) {
         console.log("things validated")
         //var OrderId = req.query.OrderId;
         var options = {
-            collection: "orders",
+            collection: define.ordersCollection,
             Query: {OrderId: OrderId},
             QuerySelect: {Summary: 1}
         }
@@ -227,7 +227,7 @@ ProcessOrder.prototype.dispatchOrder = function (req, res, body) {
                             //Done correctly
                             //Send confirmation emails
                             var updateOrderStatus = {
-                                collection: "orders",
+                                collection: define.ordersCollection,
                                 Query: {OrderId: OrderId},
                                 updateObject: {Status: "DISPATCHED", CourierName: body.CourierName, TrackingID: body.TrackingID}
                             }
@@ -265,7 +265,7 @@ ProcessOrder.prototype.uploadBulkOrders = function (req, res, fileJSON, body) {
     console.log('FranchiseDetails ' + req.query.FranchiseId + " " +req.query.FranchiseName);
     if(req.query.FranchiseId!=undefined || req.query.FranchiseName!=undefined){
         var OrderId = generateOrderId(req.query.FranchiseId);
-        new dataBase().bulkInsert({collection: "students"}, function (bulkInsert) {
+        new dataBase().bulkInsert({collection: define.studentsCollection}, function (bulkInsert) {
             for (var i = 0; i < fileJSON.length; i++) {
                 var errorArray = [];
                 checkDefinedFields(bulkUpdateStudentMapping(fileJSON[i],OrderId, req.query.FranchiseName), errorArray, function (student, errorArray) {
@@ -350,7 +350,7 @@ ProcessOrder.prototype.uploadBulkOrders = function (req, res, fileJSON, body) {
                             tempArray = [];
                             Order.Sumamry = Summary;
                             var options ={
-                                collection:"orders",
+                                collection:define.ordersCollection,
                                 insertObject:Order
                             };
                             new dataBase().insert(options, function(err, result){
@@ -384,6 +384,10 @@ ProcessOrder.prototype.uploadBulkOrders = function (req, res, fileJSON, body) {
         console.log("after completting.... " + JSON.stringify(TotalStudents));
     }
 
+
+}
+
+ProcessOrder.prototype.getNextBatch=function(req,res){
 
 }
 
@@ -441,7 +445,6 @@ function bulkUpdateStudentMapping(student, OrderId, FranchiseName) {
     return DbStudentObject;
 }
 
-
 function checkDefinedFields(StudentObject, errorArray, callback) {
     var Keys = Object.keys(StudentObject);
 
@@ -493,7 +496,6 @@ function validateExcelFields(StudentObject, errorArray, callback) {
     }
 
 }
-
 
 function completeOrder(req, res) {
     var OrderId = req.query.OrderId;
@@ -702,7 +704,7 @@ function sendConfirmationMails(OrderId) {
      })*/
 
     var options = {
-        collection: "students",
+        collection: define.studentsCollection,
         Query: {OrderId: OrderId},
         QuerySelect: {ParentName: 1, ParentEmail: 1, StudentId: 1}
     }
@@ -715,7 +717,7 @@ function sendConfirmationMails(OrderId) {
                 new sendMail({receivers: student.ParentEmail}).sendByMandrill(student.ParentName, function (err, success) {
                     var Time = new Date().toISOString();
                     var studOptions = {
-                        collection: "students",
+                        collection: define.studentsCollection,
                         Query: {StudentId: student.StudentId},
                         updateObject: {EmailSentAt: Time}
                     }

@@ -3,8 +3,8 @@
  */
 
 var mongoUrl = "mongodb://127.0.0.1:27017/WebSite";
-var StudentCollection = "students";
-var OrdersCollection = "orders";
+var StudentCollection = "STUDENTS";
+var OrdersCollection = "ORDERS";
 
 //Email Settings
 var mandrill_key = 'iIpOPFN7FFPbGaWYCg74tQ';
