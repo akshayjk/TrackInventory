@@ -43,8 +43,8 @@ sendEmail.prototype.sendByMandrill = function(recieverName){
     //console.log("search" +  htmlEmail.search('NameOfParent'))
     htmlEmail = htmlEmail.replace('{{receiverName}}', recieverName);
     if(this.options.emailTemplate=="Registration_PasswordReset"){
-        htmlEmail = htmlEmail.replace('{{username}}', this.username);
-        htmlEmail = htmlEmail.replace('{{password}}', this.password);
+        htmlEmail = htmlEmail.replace('{{FranchiseId}}', this.username);
+        htmlEmail = htmlEmail.replace('{{FranchisePassword}}', this.password);
 
     }
 
