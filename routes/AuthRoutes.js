@@ -5,8 +5,8 @@ var express = require('express'),
     router = express.Router(),
     path = require('path'),
     validate = require('../services/ValidateData.js'),
-    define = require('../service/Define.js'),
-    responseHandler = require('../service/ResponseHandler.js');
+    define = require('../services/Define.js'),
+    responseHandler = require('../services/ResponseHandler.js');
 
 
 //Application Modules
