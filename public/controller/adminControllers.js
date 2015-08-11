@@ -19,8 +19,20 @@
         }
     }]);
 
-    App.controller("AdminController", ["$scope", "$location", "$modal","PlaceOrder", function ($scope, $location, $modal, PlaceOrder) {
+    App.controller("AdminController", ["$scope", "$location", "$modal","PlaceOrder","$window", function ($scope, $location, $modal, PlaceOrder, $window) {
+        $scope.StartCheck=function(){
 
+            try{
+                JSON.parse(sessionStorage.userDetails)
+            }catch(e){
+                $window.location.href = '/Login';
+            }
+
+            if(JSON.parse(sessionStorage.userDetails).FranchiseId==undefined){
+                $window.location.href = '/Login';
+            }
+        };
+        $scope.StartCheck();
         $scope.UniformCosts = {
             "1": 10,
             "2": 20,

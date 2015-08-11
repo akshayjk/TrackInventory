@@ -97,7 +97,7 @@ app.post('/upload', type, function (req,res) {
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
-    next(err);
+    res.sendFile(path.join(__dirname,'/public/views/Not_Found.html'))
 });
 
 // error handlers
