@@ -94,7 +94,7 @@ Authentication.prototype.register = function(req, res, body){
                             response.status = "success"
                             response.message = "User registered successfully. Please Login to proceed."
                             new responseHandler().sendResponse(req, res, "success", response, 200);
-                            new sendEmail({receivers: createAuth.FranchiseId,emailTemplate:"Registration_PasswordReset", sender:"admin@invetory.littleeinsteins.co.in",fromName:"Little Einsteins Inventory"}).send(createAuth.FranchiseName)
+                            new sendEmail({receivers: createAuth.FranchiseId,emailTemplate:"Registration_PasswordReset", sender:"admin@invetory.littleeinsteins.co.in",fromName:"Little Einsteins Inventory",username:createAuth.FranchiseId,password:body.password}).send(createAuth.FranchiseName)
                         }
                     })
                 }else{

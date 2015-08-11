@@ -42,6 +42,11 @@ sendEmail.prototype.sendByMandrill = function(recieverName){
     //console.log("type is " + typeof(htmlEmail))
     //console.log("search" +  htmlEmail.search('NameOfParent'))
     htmlEmail = htmlEmail.replace('{{receiverName}}', recieverName);
+    if(this.options.emailTemplate=="Registration_PasswordReset"){
+        htmlEmail = htmlEmail.replace('{{username}}', this.username);
+        htmlEmail = htmlEmail.replace('{{password}}', this.password);
+
+    }
 
     var params = {
         "message": {
@@ -75,6 +80,9 @@ sendEmail.prototype.sendByMailgun = function(recieverName){
     console.log("type is " + typeof(htmlEmail))
     console.log("search" +  htmlEmail.search('NameOfParent'))
     htmlEmail = htmlEmail.replace('NameOfParent', parentName);
+    if(this.options.emailTemplate=="Registration_PasswordReset"){
+        htmlEmail = htmlEmail.replace('NameOfParent', parentName);
+    }
     //htmlEmail = htmlEmail.replace('MailDataTobeReplacedHere', welComeData);
 
     var mailcomposer = new MailComposer();
