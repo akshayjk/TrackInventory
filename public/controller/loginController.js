@@ -58,8 +58,9 @@
             $scope.loginError = "Password is necessary !"
             }
         }
-
+        $scope.loader = false;
         $scope.login = function () {
+            $scope.loader =  true;
             if($scope.loginForm.username!=undefined && $scope.loginForm.password!=undefined){
                 Auth.login(JSON.stringify($scope.loginForm)).success(function (LoginResponse, LoginStatus, LoginHeaders) {
                     sessionStorage.userDetails = angular.toJson(LoginResponse);
@@ -71,9 +72,11 @@
                         $window.location.href = '../views/Franchise.html';
                     }
                 }).error(function (LoginResponse, LoginStatus, LoginHeaders) {
+                    $scope.loader = false;
                     $scope.loginError = LoginResponse.errorMessage;
                 })
             }else{
+                $scope.loader = false;
                 $scope.loginError = "Username and password are required !";
             }
 

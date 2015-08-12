@@ -44,7 +44,8 @@
     <div class="login-box-body" style="background-color: #F2F3F4;box-shadow: 1px 1px 2px 1px #c4c4c4;">
         <p class="login-box-msg">Sign in to start your session</p>
 
-        <p style="color:red;text-align: center">{{loginError}} </p>
+        <p style="color:red;text-align: center"><img src="Images/circleLoader.gif" ng-show="loader">{{loginError}} </p>
+
 
         <div>
             <form ng-submit="login()" ng-show="signIn">
