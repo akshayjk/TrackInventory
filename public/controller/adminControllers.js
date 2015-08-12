@@ -836,7 +836,8 @@
                 $scope.AccountDet.FranchiseDetails.KitCost = $scope.KitCost;
                 for(var i =0;i<$scope.UniformSize.length;i++){
                     if($scope.AccountDet.FranchiseDetails.UniformCosts[i]==undefined ||$scope.AccountDet.FranchiseDetails.UniformCosts[i].cost==undefined){
-                        console.log("We got " + $scope.AccountDet.FranchiseDetails.UniformCosts[i].cost)
+                        console.log("We got " + $scope.AccountDet.FranchiseDetails.UniformCosts[i].cost);
+                        console.log("current alright " + $scope.Alright)
                         $scope.alertMsg = {
                             type: 'danger',
                             Msg: "Set Uniform Costs for this Franchise",
@@ -850,7 +851,7 @@
                 }
 
             }
-            if($scope.Alright){
+            if($scope.Alright || $scope.AccountDet.Role=="ADMIN"){
                 Auth.createAccount($scope.AccountDet).success(function () {
                     $scope.alertMsg = {
                         type: 'success',
