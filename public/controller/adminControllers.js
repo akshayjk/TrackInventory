@@ -843,7 +843,8 @@
                             view: 1
                         }
                         break;
-                    }else{
+                    }
+                    if(i==$scope.UniformSize.length-1){
                         $scope.Alright = true;
                     }
                 }
