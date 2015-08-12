@@ -390,6 +390,35 @@ ProcessOrder.prototype.uploadBulkOrders = function (req, res, fileJSON, body) {
 
 ProcessOrder.prototype.getNextBatch=function(req,res){
 
+      var validDate = new Date(req.query.Marker);
+        console.log("Marker here " + validDate)
+      if(req.query.Status=="PENDING"||req.query.Status=="DISPATCHED"||req.query.Status=="COMPLETED" ||validDate!="Invalid Date"){
+
+          var queryObject ={Status:req.query.Status};
+          if(req.query.direction=="prev"){
+              queryObject['$gte'] = {ModifiedOn:validDate}
+          }else{
+              queryObject['$lte'] = {ModifiedOn:validDate}
+          }
+
+          var nextBatchOptions = {
+              collection :define.ordersCollection,
+              Query:queryObject,
+              sortObject:{ModifiedOn:-1}
+          }
+
+          new dataBase().get(nextBatchOptions,function(err,data){
+              if(!err){
+                  new responseHandler().sendResponse(req, res, "success",data,200)
+              }else{
+                  new responseHandler().sendResponse(req, res,"error","Database error", 500)
+              }
+          })
+      }else{
+          new responseHandler().sendResponse(req, res, "error", "Param is not supported")
+      }
+
+
 }
 
 function bulkUpdateStudentMapping(student, OrderId, FranchiseName) {

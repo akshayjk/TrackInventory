@@ -24,9 +24,8 @@
 
         <div class="box-tools pull-right">
             <ul class="pagination pagination-sm inline">
-                <li><a href="#">&laquo;</a></li>
-
-                <li><a href="#">&raquo;</a></li>
+                <li><a><i class="fa fa-fw fa-arrow-left"></i></a></li>
+                <li ng-class="dummyOrders.length<20?'disabled':'normal'"><a ng-click="getNext('PENDING','next',dummyOrders[dummyOrders.length].ModifiedOn)"><i class="fa fa-fw fa-arrow-right"></i></a></li>
             </ul>
         </div>
     </div>
@@ -42,7 +41,6 @@
                     <th>Order ID</th>
                     <th>Status</th>
                     <th>Date</th>
-
                 </tr>
                 </thead>
                 <tbody>
@@ -157,8 +155,8 @@
 
         <div class="box-tools pull-right">
             <ul class="pagination pagination-sm inline">
-                <li><a href="#">&laquo;</a></li>
-                <li><a href="#">&raquo;</a></li>
+                <li><a><i class="fa fa-fw fa-arrow-left"></i></a></li>
+                <li ng-class="dispatched.length<20?'disabled':'normal'"><a><i class="fa fa-fw fa-arrow-right"></i></a></li>
             </ul>
         </div>
     </div>
@@ -206,8 +204,8 @@
 
         <div class="box-tools pull-right">
             <ul class="pagination pagination-sm inline">
-                <li><a href="#">&laquo;</a></li>
-                <li><a href="#">&raquo;</a></li>
+                <li><a><i class="fa fa-fw fa-arrow-left"></i></a></li>
+                <li ng-class="completed.length<20?'disabled':'normal'"><a><i class="fa fa-fw fa-arrow-right"></i></a></li>
             </ul>
         </div>
     </div>
@@ -447,9 +445,7 @@
                         <td>&nbsp; &nbsp;{{uniform.Quantity}}</td>
                     </tr>
                 </table>
-
             </div>
-
         </div>
         <!-- /.row -->
 

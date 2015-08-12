@@ -46,7 +46,8 @@
                 $scope.NotificationItems = res;
             }).error(function(errRes, Stat){
             })
-        }
+        };
+
         $scope.getNotificationItems();
         $scope.viewNot = true;
         $scope.checkClick = function(id){
@@ -82,6 +83,18 @@
             });
         };
         $scope.getOrders();
+        $scope.getNext = function(Status, type, Marker){
+            PlaceOrder.getNext(Status,type,Marker).success(function(res, Stat){
+                var maps ={
+                    PENDING :"dummyOrders",
+                    DISPATCHED:"dispatched",
+                    COMPLETED:"completed"
+                }
+                $scope[maps[Status]]=res;
+            }).error(function(erRes,erStat){
+                console.log("Couldn't complete")
+            })
+        }
         $scope.listView = [false, false, false];
         $scope.orderView = [true, true, true];
         $scope.OrderNo = [0, 0, 0];
@@ -479,7 +492,7 @@
                 })
             }
         };
-        $scope.addToKitButton = $scope.ItemSelected.selected != undefined ? true : false;
+        $scope.addToKitButton = $scope.ItemSelected.selected != undefined ;
         $scope.removeItem = function (Numb) {
             $scope.builtKit.splice(Numb, 1);
         };

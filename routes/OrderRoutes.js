@@ -32,6 +32,12 @@ router.get('/health', function(req, res){
     })
 })
 
+router.get('/next', function(req, res){
+    new requestData().getReqBody(req, res, function(body){
+        new processOrders().getInventoryHealth(req, res, body);
+    })
+})
+
 
 
 module.exports = router;

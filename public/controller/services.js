@@ -82,6 +82,11 @@
                  var url = "/inventory/visibleKits";
                 var visibleKits = {method: 'GET', url: url};
                 return $http(visibleKits)
+            },
+            getNextBatch:function(Status,type,Marker){
+                 var url = '/order/next?Status'+ Status +'&direction='+type+'&Marker='+Marker;
+                var getNext = {method:'GET',url:url}
+                return $http(getNext);
             }
         }
     }]);
