@@ -18,7 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "jwt-simple": "^0.3.0",
-    "json2csv": "^2.2.1",
+    "json2csv": "^5.0.1",
     "express": "^4.0.0",
     "mongodb": "latest",
     "mandrill-api": "latest",
